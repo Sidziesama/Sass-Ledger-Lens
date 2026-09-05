@@ -19,7 +19,7 @@ with the templated fallback; it is never shown as-is.
 import re
 
 CAUSAL = re.compile(
-    r"\b(caused|causes|causing|because of|resulted from|as a result of|led to|leads to|"
+    r"\b(caused|causes|causing|because of|due to|resulted from|as a result of|led to|leads to|"
     r"owing to|thanks to|attributable to the decision|in response to|"
     r"triggered by|stems from|stemming from)\b", re.I)
 FALSE_PRECISION = re.compile(

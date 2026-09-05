@@ -81,3 +81,29 @@ Reading the drafts also exposed a defect in the deterministic engine that the be
 had not caught: single-transaction claims were computed on face value, so an account
 with one line a month reported "393% of the movement". Fixed to incremental
 contribution (pass 7 commit b22fbca).
+
+## Pass 8 — invalid sweep, real bug
+
+Prompt v2 sweep reported 52/56 "model unavailable". The server was fine; a concurrent
+`gide -p` session had the single local-model slot, and GIDE answered `429 model_busy`,
+which the client treated as unavailable. Fixed: the client waits and retries with backoff.
+Operational rule: do not run a `gide -p` session and a benchmark sweep at the same time.
+
+## Pass 9 — prompt v3: choose and order, do not rewrite
+
+The 1.5B's dominant failure was paraphrasing a claim and dropping its citation. v3 asks it
+to select 4–6 claims and copy them verbatim with their ids, most important first.
+
+| Prompt | Accepted | Rejected | Uncited sentences | Ungrounded numbers | Causal-verb violations |
+|---|---|---|---|---|---|
+| v1 (write from claims) | 23 / 56 (41%) | 33 | 108 | 1 | 0 |
+| **v3 (choose and order verbatim)** | **50 / 56 (89%)** | 6 | 18 | 7 | 0 (1 "due to", see below) |
+
+By category (v3): adversarial 10/10, ambiguous 10/10, data-quality 10/11, memory 12/14, normal 8/11.
+
+The six rejections are the gate doing its job. One draft wrote "Revenue moved from $0 to
+$99,295, representing a 100% increase" — a percentage on a zero base, the spec's CASE 1 —
+and "This is due to a new counterparty". Both sentences were uncited and were rejected, but
+"due to" was not in the causal-verb list; it is now.
+
+Across 168 drafts over three sweeps, no invented figure and no causal claim reached a memo.

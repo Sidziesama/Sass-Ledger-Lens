@@ -77,12 +77,18 @@ Comparison with the `main` investigator: `docs/COMPARISON.md`.
 
 ## The model step, measured
 
-With GIDE's local model writing every memo (Qwen2.5-1.5B on this 8 GB machine), the linter
-accepted **23 of 56 drafts**; the other 33 shipped the templated memo instead. Across all 56
-drafts: **1 ungrounded number, 0 causal-verb violations, 108 uncited sentences**. The model
-keeps the arithmetic honest and mostly fails on lineage — it paraphrases a claim and drops the
-`[claim_id]`. Nothing invented reached a memo. Details and the prompt iterations are in
-`docs/IMPROVEMENT_LOG.md` (pass 7 onward).
+With GIDE's local model writing every memo (Qwen2.5-1.5B on this 8 GB machine):
+
+| Prompt | Drafts accepted by the linter | Ungrounded numbers | Causal claims shipped |
+|---|---|---|---|
+| v1 — write a memo from the claims | 23 / 56 (41%) | 1 (rejected) | 0 |
+| v3 — choose and order verbatim claims | **50 / 56 (89%)** | 7 (rejected) | 0 |
+
+Rejected drafts ship the templated memo instead. The model's failure mode is paraphrasing a
+claim and dropping its `[claim_id]`; once asked to select rather than rewrite, it is right
+nine times in ten, and the linter catches the tenth (one draft invented "a 100% increase" on
+a zero base). Across 168 drafts, nothing invented reached a memo. Details in
+`docs/IMPROVEMENT_LOG.md` (passes 7–9).
 
 ## What the agent will say when it cannot prove something
 
