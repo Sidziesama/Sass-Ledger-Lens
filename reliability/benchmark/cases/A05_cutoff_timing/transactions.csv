@@ -1,0 +1,26 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R07a000,2026-07-27,2026-07,Revenue,126417.87,Acme,subscription,Enterprise
+R07a001,2026-07-15,2026-07,Revenue,122674.17,Globex,subscription,Enterprise
+R07a002,2026-07-23,2026-07,Revenue,126907.83,Stark,subscription,Enterprise
+R07a003,2026-07-06,2026-07,Revenue,125617.44,Initech,subscription,Enterprise
+R07a004,2026-07-27,2026-07,Revenue,125313.68,Umbrella,subscription,SMB
+R07a005,2026-07-12,2026-07,Revenue,125805.5,Hooli,subscription,SMB
+R07a006,2026-07-02,2026-07,Revenue,127301.18,Vandelay,subscription,SMB
+R07a007,2026-07-24,2026-07,Revenue,126059.23,Wonka,subscription,SMB
+O07a000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,
+O07a001,2026-07-15,2026-07,Marketing,90000,Fieldmark,,
+O07a002,2026-07-15,2026-07,Cloud Expense,82000,AWS,,
+O07a003,2026-07-15,2026-07,Rent,40000,Granby Properties,,
+R08b000,2026-08-19,2026-08,Revenue,126027.14,Acme,subscription,Enterprise
+R08b001,2026-08-06,2026-08,Revenue,126749.34,Globex,subscription,Enterprise
+R08b002,2026-08-17,2026-08,Revenue,122544.79,Stark,subscription,Enterprise
+R08b003,2026-08-14,2026-08,Revenue,126069.55,Initech,subscription,Enterprise
+R08b004,2026-08-02,2026-08,Revenue,124364.51,Umbrella,subscription,SMB
+R08b005,2026-08-03,2026-08,Revenue,125743.12,Hooli,subscription,SMB
+R08b006,2026-08-17,2026-08,Revenue,127078.3,Vandelay,subscription,SMB
+R08b007,2026-08-20,2026-08,Revenue,122881.71,Wonka,subscription,SMB
+O08b000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,
+O08b001,2026-08-15,2026-08,Marketing,90000,Fieldmark,,
+O08b002,2026-08-15,2026-08,Cloud Expense,82000,AWS,,
+O08b003,2026-08-15,2026-08,Rent,40000,Granby Properties,,
+CUT1,2026-09-01,2026-08,Revenue,500000,Acme,invoice,Enterprise

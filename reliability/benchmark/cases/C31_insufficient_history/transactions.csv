@@ -1,0 +1,25 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R11a000,2025-11-10,2025-11,Revenue,122844.72,Acme,subscription,Enterprise
+R11a001,2025-11-05,2025-11,Revenue,122957.12,Globex,subscription,Enterprise
+R11a002,2025-11-19,2025-11,Revenue,126614.29,Stark,subscription,Enterprise
+R11a003,2025-11-21,2025-11,Revenue,124996.84,Initech,subscription,Enterprise
+R11a004,2025-11-11,2025-11,Revenue,123742.87,Umbrella,subscription,SMB
+R11a005,2025-11-27,2025-11,Revenue,126623.77,Hooli,subscription,SMB
+R11a006,2025-11-27,2025-11,Revenue,124231.65,Vandelay,subscription,SMB
+R11a007,2025-11-03,2025-11,Revenue,125984.55,Wonka,subscription,SMB
+O11a000,2025-11-15,2025-11,Payroll,260000,Payroll (internal),,
+O11a001,2025-11-15,2025-11,Marketing,90000,Fieldmark,,
+O11a002,2025-11-15,2025-11,Cloud Expense,82000,AWS,,
+O11a003,2025-11-15,2025-11,Rent,40000,Granby Properties,,
+R12b000,2025-12-20,2025-12,Revenue,176386.78,Acme,subscription,Enterprise
+R12b001,2025-12-05,2025-12,Revenue,176077.44,Globex,subscription,Enterprise
+R12b002,2025-12-02,2025-12,Revenue,175508.58,Stark,subscription,Enterprise
+R12b003,2025-12-10,2025-12,Revenue,172650.13,Initech,subscription,Enterprise
+R12b004,2025-12-04,2025-12,Revenue,177560.22,Umbrella,subscription,SMB
+R12b005,2025-12-20,2025-12,Revenue,177254.36,Hooli,subscription,SMB
+R12b006,2025-12-08,2025-12,Revenue,177557.97,Vandelay,subscription,SMB
+R12b007,2025-12-19,2025-12,Revenue,173194.99,Wonka,subscription,SMB
+O12b000,2025-12-15,2025-12,Payroll,260000,Payroll (internal),,
+O12b001,2025-12-15,2025-12,Marketing,90000,Fieldmark,,
+O12b002,2025-12-15,2025-12,Cloud Expense,82000,AWS,,
+O12b003,2025-12-15,2025-12,Rent,40000,Granby Properties,,

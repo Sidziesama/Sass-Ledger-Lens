@@ -1,0 +1,47 @@
+customer_id,customer_name,segment,payment_terms
+CUST-001,Copper Fork Group,Restaurant Group,Net 45
+CUST-002,Harborline Hospitality,Hotel & Hospitality,Net 30
+CUST-003,Vaughn & Sons Restaurant Co,Restaurant Group,Net 45
+CUST-004,Meridian Public Schools,Institutional,Net 60
+CUST-005,Bright Harbor Hotels,Hotel & Hospitality,Net 30
+CUST-006,Ridgeline Kitchens Group,Restaurant Group,Net 30
+CUST-007,Ashgrove Dining Partners,Restaurant Group,Net 45
+CUST-008,Northfield Medical Center,Institutional,Net 60
+CUST-009,Stonecrest Resale Supply,Distributor Resale,Net 30
+CUST-010,Lakeside Catering Co,Independent Restaurant,Net 30
+CUST-011,Sutton Kitchen,Institutional,Net 45
+CUST-012,Pendry Bistro,Institutional,Net 45
+CUST-013,Brackley Public House,Restaurant Group,Net 15
+CUST-014,Sutton Dining Co,Hotel & Hospitality,Net 30
+CUST-015,Pelham Dining Co,Restaurant Group,Net 15
+CUST-016,Marbury Food Hall,Restaurant Group,Net 30
+CUST-017,Weldon Kitchen,Distributor Resale,Net 30
+CUST-018,Pine Kitchen,Independent Restaurant,Net 30
+CUST-019,Birch Provisions,Independent Restaurant,Net 30
+CUST-020,Rushmoor Provisions,Independent Restaurant,Net 30
+CUST-021,Quarry Provisions,Independent Restaurant,Net 15
+CUST-022,Ockham Provisions,Distributor Resale,Net 45
+CUST-023,Ashford Grill,Independent Restaurant,Net 30
+CUST-024,Hollow Kitchen,Independent Restaurant,Net 30
+CUST-025,Pendry Food Hall,Restaurant Group,Net 15
+CUST-026,Old Tavern,Institutional,Net 30
+CUST-027,Wexley Dining Co,Hotel & Hospitality,Net 30
+CUST-028,Gilman Food Hall,Independent Restaurant,Net 45
+CUST-029,Pine Bistro,Hotel & Hospitality,Net 45
+CUST-030,Norwood Food Hall,Independent Restaurant,Net 15
+CUST-031,Sutton Eatery,Independent Restaurant,Net 30
+CUST-032,Ashford Dining Co,Institutional,Net 30
+CUST-033,Norwood Tavern,Independent Restaurant,Net 15
+CUST-034,Ravensworth Eatery,Independent Restaurant,Net 15
+CUST-035,Hollow Tavern,Independent Restaurant,Net 45
+CUST-036,Tarleton Food Hall,Independent Restaurant,Net 30
+CUST-037,Tarleton Grill,Institutional,Net 45
+CUST-038,Old Tavern,Independent Restaurant,Net 15
+CUST-039,Hartwell Kitchen,Institutional,Net 15
+CUST-040,Marlow Hospitality Group,Restaurant Group,Net 30
+CUST-041,Quarry Dining Co,Distributor Resale,Net 15
+CUST-042,Tarleton Grill,Independent Restaurant,Net 15
+CUST-043,Quarry Provisions,Independent Restaurant,Net 30
+CUST-044,Fairhaven Provisions,Distributor Resale,Net 15
+CUST-045,Weldon Grill,Hotel & Hospitality,Net 30
+CUST-046,Fairhaven Bistro,Institutional,Net 30

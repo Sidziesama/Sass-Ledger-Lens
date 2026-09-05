@@ -1,0 +1,48 @@
+{
+  "priors": [
+    {
+      "id": "PR-0001",
+      "type": "counterparty",
+      "scope": {
+        "account": "Cloud Expense",
+        "vendor": "AWS"
+      },
+      "statement": "AWS migration of the analytics workload began in July and is expected to elevate cloud spend through September",
+      "implication": "expect month-on-month increases of up to +30% through 2026-09; investigate anything beyond that",
+      "basis": {
+        "run_id": "run_2026_07",
+        "period": "2026-07"
+      },
+      "observations": [
+        {
+          "run_id": "run_2026_07",
+          "period": "2026-07"
+        }
+      ],
+      "confidence": 0.95,
+      "applies_to": {
+        "from_period": "2026-07",
+        "to_period": "2026-09"
+      },
+      "valid_from": "2026-07",
+      "valid_until": "2026-09",
+      "expectation": {
+        "max_increase_pct": 30
+      },
+      "status": "proposed",
+      "source_type": "user_verified",
+      "source": "finance_reviewer",
+      "verification_status": "verified",
+      "version": 1,
+      "history": [],
+      "times_observed": 1,
+      "times_applied": 0,
+      "learned_at": "2026-09-05T16:29:10+00:00",
+      "last_observed_at": "2026-09-05T16:29:10+00:00",
+      "last_confirmed_at": null,
+      "user_note": null
+    }
+  ],
+  "runs": [],
+  "updated_at": "2026-09-05T16:29:10+00:00"
+}

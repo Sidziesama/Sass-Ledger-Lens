@@ -1,0 +1,18 @@
+gl_account,gl_account_name,statement_section
+4000,Product Revenue,Revenue
+4200,Service & Installation Revenue,Revenue
+4900,Returns & Allowances,Revenue
+5000,Product COGS,COGS
+5100,Freight & Delivery (COGS),COGS
+5200,Warehouse Labor,COGS
+6000,Salaries & Wages,Opex
+6010,Payroll Taxes & Benefits,Opex
+6100,Rent & Occupancy,Opex
+6200,Software & Subscriptions,Opex
+6300,Marketing & Advertising,Opex
+6400,Professional Fees,Opex
+6500,Outbound Freight,Opex
+6600,Insurance,Opex
+6700,Utilities,Opex
+6800,Travel & Entertainment,Opex
+6900,Other Operating Expense,Opex

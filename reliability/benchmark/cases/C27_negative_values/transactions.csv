@@ -1,0 +1,38 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R07a000,2026-07-20,2026-07,Revenue,124725.4,Acme,subscription,Enterprise
+R07a001,2026-07-26,2026-07,Revenue,124867.44,Globex,subscription,Enterprise
+R07a002,2026-07-05,2026-07,Revenue,125582.96,Stark,subscription,Enterprise
+R07a003,2026-07-02,2026-07,Revenue,125979.62,Initech,subscription,Enterprise
+R07a004,2026-07-09,2026-07,Revenue,124604.7,Umbrella,subscription,SMB
+R07a005,2026-07-24,2026-07,Revenue,125016.84,Hooli,subscription,SMB
+R07a006,2026-07-05,2026-07,Revenue,126151.34,Vandelay,subscription,SMB
+R07a007,2026-07-16,2026-07,Revenue,125437.7,Wonka,subscription,SMB
+O07a000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,
+O07a001,2026-07-15,2026-07,Marketing,90000,Fieldmark,,
+O07a002,2026-07-15,2026-07,Cloud Expense,82000,AWS,,
+O07a003,2026-07-15,2026-07,Rent,40000,Granby Properties,,
+R08b000,2026-08-20,2026-08,Revenue,124213.08,Acme,subscription,Enterprise
+R08b001,2026-08-04,2026-08,Revenue,126966.87,Globex,subscription,Enterprise
+R08b002,2026-08-07,2026-08,Revenue,124697.99,Stark,subscription,Enterprise
+R08b003,2026-08-18,2026-08,Revenue,126140.16,Initech,subscription,Enterprise
+R08b004,2026-08-25,2026-08,Revenue,124153.22,Umbrella,subscription,SMB
+R08b005,2026-08-12,2026-08,Revenue,127258.94,Hooli,subscription,SMB
+R08b006,2026-08-02,2026-08,Revenue,126860.3,Vandelay,subscription,SMB
+R08b007,2026-08-15,2026-08,Revenue,123053.93,Wonka,subscription,SMB
+O08b000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,
+O08b001,2026-08-15,2026-08,Marketing,90000,Fieldmark,,
+O08b002,2026-08-15,2026-08,Cloud Expense,82000,AWS,,
+O08b003,2026-08-15,2026-08,Rent,40000,Granby Properties,,
+RF70,2026-07-20,2026-07,Revenue,-8000,Refund 0,refund,SMB
+RF80,2026-08-20,2026-08,Revenue,-25000,Refund 0,refund,SMB
+RF71,2026-07-21,2026-07,Revenue,-8000,Refund 1,refund,SMB
+RF81,2026-08-21,2026-08,Revenue,-25000,Refund 1,refund,SMB
+RF72,2026-07-22,2026-07,Revenue,-8000,Refund 2,refund,SMB
+RF82,2026-08-22,2026-08,Revenue,-25000,Refund 2,refund,SMB
+RF73,2026-07-23,2026-07,Revenue,-8000,Refund 3,refund,SMB
+RF83,2026-08-23,2026-08,Revenue,-25000,Refund 3,refund,SMB
+RF74,2026-07-24,2026-07,Revenue,-8000,Refund 4,refund,SMB
+RF84,2026-08-24,2026-08,Revenue,-25000,Refund 4,refund,SMB
+RF75,2026-07-25,2026-07,Revenue,-8000,Refund 5,refund,SMB
+RF85,2026-08-25,2026-08,Revenue,-25000,Refund 5,refund,SMB
+X1,2026-08-20,2026-08,Revenue,250000,Acme,,Enterprise

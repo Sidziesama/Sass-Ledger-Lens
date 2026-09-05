@@ -1,0 +1,385 @@
+period,gl_account,gl_account_name,statement_section,amount,signed_amount
+2024-09,4000,Product Revenue,Revenue,2226654.5,2226654.5
+2024-09,4200,Service & Installation Revenue,Revenue,80056.07,80056.07
+2024-09,4900,Returns & Allowances,Revenue,-20424.0,-20424.0
+2024-09,5000,Product COGS,COGS,1554536.59,-1554536.59
+2024-09,5200,Warehouse Labor,COGS,70009.83,-70009.83
+2024-09,6000,Salaries & Wages,Opex,159328.23,-159328.23
+2024-09,6010,Payroll Taxes & Benefits,Opex,43926.4,-43926.4
+2024-09,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2024-09,6200,Software & Subscriptions,Opex,15682.36,-15682.36
+2024-09,6300,Marketing & Advertising,Opex,57984.27,-57984.27
+2024-09,6400,Professional Fees,Opex,9753.54,-9753.54
+2024-09,6500,Outbound Freight,Opex,117161.13,-117161.13
+2024-09,6600,Insurance,Opex,11200.0,-11200.0
+2024-09,6700,Utilities,Opex,8675.77,-8675.77
+2024-09,6800,Travel & Entertainment,Opex,16027.24,-16027.24
+2024-09,6900,Other Operating Expense,Opex,5461.04,-5461.04
+2024-10,4000,Product Revenue,Revenue,1988938.92,1988938.92
+2024-10,4200,Service & Installation Revenue,Revenue,73156.89,73156.89
+2024-10,4900,Returns & Allowances,Revenue,-17457.67,-17457.67
+2024-10,5000,Product COGS,COGS,1379518.72,-1379518.72
+2024-10,5200,Warehouse Labor,COGS,56115.89,-56115.89
+2024-10,6000,Salaries & Wages,Opex,156616.71,-156616.71
+2024-10,6010,Payroll Taxes & Benefits,Opex,41944.65,-41944.65
+2024-10,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2024-10,6200,Software & Subscriptions,Opex,16225.03,-16225.03
+2024-10,6300,Marketing & Advertising,Opex,40174.49,-40174.49
+2024-10,6400,Professional Fees,Opex,12758.55,-12758.55
+2024-10,6500,Outbound Freight,Opex,111410.45,-111410.45
+2024-10,6600,Insurance,Opex,11200.0,-11200.0
+2024-10,6700,Utilities,Opex,9015.93,-9015.93
+2024-10,6800,Travel & Entertainment,Opex,12772.61,-12772.61
+2024-10,6900,Other Operating Expense,Opex,6161.71,-6161.71
+2024-11,4000,Product Revenue,Revenue,2235466.47,2235466.47
+2024-11,4200,Service & Installation Revenue,Revenue,70591.75,70591.75
+2024-11,4900,Returns & Allowances,Revenue,-22662.96,-22662.96
+2024-11,5000,Product COGS,COGS,1540973.25,-1540973.25
+2024-11,5200,Warehouse Labor,COGS,72838.78,-72838.78
+2024-11,6000,Salaries & Wages,Opex,159176.81,-159176.81
+2024-11,6010,Payroll Taxes & Benefits,Opex,44037.62,-44037.62
+2024-11,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2024-11,6200,Software & Subscriptions,Opex,16159.55,-16159.55
+2024-11,6300,Marketing & Advertising,Opex,56670.33,-56670.33
+2024-11,6400,Professional Fees,Opex,11245.08,-11245.08
+2024-11,6500,Outbound Freight,Opex,128632.88,-128632.88
+2024-11,6600,Insurance,Opex,11200.0,-11200.0
+2024-11,6700,Utilities,Opex,6484.44,-6484.44
+2024-11,6800,Travel & Entertainment,Opex,17982.29,-17982.29
+2024-11,6900,Other Operating Expense,Opex,6170.24,-6170.24
+2024-12,4000,Product Revenue,Revenue,2032584.7,2032584.7
+2024-12,4200,Service & Installation Revenue,Revenue,73900.81,73900.81
+2024-12,4900,Returns & Allowances,Revenue,-23110.97,-23110.97
+2024-12,5000,Product COGS,COGS,1409895.21,-1409895.21
+2024-12,5200,Warehouse Labor,COGS,65943.19,-65943.19
+2024-12,6000,Salaries & Wages,Opex,158533.63,-158533.63
+2024-12,6010,Payroll Taxes & Benefits,Opex,43408.98,-43408.98
+2024-12,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2024-12,6200,Software & Subscriptions,Opex,16084.4,-16084.4
+2024-12,6300,Marketing & Advertising,Opex,52642.11,-52642.11
+2024-12,6400,Professional Fees,Opex,12593.27,-12593.27
+2024-12,6500,Outbound Freight,Opex,116905.33,-116905.33
+2024-12,6600,Insurance,Opex,11200.0,-11200.0
+2024-12,6700,Utilities,Opex,9148.88,-9148.88
+2024-12,6800,Travel & Entertainment,Opex,7756.03,-7756.03
+2024-12,6900,Other Operating Expense,Opex,3551.12,-3551.12
+2025-01,4000,Product Revenue,Revenue,1652274.22,1652274.22
+2025-01,4200,Service & Installation Revenue,Revenue,59851.91,59851.91
+2025-01,4900,Returns & Allowances,Revenue,-13534.36,-13534.36
+2025-01,5000,Product COGS,COGS,1137927.05,-1137927.05
+2025-01,5200,Warehouse Labor,COGS,53070.19,-53070.19
+2025-01,6000,Salaries & Wages,Opex,158063.12,-158063.12
+2025-01,6010,Payroll Taxes & Benefits,Opex,42001.73,-42001.73
+2025-01,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-01,6200,Software & Subscriptions,Opex,16343.84,-16343.84
+2025-01,6300,Marketing & Advertising,Opex,43870.49,-43870.49
+2025-01,6400,Professional Fees,Opex,13887.92,-13887.92
+2025-01,6500,Outbound Freight,Opex,91995.91,-91995.91
+2025-01,6600,Insurance,Opex,11200.0,-11200.0
+2025-01,6700,Utilities,Opex,10710.64,-10710.64
+2025-01,6800,Travel & Entertainment,Opex,13998.34,-13998.34
+2025-01,6900,Other Operating Expense,Opex,6750.21,-6750.21
+2025-02,4000,Product Revenue,Revenue,1672138.92,1672138.92
+2025-02,4200,Service & Installation Revenue,Revenue,45507.61,45507.61
+2025-02,4900,Returns & Allowances,Revenue,-21171.55,-21171.55
+2025-02,5000,Product COGS,COGS,1155554.32,-1155554.32
+2025-02,5200,Warehouse Labor,COGS,52374.29,-52374.29
+2025-02,6000,Salaries & Wages,Opex,158306.29,-158306.29
+2025-02,6010,Payroll Taxes & Benefits,Opex,42207.78,-42207.78
+2025-02,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-02,6200,Software & Subscriptions,Opex,16510.88,-16510.88
+2025-02,6300,Marketing & Advertising,Opex,37957.45,-37957.45
+2025-02,6400,Professional Fees,Opex,11927.76,-11927.76
+2025-02,6500,Outbound Freight,Opex,89400.24,-89400.24
+2025-02,6600,Insurance,Opex,11200.0,-11200.0
+2025-02,6700,Utilities,Opex,8140.09,-8140.09
+2025-02,6800,Travel & Entertainment,Opex,16037.74,-16037.74
+2025-02,6900,Other Operating Expense,Opex,4867.84,-4867.84
+2025-03,4000,Product Revenue,Revenue,1896530.42,1896530.42
+2025-03,4200,Service & Installation Revenue,Revenue,50815.41,50815.41
+2025-03,4900,Returns & Allowances,Revenue,-18276.0,-18276.0
+2025-03,5000,Product COGS,COGS,1304365.14,-1304365.14
+2025-03,5200,Warehouse Labor,COGS,58444.5,-58444.5
+2025-03,6000,Salaries & Wages,Opex,159214.94,-159214.94
+2025-03,6010,Payroll Taxes & Benefits,Opex,43294.15,-43294.15
+2025-03,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-03,6200,Software & Subscriptions,Opex,17124.64,-17124.64
+2025-03,6300,Marketing & Advertising,Opex,50072.71,-50072.71
+2025-03,6400,Professional Fees,Opex,12392.7,-12392.7
+2025-03,6500,Outbound Freight,Opex,104062.86,-104062.86
+2025-03,6600,Insurance,Opex,11200.0,-11200.0
+2025-03,6700,Utilities,Opex,6712.59,-6712.59
+2025-03,6800,Travel & Entertainment,Opex,12480.31,-12480.31
+2025-03,6900,Other Operating Expense,Opex,3338.07,-3338.07
+2025-04,4000,Product Revenue,Revenue,1901710.01,1901710.01
+2025-04,4200,Service & Installation Revenue,Revenue,56985.59,56985.59
+2025-04,4900,Returns & Allowances,Revenue,-16549.91,-16549.91
+2025-04,5000,Product COGS,COGS,1303946.57,-1303946.57
+2025-04,5200,Warehouse Labor,COGS,56424.52,-56424.52
+2025-04,6000,Salaries & Wages,Opex,158807.57,-158807.57
+2025-04,6010,Payroll Taxes & Benefits,Opex,43431.57,-43431.57
+2025-04,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-04,6200,Software & Subscriptions,Opex,16625.3,-16625.3
+2025-04,6300,Marketing & Advertising,Opex,44522.91,-44522.91
+2025-04,6400,Professional Fees,Opex,10896.87,-10896.87
+2025-04,6500,Outbound Freight,Opex,107020.56,-107020.56
+2025-04,6600,Insurance,Opex,11200.0,-11200.0
+2025-04,6700,Utilities,Opex,6100.32,-6100.32
+2025-04,6800,Travel & Entertainment,Opex,17537.73,-17537.73
+2025-04,6900,Other Operating Expense,Opex,6579.61,-6579.61
+2025-05,4000,Product Revenue,Revenue,2119772.16,2119772.16
+2025-05,4200,Service & Installation Revenue,Revenue,53549.15,53549.15
+2025-05,4900,Returns & Allowances,Revenue,-18286.61,-18286.61
+2025-05,5000,Product COGS,COGS,1451139.26,-1451139.26
+2025-05,5200,Warehouse Labor,COGS,68158.99,-68158.99
+2025-05,6000,Salaries & Wages,Opex,165743.78,-165743.78
+2025-05,6010,Payroll Taxes & Benefits,Opex,44127.76,-44127.76
+2025-05,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-05,6200,Software & Subscriptions,Opex,17687.51,-17687.51
+2025-05,6300,Marketing & Advertising,Opex,42276.72,-42276.72
+2025-05,6400,Professional Fees,Opex,11592.11,-11592.11
+2025-05,6500,Outbound Freight,Opex,111527.65,-111527.65
+2025-05,6600,Insurance,Opex,11200.0,-11200.0
+2025-05,6700,Utilities,Opex,7024.16,-7024.16
+2025-05,6800,Travel & Entertainment,Opex,11187.09,-11187.09
+2025-05,6900,Other Operating Expense,Opex,7196.32,-7196.32
+2025-06,4000,Product Revenue,Revenue,2090161.25,2090161.25
+2025-06,4200,Service & Installation Revenue,Revenue,67149.87,67149.87
+2025-06,4900,Returns & Allowances,Revenue,-25841.3,-25841.3
+2025-06,5000,Product COGS,COGS,1437669.61,-1437669.61
+2025-06,5200,Warehouse Labor,COGS,68580.12,-68580.12
+2025-06,6000,Salaries & Wages,Opex,165272.43,-165272.43
+2025-06,6010,Payroll Taxes & Benefits,Opex,42605.56,-42605.56
+2025-06,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-06,6200,Software & Subscriptions,Opex,17157.03,-17157.03
+2025-06,6300,Marketing & Advertising,Opex,40250.95,-40250.95
+2025-06,6400,Professional Fees,Opex,8624.62,-8624.62
+2025-06,6500,Outbound Freight,Opex,111860.48,-111860.48
+2025-06,6600,Insurance,Opex,11200.0,-11200.0
+2025-06,6700,Utilities,Opex,7161.14,-7161.14
+2025-06,6800,Travel & Entertainment,Opex,9805.91,-9805.91
+2025-06,6900,Other Operating Expense,Opex,3454.15,-3454.15
+2025-07,4000,Product Revenue,Revenue,2063759.01,2063759.01
+2025-07,4200,Service & Installation Revenue,Revenue,58885.47,58885.47
+2025-07,4900,Returns & Allowances,Revenue,-30417.3,-30417.3
+2025-07,5000,Product COGS,COGS,1435505.22,-1435505.22
+2025-07,5200,Warehouse Labor,COGS,63610.83,-63610.83
+2025-07,6000,Salaries & Wages,Opex,167421.64,-167421.64
+2025-07,6010,Payroll Taxes & Benefits,Opex,44803.95,-44803.95
+2025-07,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-07,6200,Software & Subscriptions,Opex,17939.02,-17939.02
+2025-07,6300,Marketing & Advertising,Opex,44970.65,-44970.65
+2025-07,6400,Professional Fees,Opex,9511.36,-9511.36
+2025-07,6500,Outbound Freight,Opex,117349.91,-117349.91
+2025-07,6600,Insurance,Opex,11200.0,-11200.0
+2025-07,6700,Utilities,Opex,9176.45,-9176.45
+2025-07,6800,Travel & Entertainment,Opex,12116.58,-12116.58
+2025-07,6900,Other Operating Expense,Opex,5005.96,-5005.96
+2025-08,4000,Product Revenue,Revenue,2062469.24,2062469.24
+2025-08,4200,Service & Installation Revenue,Revenue,73629.29,73629.29
+2025-08,4900,Returns & Allowances,Revenue,-17276.82,-17276.82
+2025-08,5000,Product COGS,COGS,1429610.45,-1429610.45
+2025-08,5200,Warehouse Labor,COGS,66143.54,-66143.54
+2025-08,6000,Salaries & Wages,Opex,165540.98,-165540.98
+2025-08,6010,Payroll Taxes & Benefits,Opex,45956.78,-45956.78
+2025-08,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-08,6200,Software & Subscriptions,Opex,17453.98,-17453.98
+2025-08,6300,Marketing & Advertising,Opex,42044.24,-42044.24
+2025-08,6400,Professional Fees,Opex,9998.42,-9998.42
+2025-08,6500,Outbound Freight,Opex,119294.11,-119294.11
+2025-08,6600,Insurance,Opex,11200.0,-11200.0
+2025-08,6700,Utilities,Opex,9834.44,-9834.44
+2025-08,6800,Travel & Entertainment,Opex,14802.16,-14802.16
+2025-08,6900,Other Operating Expense,Opex,6479.59,-6479.59
+2025-09,4000,Product Revenue,Revenue,1919318.18,1919318.18
+2025-09,4200,Service & Installation Revenue,Revenue,61119.85,61119.85
+2025-09,4900,Returns & Allowances,Revenue,-17401.96,-17401.96
+2025-09,5000,Product COGS,COGS,1317162.51,-1317162.51
+2025-09,5200,Warehouse Labor,COGS,54127.8,-54127.8
+2025-09,6000,Salaries & Wages,Opex,166177.56,-166177.56
+2025-09,6010,Payroll Taxes & Benefits,Opex,42686.9,-42686.9
+2025-09,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-09,6200,Software & Subscriptions,Opex,18423.3,-18423.3
+2025-09,6300,Marketing & Advertising,Opex,42873.17,-42873.17
+2025-09,6400,Professional Fees,Opex,13567.64,-13567.64
+2025-09,6500,Outbound Freight,Opex,106333.66,-106333.66
+2025-09,6600,Insurance,Opex,11200.0,-11200.0
+2025-09,6700,Utilities,Opex,6273.43,-6273.43
+2025-09,6800,Travel & Entertainment,Opex,17402.05,-17402.05
+2025-09,6900,Other Operating Expense,Opex,4671.03,-4671.03
+2025-10,4000,Product Revenue,Revenue,2520368.65,2520368.65
+2025-10,4200,Service & Installation Revenue,Revenue,73247.48,73247.48
+2025-10,4900,Returns & Allowances,Revenue,-25341.75,-25341.75
+2025-10,5000,Product COGS,COGS,1744900.12,-1744900.12
+2025-10,5200,Warehouse Labor,COGS,76384.98,-76384.98
+2025-10,6000,Salaries & Wages,Opex,166147.41,-166147.41
+2025-10,6010,Payroll Taxes & Benefits,Opex,45904.26,-45904.26
+2025-10,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-10,6200,Software & Subscriptions,Opex,17766.38,-17766.38
+2025-10,6300,Marketing & Advertising,Opex,66847.63,-66847.63
+2025-10,6400,Professional Fees,Opex,10009.95,-10009.95
+2025-10,6500,Outbound Freight,Opex,138943.21,-138943.21
+2025-10,6600,Insurance,Opex,11200.0,-11200.0
+2025-10,6700,Utilities,Opex,8091.77,-8091.77
+2025-10,6800,Travel & Entertainment,Opex,11464.85,-11464.85
+2025-10,6900,Other Operating Expense,Opex,3772.86,-3772.86
+2025-11,4000,Product Revenue,Revenue,2516060.22,2516060.22
+2025-11,4200,Service & Installation Revenue,Revenue,82894.78,82894.78
+2025-11,4900,Returns & Allowances,Revenue,-24891.59,-24891.59
+2025-11,5000,Product COGS,COGS,1750404.39,-1750404.39
+2025-11,5200,Warehouse Labor,COGS,73625.89,-73625.89
+2025-11,6000,Salaries & Wages,Opex,166273.5,-166273.5
+2025-11,6010,Payroll Taxes & Benefits,Opex,46152.0,-46152.0
+2025-11,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-11,6200,Software & Subscriptions,Opex,18497.39,-18497.39
+2025-11,6300,Marketing & Advertising,Opex,61951.95,-61951.95
+2025-11,6400,Professional Fees,Opex,9334.12,-9334.12
+2025-11,6500,Outbound Freight,Opex,144935.43,-144935.43
+2025-11,6600,Insurance,Opex,11200.0,-11200.0
+2025-11,6700,Utilities,Opex,7490.14,-7490.14
+2025-11,6800,Travel & Entertainment,Opex,14654.88,-14654.88
+2025-11,6900,Other Operating Expense,Opex,7172.92,-7172.92
+2025-12,4000,Product Revenue,Revenue,2251152.67,2251152.67
+2025-12,4200,Service & Installation Revenue,Revenue,74494.72,74494.72
+2025-12,4900,Returns & Allowances,Revenue,-19472.98,-19472.98
+2025-12,5000,Product COGS,COGS,1558800.38,-1558800.38
+2025-12,5200,Warehouse Labor,COGS,66479.15,-66479.15
+2025-12,6000,Salaries & Wages,Opex,166067.61,-166067.61
+2025-12,6010,Payroll Taxes & Benefits,Opex,41896.3,-41896.3
+2025-12,6100,Rent & Occupancy,Opex,42500.0,-42500.0
+2025-12,6200,Software & Subscriptions,Opex,18184.29,-18184.29
+2025-12,6300,Marketing & Advertising,Opex,41072.97,-41072.97
+2025-12,6400,Professional Fees,Opex,11416.12,-11416.12
+2025-12,6500,Outbound Freight,Opex,119968.05,-119968.05
+2025-12,6600,Insurance,Opex,11200.0,-11200.0
+2025-12,6700,Utilities,Opex,10458.06,-10458.06
+2025-12,6800,Travel & Entertainment,Opex,12497.65,-12497.65
+2025-12,6900,Other Operating Expense,Opex,5959.71,-5959.71
+2026-01,4000,Product Revenue,Revenue,1716339.19,1716339.19
+2026-01,4200,Service & Installation Revenue,Revenue,53440.64,53440.64
+2026-01,4900,Returns & Allowances,Revenue,-23937.03,-23937.03
+2026-01,5000,Product COGS,COGS,1172432.13,-1172432.13
+2026-01,5100,Freight & Delivery (COGS),COGS,94432.58,-94432.58
+2026-01,5200,Warehouse Labor,COGS,49881.41,-49881.41
+2026-01,6000,Salaries & Wages,Opex,173760.36,-173760.36
+2026-01,6010,Payroll Taxes & Benefits,Opex,48529.32,-48529.32
+2026-01,6100,Rent & Occupancy,Opex,43775.0,-43775.0
+2026-01,6200,Software & Subscriptions,Opex,19344.5,-19344.5
+2026-01,6300,Marketing & Advertising,Opex,37557.45,-37557.45
+2026-01,6400,Professional Fees,Opex,13383.23,-13383.23
+2026-01,6600,Insurance,Opex,11200.0,-11200.0
+2026-01,6700,Utilities,Opex,7224.03,-7224.03
+2026-01,6800,Travel & Entertainment,Opex,13261.24,-13261.24
+2026-01,6900,Other Operating Expense,Opex,5707.64,-5707.64
+2026-02,4000,Product Revenue,Revenue,1796469.96,1796469.96
+2026-02,4200,Service & Installation Revenue,Revenue,58664.27,58664.27
+2026-02,4900,Returns & Allowances,Revenue,-23177.78,-23177.78
+2026-02,5000,Product COGS,COGS,1273390.02,-1273390.02
+2026-02,5100,Freight & Delivery (COGS),COGS,96722.3,-96722.3
+2026-02,5200,Warehouse Labor,COGS,56476.8,-56476.8
+2026-02,6000,Salaries & Wages,Opex,172527.88,-172527.88
+2026-02,6010,Payroll Taxes & Benefits,Opex,46628.33,-46628.33
+2026-02,6100,Rent & Occupancy,Opex,43775.0,-43775.0
+2026-02,6200,Software & Subscriptions,Opex,19132.99,-19132.99
+2026-02,6300,Marketing & Advertising,Opex,43921.16,-43921.16
+2026-02,6400,Professional Fees,Opex,8606.56,-8606.56
+2026-02,6600,Insurance,Opex,11200.0,-11200.0
+2026-02,6700,Utilities,Opex,9274.16,-9274.16
+2026-02,6800,Travel & Entertainment,Opex,11742.28,-11742.28
+2026-02,6900,Other Operating Expense,Opex,4944.77,-4944.77
+2026-03,4000,Product Revenue,Revenue,2415303.38,2415303.38
+2026-03,4200,Service & Installation Revenue,Revenue,78689.79,78689.79
+2026-03,4900,Returns & Allowances,Revenue,-37981.5,-37981.5
+2026-03,5000,Product COGS,COGS,1732516.94,-1732516.94
+2026-03,5100,Freight & Delivery (COGS),COGS,137051.08,-137051.08
+2026-03,5200,Warehouse Labor,COGS,68378.07,-68378.07
+2026-03,6000,Salaries & Wages,Opex,173591.78,-173591.78
+2026-03,6010,Payroll Taxes & Benefits,Opex,44762.41,-44762.41
+2026-03,6100,Rent & Occupancy,Opex,43775.0,-43775.0
+2026-03,6200,Software & Subscriptions,Opex,19149.14,-19149.14
+2026-03,6300,Marketing & Advertising,Opex,57309.32,-57309.32
+2026-03,6400,Professional Fees,Opex,13868.41,-13868.41
+2026-03,6600,Insurance,Opex,11200.0,-11200.0
+2026-03,6700,Utilities,Opex,8087.35,-8087.35
+2026-03,6800,Travel & Entertainment,Opex,10476.72,-10476.72
+2026-03,6900,Other Operating Expense,Opex,3611.29,-3611.29
+2026-04,4000,Product Revenue,Revenue,2032636.44,2032636.44
+2026-04,4200,Service & Installation Revenue,Revenue,64143.24,64143.24
+2026-04,4900,Returns & Allowances,Revenue,-24949.17,-24949.17
+2026-04,5000,Product COGS,COGS,1401532.87,-1401532.87
+2026-04,5100,Freight & Delivery (COGS),COGS,112255.69,-112255.69
+2026-04,5200,Warehouse Labor,COGS,59550.12,-59550.12
+2026-04,6000,Salaries & Wages,Opex,174428.42,-174428.42
+2026-04,6010,Payroll Taxes & Benefits,Opex,47559.52,-47559.52
+2026-04,6100,Rent & Occupancy,Opex,43775.0,-43775.0
+2026-04,6200,Software & Subscriptions,Opex,19627.43,-19627.43
+2026-04,6300,Marketing & Advertising,Opex,44227.18,-44227.18
+2026-04,6400,Professional Fees,Opex,9497.95,-9497.95
+2026-04,6600,Insurance,Opex,11200.0,-11200.0
+2026-04,6700,Utilities,Opex,9381.85,-9381.85
+2026-04,6800,Travel & Entertainment,Opex,7229.79,-7229.79
+2026-04,6900,Other Operating Expense,Opex,5241.69,-5241.69
+2026-05,4000,Product Revenue,Revenue,2471155.93,2471155.93
+2026-05,4200,Service & Installation Revenue,Revenue,76741.8,76741.8
+2026-05,4900,Returns & Allowances,Revenue,-22983.81,-22983.81
+2026-05,5000,Product COGS,COGS,1700164.26,-1700164.26
+2026-05,5100,Freight & Delivery (COGS),COGS,143182.73,-143182.73
+2026-05,5200,Warehouse Labor,COGS,72852.47,-72852.47
+2026-05,6000,Salaries & Wages,Opex,174799.69,-174799.69
+2026-05,6010,Payroll Taxes & Benefits,Opex,45198.26,-45198.26
+2026-05,6100,Rent & Occupancy,Opex,43775.0,-43775.0
+2026-05,6200,Software & Subscriptions,Opex,19062.84,-19062.84
+2026-05,6300,Marketing & Advertising,Opex,55815.93,-55815.93
+2026-05,6400,Professional Fees,Opex,11708.77,-11708.77
+2026-05,6600,Insurance,Opex,11200.0,-11200.0
+2026-05,6700,Utilities,Opex,8104.14,-8104.14
+2026-05,6800,Travel & Entertainment,Opex,14731.29,-14731.29
+2026-05,6900,Other Operating Expense,Opex,4727.61,-4727.61
+2026-06,4000,Product Revenue,Revenue,2075595.1,2075595.1
+2026-06,4200,Service & Installation Revenue,Revenue,57530.9,57530.9
+2026-06,4900,Returns & Allowances,Revenue,-26172.51,-26172.51
+2026-06,5000,Product COGS,COGS,1453867.02,-1453867.02
+2026-06,5100,Freight & Delivery (COGS),COGS,112193.28,-112193.28
+2026-06,5200,Warehouse Labor,COGS,63220.94,-63220.94
+2026-06,6000,Salaries & Wages,Opex,173183.93,-173183.93
+2026-06,6010,Payroll Taxes & Benefits,Opex,43468.7,-43468.7
+2026-06,6100,Rent & Occupancy,Opex,43775.0,-43775.0
+2026-06,6200,Software & Subscriptions,Opex,19400.0,-19400.0
+2026-06,6300,Marketing & Advertising,Opex,49077.96,-49077.96
+2026-06,6400,Professional Fees,Opex,104433.16,-104433.16
+2026-06,6600,Insurance,Opex,11200.0,-11200.0
+2026-06,6700,Utilities,Opex,8386.06,-8386.06
+2026-06,6800,Travel & Entertainment,Opex,11146.85,-11146.85
+2026-06,6900,Other Operating Expense,Opex,3998.06,-3998.06
+2026-07,4000,Product Revenue,Revenue,2078191.12,2078191.12
+2026-07,4200,Service & Installation Revenue,Revenue,61091.46,61091.46
+2026-07,4900,Returns & Allowances,Revenue,-28114.51,-28114.51
+2026-07,5000,Product COGS,COGS,1425965.23,-1425965.23
+2026-07,5100,Freight & Delivery (COGS),COGS,110492.57,-110492.57
+2026-07,5200,Warehouse Labor,COGS,64815.7,-64815.7
+2026-07,6000,Salaries & Wages,Opex,172194.38,-172194.38
+2026-07,6010,Payroll Taxes & Benefits,Opex,44865.14,-44865.14
+2026-07,6100,Rent & Occupancy,Opex,43775.0,-43775.0
+2026-07,6200,Software & Subscriptions,Opex,19534.19,-19534.19
+2026-07,6300,Marketing & Advertising,Opex,49386.59,-49386.59
+2026-07,6400,Professional Fees,Opex,11618.89,-11618.89
+2026-07,6600,Insurance,Opex,11200.0,-11200.0
+2026-07,6700,Utilities,Opex,7202.14,-7202.14
+2026-07,6800,Travel & Entertainment,Opex,15965.93,-15965.93
+2026-07,6900,Other Operating Expense,Opex,5948.22,-5948.22
+2026-08,4000,Product Revenue,Revenue,2020224.2,2020224.2
+2026-08,4200,Service & Installation Revenue,Revenue,64447.85,64447.85
+2026-08,4900,Returns & Allowances,Revenue,-18302.97,-18302.97
+2026-08,5000,Product COGS,COGS,1405033.77,-1405033.77
+2026-08,5100,Freight & Delivery (COGS),COGS,108618.05,-108618.05
+2026-08,5200,Warehouse Labor,COGS,60854.54,-60854.54
+2026-08,6000,Salaries & Wages,Opex,175529.72,-175529.72
+2026-08,6010,Payroll Taxes & Benefits,Opex,45842.29,-45842.29
+2026-08,6100,Rent & Occupancy,Opex,43775.0,-43775.0
+2026-08,6200,Software & Subscriptions,Opex,20730.35,-20730.35
+2026-08,6300,Marketing & Advertising,Opex,42839.66,-42839.66
+2026-08,6400,Professional Fees,Opex,8588.17,-8588.17
+2026-08,6600,Insurance,Opex,11200.0,-11200.0
+2026-08,6700,Utilities,Opex,10387.52,-10387.52
+2026-08,6800,Travel & Entertainment,Opex,9814.92,-9814.92
+2026-08,6900,Other Operating Expense,Opex,5679.46,-5679.46

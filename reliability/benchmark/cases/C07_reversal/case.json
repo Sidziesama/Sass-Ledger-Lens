@@ -1,0 +1,39 @@
+{
+  "id": "C07_reversal",
+  "category": "normal",
+  "title": "+$100K then -$100K reversal reads as a $200K swing",
+  "period": "2026-08",
+  "prior_period": "2026-07",
+  "ground_truth": {
+    "expected_material_variances": [
+      "Consulting"
+    ],
+    "expected_immaterial": [],
+    "expected_top_drivers": {},
+    "expected_unexplained_amount": null,
+    "expected_unexplained_min_share": null,
+    "expected_data_quality_flags": [
+      "REVERSAL_PAIR"
+    ],
+    "expected_no_data_quality_flags": [],
+    "expected_memory_usage": [],
+    "expected_memory_rejected": [],
+    "forbidden_claims": [],
+    "forbidden_patterns": [
+      "deteriorat",
+      "cost (saving|discipline)"
+    ],
+    "required_patterns": [
+      "reversal"
+    ],
+    "acceptable_confidence": [
+      "high",
+      "medium",
+      "low"
+    ],
+    "expected_abstention": false,
+    "expected_abstention_scope": [],
+    "max_tool_calls": 30,
+    "notes": ""
+  }
+}

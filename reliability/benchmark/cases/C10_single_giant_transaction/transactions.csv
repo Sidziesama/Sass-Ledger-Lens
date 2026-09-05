@@ -1,0 +1,34 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R07a000,2026-07-10,2026-07,Revenue,123897.09,Acme,subscription,Enterprise
+R07a001,2026-07-21,2026-07,Revenue,123468.22,Globex,subscription,Enterprise
+R07a002,2026-07-16,2026-07,Revenue,127282.58,Stark,subscription,Enterprise
+R07a003,2026-07-25,2026-07,Revenue,126542.83,Initech,subscription,Enterprise
+R07a004,2026-07-13,2026-07,Revenue,127440.19,Umbrella,subscription,SMB
+R07a005,2026-07-05,2026-07,Revenue,122902.69,Hooli,subscription,SMB
+R07a006,2026-07-08,2026-07,Revenue,123634.23,Vandelay,subscription,SMB
+R07a007,2026-07-17,2026-07,Revenue,124188.69,Wonka,subscription,SMB
+O07a000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,
+O07a001,2026-07-15,2026-07,Marketing,90000,Fieldmark,,
+O07a002,2026-07-15,2026-07,Cloud Expense,82000,AWS,,
+O07a003,2026-07-15,2026-07,Rent,40000,Granby Properties,,
+O07a004,2026-07-15,2026-07,Equipment,50000,Various,,
+R08b000,2026-08-21,2026-08,Revenue,125620.33,Acme,subscription,Enterprise
+R08b001,2026-08-17,2026-08,Revenue,126702.18,Globex,subscription,Enterprise
+R08b002,2026-08-13,2026-08,Revenue,127046.0,Stark,subscription,Enterprise
+R08b003,2026-08-04,2026-08,Revenue,126498.22,Initech,subscription,Enterprise
+R08b004,2026-08-05,2026-08,Revenue,126673.24,Umbrella,subscription,SMB
+R08b005,2026-08-27,2026-08,Revenue,127048.89,Hooli,subscription,SMB
+R08b006,2026-08-08,2026-08,Revenue,126057.46,Vandelay,subscription,SMB
+R08b007,2026-08-07,2026-08,Revenue,124890.16,Wonka,subscription,SMB
+O08b000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,
+O08b001,2026-08-15,2026-08,Marketing,90000,Fieldmark,,
+O08b002,2026-08-15,2026-08,Cloud Expense,82000,AWS,,
+O08b003,2026-08-15,2026-08,Rent,40000,Granby Properties,,
+O08b004,2026-08-15,2026-08,Equipment,50000,Various,,
+G1,2026-08-18,2026-08,Equipment,470000,Northline Systems,walk-in freezer install,
+G2,2026-08-10,2026-08,Equipment,5000,Vendor 0,,
+G3,2026-08-11,2026-08,Equipment,5000,Vendor 1,,
+G4,2026-08-12,2026-08,Equipment,5000,Vendor 2,,
+G5,2026-08-13,2026-08,Equipment,5000,Vendor 3,,
+G6,2026-08-14,2026-08,Equipment,5000,Vendor 4,,
+G7,2026-08-15,2026-08,Equipment,5000,Vendor 5,,

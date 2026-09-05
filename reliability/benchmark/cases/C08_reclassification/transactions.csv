@@ -1,0 +1,27 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R07a000,2026-07-02,2026-07,Revenue,125215.86,Acme,subscription,Enterprise
+R07a001,2026-07-11,2026-07,Revenue,126290.71,Globex,subscription,Enterprise
+R07a002,2026-07-04,2026-07,Revenue,127392.51,Stark,subscription,Enterprise
+R07a003,2026-07-10,2026-07,Revenue,125980.98,Initech,subscription,Enterprise
+R07a004,2026-07-07,2026-07,Revenue,125091.98,Umbrella,subscription,SMB
+R07a005,2026-07-09,2026-07,Revenue,124278.48,Hooli,subscription,SMB
+R07a006,2026-07-26,2026-07,Revenue,125162.96,Vandelay,subscription,SMB
+R07a007,2026-07-22,2026-07,Revenue,125013.49,Wonka,subscription,SMB
+O07a000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,
+O07a001,2026-07-15,2026-07,Rent,40000,Granby,,
+R08b000,2026-08-27,2026-08,Revenue,123615.21,Acme,subscription,Enterprise
+R08b001,2026-08-26,2026-08,Revenue,126442.0,Globex,subscription,Enterprise
+R08b002,2026-08-27,2026-08,Revenue,126763.14,Stark,subscription,Enterprise
+R08b003,2026-08-14,2026-08,Revenue,123696.94,Initech,subscription,Enterprise
+R08b004,2026-08-09,2026-08,Revenue,126199.37,Umbrella,subscription,SMB
+R08b005,2026-08-17,2026-08,Revenue,123499.59,Hooli,subscription,SMB
+R08b006,2026-08-02,2026-08,Revenue,124277.81,Vandelay,subscription,SMB
+R08b007,2026-08-27,2026-08,Revenue,127448.02,Wonka,subscription,SMB
+O08b000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,
+O08b001,2026-08-15,2026-08,Rent,40000,Granby,,
+M1,2026-07-10,2026-07,Marketing,100000,Fieldmark,,
+M2,2026-07-11,2026-07,Marketing,100000,Brandhaus,,
+P1,2026-07-12,2026-07,Professional Services,50000,Bellweather,,
+M3,2026-08-10,2026-08,Marketing,100000,Brandhaus,,
+P2,2026-08-11,2026-08,Professional Services,100000,Fieldmark,reclassified from Marketing,
+P3,2026-08-12,2026-08,Professional Services,50000,Bellweather,,

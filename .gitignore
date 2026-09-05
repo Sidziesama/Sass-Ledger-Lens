@@ -6,3 +6,8 @@ __pycache__/
 .pytest_cache/
 data/runs/*
 !data/runs/.gitkeep
+# reliability package
+reliability/runs/*.json
+reliability/runs/traces/
+reliability/benchmark/results/
+.venv/

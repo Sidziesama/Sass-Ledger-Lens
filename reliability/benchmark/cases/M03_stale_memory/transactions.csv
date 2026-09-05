@@ -1,0 +1,21 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R11a000,2026-11-02,2026-11,Revenue,123767.38,Acme,subscription,Enterprise
+R11a001,2026-11-19,2026-11,Revenue,122875.17,Globex,subscription,Enterprise
+R11a002,2026-11-19,2026-11,Revenue,123818.95,Stark,subscription,Enterprise
+R11a003,2026-11-04,2026-11,Revenue,125704.26,Initech,subscription,Enterprise
+R11a004,2026-11-24,2026-11,Revenue,125387.79,Umbrella,subscription,SMB
+R11a005,2026-11-20,2026-11,Revenue,127234.45,Hooli,subscription,SMB
+R11a006,2026-11-26,2026-11,Revenue,123783.68,Vandelay,subscription,SMB
+R11a007,2026-11-15,2026-11,Revenue,122591.93,Wonka,subscription,SMB
+O11a000,2026-11-15,2026-11,Payroll,260000,Payroll (internal),,
+O11a001,2026-11-15,2026-11,Cloud Expense,82000,AWS,,
+R12b000,2026-12-11,2026-12,Revenue,122622.6,Acme,subscription,Enterprise
+R12b001,2026-12-13,2026-12,Revenue,123772.89,Globex,subscription,Enterprise
+R12b002,2026-12-03,2026-12,Revenue,122746.7,Stark,subscription,Enterprise
+R12b003,2026-12-24,2026-12,Revenue,123683.11,Initech,subscription,Enterprise
+R12b004,2026-12-16,2026-12,Revenue,125145.53,Umbrella,subscription,SMB
+R12b005,2026-12-12,2026-12,Revenue,122975.29,Hooli,subscription,SMB
+R12b006,2026-12-24,2026-12,Revenue,122857.51,Vandelay,subscription,SMB
+R12b007,2026-12-05,2026-12,Revenue,123773.86,Wonka,subscription,SMB
+O12b000,2026-12-15,2026-12,Payroll,260000,Payroll (internal),,
+O12b001,2026-12-15,2026-12,Cloud Expense,107000,AWS,,
