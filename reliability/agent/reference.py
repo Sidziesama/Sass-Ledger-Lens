@@ -204,7 +204,8 @@ def _rank(ds, p0, p1, gate, policy):
 def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, policy=None):
     ds = SimpleDataset(case_dir)
     prior_period = prior_period or ds.prior(period)
-    tr = tracer or Tracer(enabled=True)
+    tr = tracer or Tracer(enabled=True, out_dir=os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "runs", "traces"))
     pol = dict(DEFAULT_POLICY)
     pp = os.path.join(case_dir, "policy.json")
     if os.path.exists(pp):
@@ -573,6 +574,8 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
     tr.event("explanation_generated", claims=len(claims.claims), verified=len(claims.verified()),
              confidence=conf["overall"])
     tr.event("run_completed", abstained=bool(abstained_scope))
+    tr.flush()
+    tr.submit()          # no-op without PRISM_API_KEY + PRISM_PROJECT_ID
     return _result(period, prior_period, gate, investigate, not_inv, claims, narrative, conf,
                    unexplained, memory_used, memory_rejected, contradictions,
                    bool(abstained_scope) or not investigate and not gate["passed"], abstained_scope, tr)

@@ -31,9 +31,13 @@ CHECK_TO_CLASS = {
     "reconciliation_detected": "RECONCILIATION_FAILURE",
     "material_variances": "MATERIALITY_FAILURE",
     "top_drivers": "DRIVER_ATTRIBUTION_FAILURE",
-    "forbidden_claims": "UNSUPPORTED_CAUSALITY",
-    "forbidden_patterns": "HALLUCINATED_CLAIM",
-    "required_patterns": "PREMATURE_STOPPING",
+    "forbidden_claim": "UNSUPPORTED_CAUSALITY",
+    "forbidden_pattern": "HALLUCINATED_CLAIM",
+    "required_pattern": "PREMATURE_STOPPING",     # said less than the evidence required
+    "no_false_flags": "DATA_QUALITY_FAILURE",
+    "immaterial_ignored": "MATERIALITY_FAILURE",
+    "abstention_scope": "ABSTENTION_FAILURE",
+    "contract": "TOOL_FAILURE",
     "unexplained_amount": "PREMATURE_STOPPING",
     "arithmetic": "ARITHMETIC_FAILURE",
     "lineage": "EVIDENCE_LINEAGE_FAILURE",
@@ -49,4 +53,8 @@ CHECK_TO_CLASS = {
 
 
 def classify(failed_checks):
-    return sorted({CHECK_TO_CLASS.get(c, "TOOL_FAILURE") for c in failed_checks})
+    out = set()
+    for c in failed_checks:
+        base = c.split("[")[0]
+        out.add(CHECK_TO_CLASS.get(base, "TOOL_FAILURE"))
+    return sorted(out)
