@@ -172,12 +172,13 @@ function renderHeader(result, error) {
       <div class="brand-block">
         <span class="eyebrow">Maximor Money Operations</span>
         <h1>LedgerLens</h1>
-        <p>Financial variance courtroom: detect material movement, attack weak claims, prove source rows, remember reviewer-approved findings.</p>
+        <p>GIDE/Ornith proposes finance narratives; LedgerLens verifies material movement, source rows, and reviewer-approved memory before anything reaches the CFO brief.</p>
       </div>
       <div class="status-stack" aria-label="Demo status">
         <span class="badge strong">${state.mode === "demo" ? "Synthetic ledger" : "Imported ledger"}</span>
+        <span class="badge">GIDE/Ornith AI proposer</span>
         <span class="badge">Deterministic checks</span>
-        <span class="badge muted">PRISM not connected</span>
+        <span class="badge muted">PRISM trace-ready</span>
       </div>
     </header>
 
@@ -270,7 +271,7 @@ function renderReview(result) {
             <span class="eyebrow">Challenge</span>
             <h2>${escapeHtml(account?.account || "Account")} courtroom</h2>
           </div>
-          <span class="mini-badge">AI claims start untrusted</span>
+          <span class="mini-badge">GIDE claims start untrusted</span>
         </div>
         ${renderDriverBars(result, account)}
         ${renderCourtroom(result)}

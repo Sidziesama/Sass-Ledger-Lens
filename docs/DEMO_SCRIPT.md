@@ -36,4 +36,4 @@ Closing line:
 
 ## Optional PRISM Line
 
-The repo can generate a PRISM trace preview from the same courtroom engine. Real PRISM sending is ready once project credentials are added.
+The repo can generate and send a PRISM trace from the same courtroom engine. After credentials are added, run `npm run trace:handshake`, `npm run trace:send`, then `npm run trace:doctor`.
