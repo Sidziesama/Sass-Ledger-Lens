@@ -1,0 +1,25 @@
+{
+  "name": "ledgerlens-financial-variance-courtroom",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hackathon demo for an evidence-first financial variance investigation agent.",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "test": "node scripts/verify.mjs",
+    "sync:data": "node scripts/sync_csv.mjs",
+    "trace:preview": "node scripts/emit_prism_trace.mjs",
+    "trace:send": "node scripts/emit_prism_trace.mjs --send"
+  },
+  "keywords": [
+    "finance",
+    "variance-analysis",
+    "ai-agent",
+    "auditability",
+    "maximor"
+  ],
+  "license": "UNLICENSED",
+  "dependencies": {
+    "lucide": "^1.41.0",
+    "papaparse": "^5.7.0"
+  }
+}

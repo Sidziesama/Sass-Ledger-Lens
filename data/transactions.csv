@@ -1,0 +1,56 @@
+id,duplicateOf,date,month,account,counterparty,segment,category,amount,status
+REV-0701,,2026-07-03,2026-07,Revenue,Acme Corp,Enterprise,Expansion,72000,posted
+REV-0702,,2026-07-04,2026-07,Revenue,Globex,Enterprise,Subscription,64000,posted
+REV-0703,,2026-07-06,2026-07,Revenue,Stark Industries,Enterprise,Subscription,35000,posted
+REV-0704,,2026-07-09,2026-07,Revenue,Orion Freight,Enterprise,Usage,88000,posted
+REV-0705,,2026-07-16,2026-07,Revenue,Northwind,Enterprise,Subscription,231000,posted
+REV-0706,,2026-07-21,2026-07,Revenue,SMB Portfolio,SMB,Subscription,360000,posted
+REV-0707,,2026-07-28,2026-07,Revenue,Consumer Portfolio,Consumer,Subscription,150000,posted
+REV-0801,,2026-08-03,2026-08,Revenue,Acme Corp,Enterprise,Expansion,124000,posted
+REV-0802,,2026-08-05,2026-08,Revenue,Globex,Enterprise,Expansion,105000,posted
+REV-0803,,2026-08-07,2026-08,Revenue,Stark Industries,Enterprise,Usage,58000,posted
+REV-0804,,2026-08-10,2026-08,Revenue,Orion Freight,Enterprise,Usage,109000,posted
+REV-0805,,2026-08-18,2026-08,Revenue,Northwind,Enterprise,Subscription,252000,posted
+REV-0806,,2026-08-22,2026-08,Revenue,SMB Portfolio,SMB,Subscription,391000,posted
+REV-0807,,2026-08-29,2026-08,Revenue,Consumer Portfolio,Consumer,Subscription,141000,posted
+REV-0901,,2026-09-03,2026-09,Revenue,Acme Corp,Enterprise,Expansion,151000,posted
+REV-0902,,2026-09-04,2026-09,Revenue,Globex,Enterprise,Expansion,126000,posted
+REV-0903,,2026-09-08,2026-09,Revenue,Stark Industries,Enterprise,Usage,67000,posted
+REV-0904,,2026-09-11,2026-09,Revenue,Orion Freight,Enterprise,Usage,121000,posted
+REV-0905,,2026-09-18,2026-09,Revenue,Northwind,Enterprise,Subscription,281000,posted
+REV-0906,,2026-09-22,2026-09,Revenue,SMB Portfolio,SMB,Subscription,403000,posted
+REV-0907,,2026-09-28,2026-09,Revenue,Consumer Portfolio,Consumer,Subscription,144000,posted
+COGS-0701,,2026-07-30,2026-07,COGS,Fulfillment Network,Operations,Delivery,284000,posted
+COGS-0702,,2026-07-30,2026-07,COGS,Data Labeling Co,Operations,Data,136000,posted
+COGS-0801,,2026-08-30,2026-08,COGS,Fulfillment Network,Operations,Delivery,342000,posted
+COGS-0802,,2026-08-30,2026-08,COGS,Data Labeling Co,Operations,Data,173000,posted
+COGS-0901,,2026-09-30,2026-09,COGS,Fulfillment Network,Operations,Delivery,386000,posted
+COGS-0902,,2026-09-30,2026-09,COGS,Data Labeling Co,Operations,Data,198000,posted
+CLD-0701,,2026-07-30,2026-07,Cloud Costs,AWS Compute,Infrastructure,Compute,51000,posted
+CLD-0702,,2026-07-30,2026-07,Cloud Costs,AWS Storage,Infrastructure,Storage,16000,posted
+CLD-0703,,2026-07-30,2026-07,Cloud Costs,VectorDB Labs,Infrastructure,Inference,15000,posted
+CLD-0801,,2026-08-30,2026-08,Cloud Costs,AWS Compute,Infrastructure,Compute,74000,posted
+CLD-0802,,2026-08-30,2026-08,Cloud Costs,AWS Storage,Infrastructure,Storage,19000,posted
+CLD-0803,,2026-08-30,2026-08,Cloud Costs,VectorDB Labs,Infrastructure,Inference,28000,posted
+CLD-0901,,2026-09-30,2026-09,Cloud Costs,AWS Compute,Infrastructure,Compute,84000,posted
+CLD-0902,,2026-09-30,2026-09,Cloud Costs,AWS Storage,Infrastructure,Storage,22000,posted
+CLD-0903,,2026-09-30,2026-09,Cloud Costs,VectorDB Labs,Infrastructure,Inference,54000,posted
+CLD-0903-DUP,CLD-0903,2026-09-30,2026-09,Cloud Costs,VectorDB Labs,Infrastructure,Inference,54000,duplicate
+MKT-0701,,2026-07-20,2026-07,Marketing,Search Ads,Growth,Paid Media,70000,posted
+MKT-0702,,2026-07-24,2026-07,Marketing,Events,Growth,Field,20000,posted
+MKT-0801,,2026-08-20,2026-08,Marketing,Search Ads,Growth,Paid Media,64000,posted
+MKT-0802,,2026-08-24,2026-08,Marketing,Events,Growth,Field,24000,posted
+MKT-0901,,2026-09-20,2026-09,Marketing,Search Ads,Growth,Paid Media,62000,posted
+MKT-0902,,2026-09-24,2026-09,Marketing,Events,Growth,Field,30000,posted
+PAY-0701,,2026-07-15,2026-07,Payroll,Payroll Provider,People,Salary,260000,posted
+PAY-0801,,2026-08-15,2026-08,Payroll,Payroll Provider,People,Salary,275000,posted
+PAY-0901,,2026-09-15,2026-09,Payroll,Payroll Provider,People,Salary,277000,posted
+OCF-0701,,2026-07-31,2026-07,Operating Cash Flow,Collections,Cash,AR,420000,posted
+OCF-0702,,2026-07-31,2026-07,Operating Cash Flow,Vendor Payments,Cash,AP,-265000,posted
+OCF-0703,,2026-07-31,2026-07,Operating Cash Flow,Payroll,Cash,Payroll,-35000,posted
+OCF-0801,,2026-08-31,2026-08,Operating Cash Flow,Collections,Cash,AR,210000,posted
+OCF-0802,,2026-08-31,2026-08,Operating Cash Flow,Vendor Payments,Cash,AP,-330000,posted
+OCF-0803,,2026-08-31,2026-08,Operating Cash Flow,Payroll,Cash,Payroll,-70000,posted
+OCF-0901,,2026-09-30,2026-09,Operating Cash Flow,Collections,Cash,AR,235000,posted
+OCF-0902,,2026-09-30,2026-09,Operating Cash Flow,Vendor Payments,Cash,AP,-382000,posted
+OCF-0903,,2026-09-30,2026-09,Operating Cash Flow,Payroll,Cash,Payroll,-98000,posted
