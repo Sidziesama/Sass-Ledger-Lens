@@ -84,3 +84,19 @@ python -m src.evaluation.benchmark
 ```
 
 CI runs these checks for every pull request and every push to `main`.
+
+## GIDE and PRISM setup
+
+Copy `.env.example` to `.env` and fill in your own credentials. Both the CLI and dashboard load this file; it must remain untracked.
+
+Use the official GIDE CLI to sign in, start the server, select a model that fits your hardware, and create an API key. Set `LEDGER_LENS_LLM_BASE_URL` to the server's actual address with `/v1`, and `LEDGER_LENS_LLM_MODEL` to an ID returned by its `/v1/models` endpoint. Set `LEDGER_LENS_LLM_JSON_MODE=false` only if your endpoint does not support JSON response mode. Model selection and authentication do not prove that inference can run: verify available memory and a real completion.
+
+Set the three `PRISMTRACE_*` values from your PRISM project. Enable the dashboard checkboxes or run:
+
+```bash
+python -m src.cli --prior 2026-01-01 --current 2026-02-01 --llm --prism
+```
+
+PRISM receives an explicitly labeled workflow summary trace and ordered trajectory under the same run ID, including explanation validation and failures. It receives account and driver summaries, so enable it only for data you intend to share with your configured PRISM service. Delivery failure leaves local results available and is shown separately.
+
+Explanations can select only approved, evidence-backed statements. Model failures or rejected output produce a visible warning and a validated template fallback. Summary/detail discrepancies or currency mismatches block explanations; insufficient coverage remains partial with a required caveat. The workflow owns the trace lifecycle so provider calls and validation appear before completion.

@@ -3,4 +3,4 @@ pydantic
 streamlit
 python-dotenv
 pytest
-prismtrace-sdk
+prismtrace-sdk>=0.4.2,<0.5httpx>=0.28,<0.29

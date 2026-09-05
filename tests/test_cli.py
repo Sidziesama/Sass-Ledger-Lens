@@ -49,6 +49,7 @@ def test_cli_reports_no_material_variances(tmp_path, capsys):
 
 
 def test_cli_llm_flag_requires_configuration(monkeypatch):
+    monkeypatch.setattr("src.cli.load_settings", lambda: None)
     for name in (
         "LEDGER_LENS_LLM_BASE_URL",
         "LEDGER_LENS_LLM_API_KEY",

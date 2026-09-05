@@ -8,9 +8,8 @@ from pathlib import Path
 import streamlit as st
 from pydantic import ValidationError
 
-from src.agent import FinancialTools, Investigator
 from src.evidence import build_claim_lineage
-from src.explanation import EvidenceBoundExplainer, TemplateExplanationProvider
+from src.explanation import OpenAICompatibleProvider
 from src.ingestion.loaders import load_account_summaries, load_transactions
 from src.ingestion.models import (
     EvidenceClaim,
@@ -20,7 +19,11 @@ from src.ingestion.models import (
 )
 from src.ingestion.validation import validate_dataset
 from src.memory import JsonMemoryStore, compare_investigation_runs
-from src.observability import InMemoryTraceObserver
+from src.observability import InMemoryTraceObserver, PrismTraceObserver
+from src.settings import load_settings
+from src.workflow import run_workflow
+
+load_settings()
 
 ROOT = Path(__file__).parents[1]
 SAMPLE = ROOT / "data" / "sample"
@@ -77,14 +80,33 @@ def claim_models(account, transactions) -> list[EvidenceClaim]:
 
 
 def run_dashboard(
-    summaries, transactions, prior: date, current: date, absolute: Decimal, percentage: Decimal
+    summaries,
+    transactions,
+    prior: date,
+    current: date,
+    absolute: Decimal,
+    percentage: Decimal,
+    *,
+    use_llm=False,
+    use_prism=False,
 ):
     memory = JsonMemoryStore(MEMORY)
-    observer = InMemoryTraceObserver()
-    result = Investigator(
-        FinancialTools(summaries, transactions), memory=memory, observer=observer
-    ).investigate(prior, current, absolute, percentage)
-    return result, transactions, observer, memory
+    observer = PrismTraceObserver.from_env(required=True) if use_prism else InMemoryTraceObserver()
+    provider = OpenAICompatibleProvider.from_env() if use_llm else None
+    if use_llm and provider is None:
+        raise RuntimeError("Configure the GIDE endpoint, API key, and model in .env first.")
+    execution = run_workflow(
+        summaries,
+        transactions,
+        prior,
+        current,
+        absolute,
+        percentage,
+        memory=memory,
+        observer=observer,
+        provider=provider,
+    )
+    return execution.result, transactions, observer, memory, execution.artifact
 
 
 st.set_page_config(page_title="Ledger Lens", page_icon="◉", layout="wide")
@@ -153,6 +175,12 @@ with st.sidebar:
     percentage_threshold = Decimal(
         str(st.number_input("Percentage materiality", min_value=0.0, value=10.0, step=1.0))
     )
+    use_llm = st.checkbox("Use configured GIDE model", value=False)
+    use_prism = st.checkbox(
+        "Send investigation summaries to PRISM",
+        value=False,
+        help="Sends account/driver labels, calculation summaries, and validation events to the configured PRISM project.",
+    )
     investigate = st.button("Run investigation", type="primary", width="stretch")
 
 if (
@@ -164,17 +192,28 @@ if (
         st.error("Current period must be after the prior period.")
         st.stop()
     with st.spinner("Tracing changes to transaction evidence…"):
-        st.session_state.investigation = run_dashboard(
-            summaries_for_periods,
-            selected_transactions,
-            prior_period,
-            current_period,
-            absolute_threshold,
-            percentage_threshold,
-        )
+        try:
+            st.session_state.investigation = run_dashboard(
+                summaries_for_periods,
+                selected_transactions,
+                prior_period,
+                current_period,
+                absolute_threshold,
+                percentage_threshold,
+                use_llm=use_llm,
+                use_prism=use_prism,
+            )
+        except RuntimeError as exc:
+            st.error(str(exc))
+            st.stop()
         st.session_state.dataset_signature = dataset_signature
 
-result, transactions, observer, memory = st.session_state.investigation
+result, transactions, observer, memory, artifact = st.session_state.investigation
+account_outputs = {item["account"]: item for item in artifact["accounts"]}
+if artifact["telemetry"]["status"] == "failed":
+    st.warning("Investigation completed, but PRISM delivery failed. Local trace is available.")
+elif artifact["telemetry"]["status"] == "delivered":
+    st.caption("PRISM trajectory delivered.")
 
 for warning in dataset_warnings:
     st.warning(warning)
@@ -184,7 +223,7 @@ if not result.accounts:
     st.stop()
 
 total_change = sum((item.variance.variance for item in result.accounts), Decimal("0"))
-supported = sum(item.stop_decision.should_stop for item in result.accounts)
+supported = sum(item["status"] == "complete" for item in artifact["accounts"])
 metric_columns = st.columns(4)
 metric_columns[0].metric("Material accounts", len(result.accounts))
 metric_columns[1].metric("Net material change", signed_money(total_change))
@@ -215,7 +254,7 @@ with overview:
                 if item.variance.variance_pct is not None
                 else None,
                 "Coverage %": float(item.stop_decision.coverage * 100),
-                "Evidence": "Sufficient" if item.stop_decision.should_stop else "Needs review",
+                "Evidence": account_outputs[item.variance.account]["status"],
             }
             for item in result.accounts
         ],
@@ -224,16 +263,16 @@ with overview:
     )
     for item in result.accounts:
         st.markdown(f"#### {item.variance.account}")
-        claims = build_claim_lineage(item, transactions)
-        if claims:
-            explanation = EvidenceBoundExplainer(TemplateExplanationProvider()).explain(
-                item, claims
-            )
-            st.write(explanation.summary)
-            st.caption(
-                f"Grounded · {len(explanation.claim_ids)} verified claims · {explanation.provider}"
-            )
-        else:
+        output = account_outputs[item.variance.account]
+        for issue in output["reliability_issues"]:
+            st.warning(f"Explanation blocked: {issue}")
+        if output["explanation_warning"]:
+            st.warning(output["explanation_warning"])
+        if output["explanation"]:
+            explanation = output["explanation"]
+            st.write(explanation["summary"])
+            st.caption(f"Validated statements · {explanation['provider']} · {output['status']}")
+        elif output["status"] != "blocked":
             st.write(evidence_summary(item))
 
 with drivers_tab:
@@ -263,7 +302,11 @@ with drivers_tab:
 with evidence_tab:
     for account in result.accounts:
         st.subheader(account.variance.account)
-        claims = build_claim_lineage(account, transactions)
+        claims = (
+            build_claim_lineage(account, transactions)
+            if account_outputs[account.variance.account]["status"] != "blocked"
+            else []
+        )
         if not claims:
             st.warning("No supported claims available.")
         for claim in claims:
@@ -300,7 +343,10 @@ with memory_tab:
         st.caption("No relevant context was retrieved for this investigation.")
 
     all_claims = [
-        claim for account in result.accounts for claim in claim_models(account, transactions)
+        claim
+        for account in result.accounts
+        if account_outputs[account.variance.account]["status"] != "blocked"
+        for claim in claim_models(account, transactions)
     ]
     existing_ids = {run.run_id for run in memory.list_investigation_runs()}
     if result.run_id not in existing_ids:

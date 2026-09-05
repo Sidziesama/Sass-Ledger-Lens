@@ -25,11 +25,13 @@ class OpenAICompatibleProvider:
         api_key: str,
         model: str,
         timeout: float = 30,
+        json_mode: bool = True,
     ):
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
+        self.json_mode = json_mode
 
     @classmethod
     def from_env(cls) -> "OpenAICompatibleProvider | None":
@@ -38,21 +40,30 @@ class OpenAICompatibleProvider:
         model = os.getenv("LEDGER_LENS_LLM_MODEL")
         if not all((base_url, api_key, model)):
             return None
-        return cls(base_url=base_url, api_key=api_key, model=model)
+        return cls(
+            base_url=base_url,
+            api_key=api_key,
+            model=model,
+            timeout=float(os.getenv("LEDGER_LENS_LLM_TIMEOUT", "120")),
+            json_mode=os.getenv("LEDGER_LENS_LLM_JSON_MODE", "true").lower() == "true",
+        )
 
     def generate(self, *, system: str, prompt: str) -> str:
+        body = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": 0,
+            "max_tokens": 1024,
+        }
+        if self.json_mode:
+            body["response_format"] = {"type": "json_object"}
         response = httpx.post(
             f"{self.base_url}/chat/completions",
             headers={"Authorization": f"Bearer {self.api_key}"},
-            json={
-                "model": self.model,
-                "messages": [
-                    {"role": "system", "content": system},
-                    {"role": "user", "content": prompt},
-                ],
-                "temperature": 0,
-                "response_format": {"type": "json_object"},
-            },
+            json=body,
             timeout=self.timeout,
         )
         response.raise_for_status()
@@ -67,20 +78,11 @@ class TemplateExplanationProvider:
 
     def generate(self, *, system: str, prompt: str) -> str:
         packet = json.loads(prompt)
-        account = packet["account"]
-        direction = "increased" if packet["variance"]["amount"].startswith("+") else "decreased"
-        claims = packet["claims"]
-        lead = claims[0]
-        summary = (
-            f"{account} {direction} by {packet['variance']['absolute_amount']} "
-            f"({packet['variance']['percentage_display']}). "
-            f"The largest identified driver was {lead['driver']}, contributing "
-            f"{lead['variance']} and supported by {len(lead['transaction_ids'])} transactions."
-        )
+        statements = packet["approved_statements"]
         return json.dumps(
             {
-                "headline": f"{account} {direction}",
-                "summary": summary,
-                "claim_ids": [claim["claim_id"] for claim in claims],
+                "headline": packet["approved_headlines"][0],
+                "summary": " ".join(item["text"] for item in statements),
+                "claim_ids": [claim["claim_id"] for claim in packet["claims"]],
             }
         )
