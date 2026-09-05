@@ -32,7 +32,15 @@ from src.ingestion.models import AccountSummary, Transaction
 try:                                   # present from main@33fea51 onwards
     from src.explanation.explainer import EvidenceBoundExplainer, UngroundedExplanationError
     from src.explanation.providers import TemplateExplanationProvider
-    _EXPLAINER = EvidenceBoundExplainer(TemplateExplanationProvider())
+    _provider = None
+    if os.environ.get("MAIN_V1_LLM") == "1":
+        # Score the product's REAL explainer path: its own OpenAI-compatible provider
+        # pointed at GIDE (LEDGER_LENS_LLM_* in .env), with its own grounding checks.
+        from reliability.agent.llm import _load_dotenv
+        _load_dotenv()
+        from src.explanation.providers import OpenAICompatibleProvider
+        _provider = OpenAICompatibleProvider.from_env()
+    _EXPLAINER = EvidenceBoundExplainer(_provider or TemplateExplanationProvider())
 except Exception:                      # noqa: BLE001
     _EXPLAINER, UngroundedExplanationError = None, Exception
 
