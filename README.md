@@ -56,3 +56,13 @@ Add `--llm` to use the configured OpenAI-compatible provider; otherwise the grou
 ## Evidence-constrained explanations
 
 `EvidenceBoundExplainer` sends a structured packet of deterministic results and verified claims to a pluggable provider. It rejects unknown claim citations and any numeric fact not present in the evidence packet. `TemplateExplanationProvider` works offline; `OpenAICompatibleProvider` can use a hosted provider or GIDE's local API through the `LEDGER_LENS_LLM_*` settings in `.env.example`.
+
+## Deterministic benchmark
+
+The multi-period benchmark proves exact variance results, correct top-driver selection, full decomposition reconciliation, and transaction-evidence completeness against known outcomes:
+
+```bash
+python -m src.evaluation.benchmark --output data/runs/benchmark-score.json
+```
+
+The command exits nonzero if any benchmark case fails, making it suitable for CI and PRISM's “Prove” stage.

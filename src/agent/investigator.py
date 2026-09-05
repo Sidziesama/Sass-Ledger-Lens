@@ -136,6 +136,16 @@ class Investigator:
             )
             if not all_drivers:
                 continue
+            if all(driver.driver == "Unspecified" for driver in all_drivers):
+                self.observer.record(
+                    TraceEvent(
+                        step_type="reasoning",
+                        label="Skip uninformative dimension",
+                        input_summary=f"dimension={dimension}",
+                        output_summary="all transactions are Unspecified",
+                    )
+                )
+                continue
 
             selected: list[DriverContribution] = []
             decision = evaluate_stopping_rule(selected, all_drivers, self.target_coverage)
