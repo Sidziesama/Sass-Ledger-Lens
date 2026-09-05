@@ -119,6 +119,8 @@ def build_artifact(
                 "business_context": [
                     context.model_dump(mode="json") for context in account.business_context
                 ],
+                "reliability_notes": list(account.reliability_notes),
+                "quality_flags": [flag.model_dump(mode="json") for flag in account.quality_flags],
             }
         )
     return {
@@ -154,6 +156,9 @@ def print_report(artifact: dict[str, Any], *, llm_debug: bool = False) -> None:
             )
         if account["explanation"]:
             print(f"  explanation: {account['explanation']['summary']}")
+        else:
+            for note in account.get("reliability_notes", []):
+                print(f"  reliability: {note}")
         if account["explanation_error"]:
             print(
                 "  LLM status: configured model failed validation or generation; "
@@ -161,6 +166,8 @@ def print_report(artifact: dict[str, Any], *, llm_debug: bool = False) -> None:
             )
             if llm_debug:
                 print(f"  LLM diagnostic: {account['explanation_error']}")
+        for flag in account.get("quality_flags", []):
+            print(f"  data quality [{flag['severity']}]: {flag['message']}")
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:

@@ -18,6 +18,9 @@ target-version = "py311"
 select = ["B", "E", "F", "I", "UP"]
 ignore = ["E501"]
 
+[tool.ruff.lint.per-file-ignores]
+"app/app.py" = ["E402"] # Bootstrap the repo root before importing the local src package.
+
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"

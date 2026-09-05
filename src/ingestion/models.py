@@ -4,7 +4,7 @@ from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field, model_validator
 
 
 class LedgerModel(BaseModel):
@@ -21,6 +21,9 @@ class AccountSummary(LedgerModel):
 class Transaction(LedgerModel):
     transaction_id: str = Field(min_length=1)
     period: date
+    transaction_date: date | None = Field(
+        default=None, validation_alias=AliasChoices("transaction_date", "date")
+    )
     account: str = Field(min_length=1)
     amount: Decimal
     currency: str = Field(default="USD", min_length=3, max_length=3)
@@ -39,8 +42,22 @@ class BusinessContext(LedgerModel):
     subject: str
     description: str
     effective_period: date | None = None
+    valid_from: date | None = None
+    valid_until: date | None = None
+    source_type: Literal["user_verified", "system_inferred", "hypothesis"] = "system_inferred"
+    status: Literal["proposed", "confirmed", "rejected", "contested", "superseded"] = "proposed"
+    reason: str | None = None
+    learned_min_pct: Decimal | None = None
+    learned_max_pct: Decimal | None = None
     source: str | None = None
     tags: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validity_is_ordered(self) -> "BusinessContext":
+        start = self.valid_from or self.effective_period
+        if self.valid_until is not None and start is not None and self.valid_until < start:
+            raise ValueError("valid_until must not be before valid_from")
+        return self
 
 
 class EvidenceClaim(LedgerModel):

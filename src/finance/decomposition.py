@@ -33,10 +33,15 @@ def breakdown_by_dimension(
 ) -> list[DriverContribution]:
     totals: dict[tuple[str, date], Decimal] = defaultdict(Decimal)
     evidence: dict[str, set[str]] = defaultdict(set)
+    labels: dict[str, str] = {}
     for tx in transactions:
         if tx.account != account or tx.period not in (prior_period, current_period):
             continue
-        driver = getattr(tx, dimension) or "Unspecified"
+        raw_driver = getattr(tx, dimension) or "Unspecified"
+        # Financially identical counterparties must not become separate drivers
+        # solely because source-system capitalization differs.
+        driver = raw_driver.casefold().strip() if raw_driver != "Unspecified" else raw_driver
+        labels.setdefault(driver, raw_driver)
         totals[(driver, tx.period)] += tx.amount
         evidence[driver].add(tx.transaction_id)
 
@@ -48,7 +53,7 @@ def breakdown_by_dimension(
     rows = [
         DriverContribution(
             dimension=dimension,
-            driver=driver,
+            driver=labels[driver],
             prior_amount=totals[(driver, prior_period)],
             current_amount=totals[(driver, current_period)],
             variance=change,

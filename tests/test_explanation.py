@@ -63,6 +63,40 @@ def test_template_explanation_is_grounded_and_traced():
     assert observer.events[0].step_type == "llm_call"
 
 
+def test_coverage_percentage_display_is_groundable():
+    account, claims = evidence()
+    provider = StaticProvider(
+        {
+            "headline": "Revenue variance",
+            "summary": "Verified evidence covers 100% of absolute driver movement.",
+            "claim_ids": [claims[0].claim_id],
+        }
+    )
+    explanation = EvidenceBoundExplainer(provider).explain(account, claims)
+    assert "100%" in explanation.summary
+
+
+def test_rounded_coverage_percentage_is_groundable():
+    account, claims = evidence()
+    account = account.__class__(
+        **{
+            **account.__dict__,
+            "stop_decision": account.stop_decision.__class__(
+                True, Decimal("0.877777777777777777"), True, "coverage_target_met"
+            ),
+        }
+    )
+    provider = StaticProvider(
+        {
+            "headline": "Revenue variance",
+            "summary": "Verified evidence covers 87.78% of absolute driver movement.",
+            "claim_ids": [claims[0].claim_id],
+        }
+    )
+    explanation = EvidenceBoundExplainer(provider).explain(account, claims)
+    assert "87.78%" in explanation.summary
+
+
 class StaticProvider:
     name = "test"
 

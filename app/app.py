@@ -2,9 +2,17 @@
 
 import json
 import os
+import sys
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
+
+# Streamlit executes this file with ``app/`` as the import root. Add the
+# repository root so the local ``src`` package resolves without PYTHONPATH
+# shell configuration or an editable install.
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 import streamlit as st
 from dotenv import load_dotenv
@@ -29,7 +37,7 @@ from src.ingestion.validation import validate_dataset
 from src.memory import JsonMemoryStore, compare_investigation_runs
 from src.observability import InMemoryTraceObserver
 
-ROOT = Path(__file__).parents[1]
+ROOT = PROJECT_ROOT
 SAMPLE = ROOT / "data" / "sample"
 MEMORY = ROOT / "data" / "memory"
 if os.getenv("LEDGER_LENS_DISABLE_DOTENV") != "1":
@@ -51,10 +59,11 @@ def evidence_summary(account) -> str:
         "new from zero" if variance.variance_pct is None else f"{abs(variance.variance_pct):.1f}%"
     )
     if not account.drivers:
-        return (
+        summary = (
             f"{variance.account} {direction} by {money(abs(variance.variance))} ({percent}), "
             "but no transaction-backed driver explanation is available."
         )
+        return " ".join([summary, *[f"{note}." for note in account.reliability_notes]])
     lead = account.drivers[0]
     return (
         f"{variance.account} {direction} by {money(abs(variance.variance))} ({percent}). "
@@ -279,6 +288,11 @@ with overview:
                 )
         else:
             st.write(evidence_summary(item))
+        for flag in item.quality_flags:
+            if flag.severity == "blocker":
+                st.error(flag.message)
+            else:
+                st.warning(flag.message)
 
 with drivers_tab:
     selected_account = st.selectbox(

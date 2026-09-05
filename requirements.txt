@@ -1,6 +1,6 @@
-pandas
-pydantic
-streamlit
-python-dotenv
-pytest
-prismtrace-sdk
+pandas>=2.2,<3
+pydantic>=2.8,<3
+streamlit>=1.40,<2
+python-dotenv>=1.0,<2
+httpx>=0.28,<0.29
+prismtrace-sdk>=0.4.2,<0.5

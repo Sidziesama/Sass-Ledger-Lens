@@ -67,7 +67,8 @@ def build_claim_lineage(
             tx
             for tx in source
             if tx.account == investigation.variance.account
-            and (getattr(tx, driver.dimension) or "Unspecified") == driver.driver
+            and (getattr(tx, driver.dimension) or "Unspecified").casefold().strip()
+            == driver.driver.casefold().strip()
         ]
         if len(matching) != len(source):
             raise EvidenceError(f"transaction lineage does not match driver {driver.driver}")

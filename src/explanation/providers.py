@@ -61,12 +61,17 @@ def _compact_evidence_prompt(prompt: str) -> str:
             f"{claim['driver']} {claim['variance']} ({claim['transaction_count']} transactions)"
             for claim in packet["claims"]
         )
+        disclosures = "; ".join(packet.get("required_disclosures", []))
+        coverage_display = packet.get(
+            "coverage_percentage_display", f"{packet['coverage_percentage']}%"
+        )
         return (
             f"Account: {packet['account']}. Prior: {variance['prior_amount']}. "
             f"Current: {variance['current_amount']}. Variance: {variance['amount']} "
-            f"({variance['percentage_display']}). Coverage: {packet['coverage_percentage']}%. "
+            f"({variance['percentage_display']}). Coverage: {coverage_display}. "
             f"Evidence sufficient: {packet['evidence_sufficient']}. "
-            f"Verified drivers: {drivers}. Explain in one sentence."
+            f"Verified drivers: {drivers}. Required disclosures: {disclosures}. "
+            "Include every required disclosure verbatim."
         )
     except (json.JSONDecodeError, KeyError, TypeError):
         return prompt
@@ -276,6 +281,9 @@ class TemplateExplanationProvider:
             f"The largest identified driver was {lead['driver']}, contributing "
             f"{lead['variance']} and supported by {len(lead['transaction_ids'])} transactions."
         )
+        disclosures = packet.get("required_disclosures", [])
+        if disclosures:
+            summary = " ".join([summary, *[f"{item}." for item in disclosures]])
         return json.dumps(
             {
                 "headline": f"{account} {direction}",

@@ -2,11 +2,51 @@
 
 Ledger Lens is a JSON-first financial variance investigation system for the Maximor Money Operations “Explain the Change” track.
 
+**Submission branch:** `python-grounded-prism`
+
+The governing rule is: **Python calculates. The agent investigates. The LLM explains.**
+
+## Quick start
+
+Ledger Lens requires Python 3.11 or newer. From the repository root:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+cp .env.example .env
+```
+
+The application works offline with its deterministic explanation provider. To use GIDE, create a
+local API key, put it in the private `.env` file, and start its server:
+
+```bash
+gide apikey create ledger-lens
+gide server start
+```
+
+Run the dashboard:
+
+```bash
+python -m streamlit run app/app.py
+```
+
+Or run the investigation directly, adding `--llm` when GIDE is available:
+
+```bash
+python -m src.cli \
+  --prior 2026-01-01 \
+  --current 2026-02-01 \
+  --llm \
+  --llm-debug
+```
+
+Local secrets, model history, virtual environments, caches, and generated run artifacts are
+excluded from Git. Never commit `.env`.
+
 ## Milestone 1: financial foundation
 
 The current implementation validates account summaries and transactions with Pydantic, compares periods with exact `Decimal` arithmetic, ranks material variances, decomposes changes across business dimensions, and preserves transaction IDs as evidence lineage.
-
-The governing rule is: **Python calculates. The agent investigates. The LLM explains.**
 
 ```bash
 source .venv/bin/activate
@@ -40,6 +80,17 @@ Upload a monthly-summary JSON file and a transaction JSON file together from the
 Saved investigations appear in the Run history tab with periods, account results, claim counts, and review status. Any two stored runs can be compared to show variance changes and newly appearing or disappearing drivers.
 
 Reviewers can attach a structured correction to their feedback. Corrections are promoted into business context with reviewer and run provenance, then retrieved automatically for later investigations of the same account. Corrections inform explanations but never alter deterministic financial calculations.
+
+The reliability gate runs before attribution. It reports reconciliation gaps with exact amounts,
+near-duplicates, counterparty naming variants, sign inconsistencies, missing periods, and cutoff
+mismatches. A reconciliation gap blocks an evidence-sufficient conclusion. The memo also carries
+deterministic disclosures for zero bases, reversals, data-detected reclassifications, one-time
+items, distributed or concentrated movement, inactive counterparties, and outlier masking. Every
+memo states that the available data does not establish the underlying business cause.
+
+Saved runs write proposed, system-inferred priors for the next investigation. Priors retain a
+source type, status, validity window, learned range, and reviewer reason. The memo identifies
+applied prior IDs and explicitly reports expired, rejected, or contested priors as not applied.
 
 ```bash
 streamlit run app/app.py
@@ -103,7 +154,8 @@ pytest -q
 python -m src.evaluation.benchmark
 ```
 
-CI runs these checks for every pull request and every push to `main`.
+CI runs these checks for every pull request and every push to `main` or
+`python-grounded-prism`.
 
 ## PRISM evaluation pipeline
 

@@ -34,6 +34,10 @@ def _number_tokens(text: str) -> set[str]:
 
 def build_evidence_packet(investigation: AccountInvestigation, claims: list[ClaimLineage]) -> dict:
     variance = investigation.variance
+    coverage_percentage = investigation.stop_decision.coverage * Decimal("100")
+    coverage_display = (
+        format(coverage_percentage.quantize(Decimal("0.01")), "f").rstrip("0").rstrip(".")
+    )
     return {
         "account": variance.account,
         "periods": {
@@ -57,7 +61,12 @@ def build_evidence_packet(investigation: AccountInvestigation, claims: list[Clai
                 else "not-applicable"
             ),
         },
-        "coverage_percentage": str(investigation.stop_decision.coverage * Decimal("100")),
+        "coverage_percentage": str(coverage_percentage),
+        "coverage_percentage_display": f"{coverage_display}%",
+        "coverage_percentage_display_variants": [
+            f"{coverage_percentage.quantize(Decimal('0.1'))}%",
+            f"{coverage_display}%",
+        ],
         "evidence_sufficient": investigation.stop_decision.evidence_sufficient,
         "claims": [
             {
@@ -79,6 +88,10 @@ def build_evidence_packet(investigation: AccountInvestigation, claims: list[Clai
         ],
         "business_context": [
             context.model_dump(mode="json") for context in investigation.business_context
+        ],
+        "required_disclosures": [
+            *investigation.reliability_notes,
+            *(flag.message for flag in investigation.quality_flags),
         ],
     }
 
@@ -109,6 +122,16 @@ class EvidenceBoundExplainer:
             raw = self.provider.generate(system=SYSTEM_PROMPT, prompt=json.dumps(packet))
             draft = ExplanationDraft.model_validate_json(raw)
             self._validate_grounding(draft, packet)
+            normalized_summary = draft.summary.casefold()
+            missing = [
+                note
+                for note in packet["required_disclosures"]
+                if note.casefold() not in normalized_summary
+            ]
+            if missing:
+                draft = draft.model_copy(
+                    update={"summary": " ".join([draft.summary, *[f"{note}." for note in missing]])}
+                )
             result = GroundedExplanation(
                 **draft.model_dump(),
                 account=investigation.variance.account,
