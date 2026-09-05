@@ -12,14 +12,21 @@ git worktree add /tmp/court origin/main
 COURTROOM_ROOT=/tmp/court python -m reliability.benchmark.evaluate --runner reliability.benchmark.adapters.courtroom_v1:run_normalized
 ```
 
-| | `main` @ d180870 (JS courtroom) | old `main` @ 3d74433 (Python) | `reliability-hardening` @ 9b0eed8 | reference |
-|---|---|---|---|---|
-| **Overall** | **8 / 56** normalized · 0 / 56 raw | 0 / 56 | 5 / 56 | **56 / 56** |
-| normal | 4 / 11 | 0 / 11 | 3 / 11 | 11 / 11 |
-| ambiguous | 0 / 10 | 0 / 10 | 0 / 10 | 10 / 10 |
-| data quality | 2 / 11 | 0 / 11 | 0 / 11 | 11 / 11 |
-| adversarial | 1 / 10 | 0 / 10 | 1 / 10 | 10 / 10 |
-| memory (incl. 4 multi-run sequences) | 1 / 14 | 0 / 14 | 1 / 14 | 14 / 14 |
+| | `main` @ d180870 (JS courtroom) | `python-grounded-prism` @ 6319d12 | `reliability-hardening` @ 9b0eed8 | old `main` @ 3d74433 | reference |
+|---|---|---|---|---|---|
+| **Overall** | **8 / 56** normalized · 0 / 56 raw | 0 / 56 | 5 / 56 | 0 / 56 | **56 / 56** |
+| normal | 4 / 11 | 0 / 11 | 3 / 11 | 0 / 11 | 11 / 11 |
+| ambiguous | 0 / 10 | 0 / 10 | 0 / 10 | 0 / 10 | 10 / 10 |
+| data quality | 2 / 11 | 0 / 11 | 0 / 11 | 0 / 11 | 11 / 11 |
+| adversarial | 1 / 10 | 0 / 10 | 1 / 10 | 0 / 10 | 10 / 10 |
+| memory (incl. 4 multi-run sequences) | 1 / 14 | 0 / 14 | 1 / 14 | 0 / 14 | 14 / 14 |
+
+`python-grounded-prism` continues the Python lineage with a GIDE-backed grounded explainer
+(claim-id and number-token checks) and PRISM tracing. Scored with its offline template
+provider it repeats the unrounded-Decimal memo ("40.90037309924180988050104740%") — the
+rounding fix on `reliability-hardening` was never merged into it — so every case fails
+`number_lint` before anything else is measured; the rest of its profile matches the old
+Python `main` exactly (37 premature-stopping, 19 data-quality, 10 memory).
 
 Only asserted text is scanned for forbidden language — a candidate the courtroom
 *rejects* ("Proposed: growth was broad-based") is judgement, not assertion.
