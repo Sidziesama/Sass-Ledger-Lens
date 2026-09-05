@@ -53,6 +53,29 @@ RUN_RESULT_FIELDS = (
 )
 
 
+# A multi-run case carries a sequence.json:
+#   {"steps": [{"period", "prior_period", "feedback": [ops...], "ground_truth": {...}}, ...]}
+# Steps share one memory file. Feedback ops are applied BEFORE the step runs:
+#   {"op": "add", "type", "scope", "statement", "implication", "confidence",
+#    "source_type", "valid_from", "valid_until", "expectation"}
+#   {"op": "confirm" | "reject" | "contest", "id", "note"}
+#   {"op": "correct", "id", "statement", "implication", "note"}
+FEEDBACK_OPS = ("add", "confirm", "reject", "contest", "correct")
+
+
+def new_sequence(id, category, title, steps, **case_gt):
+    """A case whose ground truth is checked at each step of a run sequence."""
+    c = new_case(id, category, title, steps[-1]["period"], steps[-1]["prior_period"], **case_gt)
+    out = []
+    for st in steps:
+        g = dict(GROUND_TRUTH_DEFAULTS); g.update(st.get("ground_truth") or {})
+        out.append({"period": st["period"], "prior_period": st["prior_period"],
+                    "feedback": st.get("feedback") or [], "ground_truth": g,
+                    "score": st.get("score", True)})
+    c["sequence"] = {"steps": out}
+    return c
+
+
 def new_case(id, category, title, period, prior_period, **gt):
     assert category in CATEGORIES, category
     g = dict(GROUND_TRUTH_DEFAULTS)

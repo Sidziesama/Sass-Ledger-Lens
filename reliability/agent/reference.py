@@ -18,6 +18,7 @@ from ..evidence.claims import Claim, ClaimSet
 from ..finance import detectors as D
 from ..finance.metrics import expectation
 from ..ingestion.normalize import SimpleDataset
+from ..memory.learn import propose
 from ..memory.store import PriorStore
 from ..observability.prism import Tracer
 from ..quality.gate import run_gate
@@ -35,6 +36,20 @@ CONCENTRATION_SHARE = 0.80
 DISTRIBUTED_TOP3 = 0.35
 DISTRIBUTED_MIN_MEMBERS = 20
 UNEXPLAINED_REPORT_SHARE = 0.15
+
+
+_NUM_RX = re.compile(r"[-+]?\$?\d[\d,]*(?:\.\d+)?")
+
+
+def _nums_in(*texts):
+    out = []
+    for t in texts:
+        for tok in _NUM_RX.findall(t or ""):
+            try:
+                out.append(float(tok.replace("$", "").replace(",", "")))
+            except ValueError:
+                pass
+    return out
 
 
 def _shift_period(period, months):
@@ -295,6 +310,8 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
     unexplained, abstained_scope = {}, []
     total_attr, total_var = 0.0, 0.0
     weak_context = False
+    learned = {"reclass": [], "one_time": [], "silent_churn": []}
+    cited = set()
     detector_findings = []
     sentences = []
 
@@ -344,6 +361,8 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
                                      transaction_ids=[t["txn_id"] for t in ds.txns(period)
                                                       if t["counterparty_name"] == f["counterparty"]][:10]))
                 sentences.append(f"{txt} [{c.id}]"); detector_findings.append(f)
+                if f not in learned["reclass"]:
+                    learned["reclass"].append(f)
                 total_attr += f["amount"]; tr.event("driver_found", account=acct, kind="reclass")
         for f in gate["flags"]:
             if f["code"] == "REVERSAL_PAIR" and f["scope"].get("account") == acct and f["scope"].get("cross_period"):
@@ -550,6 +569,7 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
                                          confidence=f["confidence"], driver_amount=f["excess"], variance=V, numbers=[f["excess"], f["z_score"]],
                                          transaction_ids=[e["txn_id"] for e in f["evidence"]]))
                     sentences.append(f"{txt} [{c.id}]"); detector_findings.append(f)
+                    learned["one_time"].append(dict(f, gl_account_name=acct))
 
         # -- memory: use, verify, or reject ------------------------------------------
         for p in priors:
@@ -594,9 +614,11 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
                 txt = (f"An unverified system hypothesis, {p['id']}, not confirmed by a reviewer, would read: "
                        f"{txt} It is not treated as an established fact.")
                 weak_context = True
+            cited.add(p["id"])
             c = claims.add(Claim(txt, account=acct, kind="context", prior_ids=[p["id"]],
                                  confidence=p["confidence"],
-                                 numbers=[r["variance_pct"], (p.get("expectation") or {}).get("max_increase_pct"), V]))
+                                 numbers=[r["variance_pct"], (p.get("expectation") or {}).get("max_increase_pct"), V]
+                                 + _nums_in(p["statement"], p["implication"])))
             c.transaction_ids = ["n/a"]
             sentences.append(f"{txt} [{c.id}]")
         for rj in rejected:
@@ -604,7 +626,8 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
                 pr = next((x for x in store.priors if x["id"] == rj["id"]), None)
                 if pr and (pr.get("scope", {}).get("account") or "").lower() == acct.lower():
                     txt = f"{rj['id']} ({pr['statement']}) was not applied: {rj['reason']}."
-                    c = claims.add(Claim(txt, account=acct, kind="context", confidence=1.0)); c.transaction_ids = ["n/a"]
+                    c = claims.add(Claim(txt, account=acct, kind="context", confidence=1.0,
+                                         numbers=_nums_in(pr["statement"]))); c.transaction_ids = ["n/a"]
                     sentences.append(f"{txt} [{c.id}]")
 
         # -- residual -------------------------------------------------------------------
@@ -625,6 +648,50 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
         total_attr += attr_total
         tr.event("investigation_stopped", account=acct,
                  reason=f"top3 {best['top3_share']:.0%}" if best else "no decomposition")
+
+    # -- revenue that stopped arriving --------------------------------------------
+    # Runs regardless of whether Revenue moved this month. That is the point: a
+    # customer who quietly stops buying creates no transaction, so no variance
+    # will ever surface it. Only a look at what USED to happen can.
+    churn_acct = None
+    if gate["trend_allowed"] and len([p for p in ds.periods if p <= period]) >= 13:
+        rev_by_acct = defaultdict(float)
+        for t in ds.txns(period):
+            if t["statement_section"] == "Revenue":
+                rev_by_acct[t["gl_account"]] += t["amount"]
+        churn_acct = max(rev_by_acct, key=rev_by_acct.get, default=None)
+        dim = "category" if "category" in ds.dimensions else ("product" if "product" in ds.dimensions else None)
+        churn = D.detect_silent_churn(ds, period, lookback=3, dim=dim)
+        tr.event("tool_called", tool="check_silent_churn", lookback=3, dimension=dim or "counterparty",
+                 findings=len(churn))
+        for f in churn[:6]:
+            what = f"{f['category']} " if f.get("category") and f["category"] != "(all)" else ""
+            txt = (f"{f['customer']} bought {what}in {f['months_active']} of {f['months_available']} months "
+                   f"(~{_money(f['avg_monthly_revenue'])}/mo) and has bought none since {f['last_purchase_period']}: "
+                   f"{_money(f['annualised_run_rate_lost'])} of annualised {churn_acct or 'Revenue'} at risk that no "
+                   f"variance report would show, because nothing was booked.")
+            c = claims.add(Claim(txt, account=churn_acct or "Revenue", kind="attribution", detector="silent_churn",
+                                 drivers=[f["customer"]], confidence=f["confidence"],
+                                 numbers=[f["months_active"], f["months_available"], f["avg_monthly_revenue"],
+                                          f["annualised_run_rate_lost"]],
+                                 transaction_ids=[e["txn_id"] for e in f["evidence"]]))
+            sentences.append(f"{txt} [{c.id}]")
+            learned["silent_churn"].append(dict(f, account=churn_acct or "Revenue"))
+        if churn:
+            tr.event("driver_found", account=churn_acct, kind="silent_churn", count=len(churn))
+
+    # -- standing context carried from earlier runs --------------------------------
+    # Structural and policy priors matter even when their account did not move.
+    for p in priors:
+        if p["id"] in cited or p["type"] not in ("structural", "accounting_policy", "one_time"):
+            continue
+        a = (p.get("scope") or {}).get("account")
+        txt = f"Carried from earlier runs, {p['id']}: {p['statement']}; {p['implication']}."
+        c = claims.add(Claim(txt, account=a, kind="context", prior_ids=[p["id"]], confidence=p["confidence"],
+                             numbers=_nums_in(p["statement"], p["implication"])))
+        c.transaction_ids = ["n/a"]
+        sentences.append(f"{txt} [{c.id}]")
+        memory_used.append(p["id"]); cited.add(p["id"])
 
     # -- margin composition: mix vs rate ----------------------------------------
     # Blended margin can improve while every segment's margin falls, if sales
@@ -648,6 +715,12 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
         sentences.append(f"{txt} [{c.id}]")
 
     if store:
+        new_ids = propose(store, tr.run_id, period, learned)
+        if new_ids:
+            tr.event("prior_learned", ids=new_ids)
+        store.record_run({"run_id": tr.run_id, "period": period, "prior_period": prior_period,
+                          "investigated": [r["account"] for r in investigate],
+                          "priors_used": sorted(set(memory_used)), "priors_learned": new_ids})
         store.save()
 
     if not investigate:

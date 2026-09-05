@@ -1,0 +1,111 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R01r0000,2026-01-04,2026-01,Revenue,127312.36,Acme,subscription,Enterprise
+R01r0001,2026-01-27,2026-01,Revenue,123843.28,Globex,subscription,Enterprise
+R01r0002,2026-01-23,2026-01,Revenue,124560.4,Stark,subscription,Enterprise
+R01r0003,2026-01-20,2026-01,Revenue,123219.38,Initech,subscription,Enterprise
+R01r0004,2026-01-02,2026-01,Revenue,126022.94,Umbrella,subscription,SMB
+R01r0005,2026-01-19,2026-01,Revenue,123093.02,Hooli,subscription,SMB
+R01r0006,2026-01-26,2026-01,Revenue,126731.04,Vandelay,subscription,SMB
+R01r0007,2026-01-05,2026-01,Revenue,125588.68,Wonka,subscription,SMB
+O01r0000,2026-01-15,2026-01,Payroll,260000,Payroll (internal),,
+O01r0001,2026-01-15,2026-01,Rent,40000,Granby,,
+FR0,2026-01-28,2026-01,Outbound Freight,60000,Pacific Freight Partners,freight,
+R02r1000,2026-02-12,2026-02,Revenue,125541.42,Acme,subscription,Enterprise
+R02r1001,2026-02-12,2026-02,Revenue,123408.45,Globex,subscription,Enterprise
+R02r1002,2026-02-16,2026-02,Revenue,127067.86,Stark,subscription,Enterprise
+R02r1003,2026-02-23,2026-02,Revenue,126054.01,Initech,subscription,Enterprise
+R02r1004,2026-02-08,2026-02,Revenue,126749.18,Umbrella,subscription,SMB
+R02r1005,2026-02-26,2026-02,Revenue,127023.71,Hooli,subscription,SMB
+R02r1006,2026-02-27,2026-02,Revenue,123026.92,Vandelay,subscription,SMB
+R02r1007,2026-02-19,2026-02,Revenue,126844.48,Wonka,subscription,SMB
+O02r1000,2026-02-15,2026-02,Payroll,260000,Payroll (internal),,
+O02r1001,2026-02-15,2026-02,Rent,40000,Granby,,
+FR1,2026-02-28,2026-02,Outbound Freight,60000,Pacific Freight Partners,freight,
+R03r2000,2026-03-13,2026-03,Revenue,124393.15,Acme,subscription,Enterprise
+R03r2001,2026-03-04,2026-03,Revenue,124960.09,Globex,subscription,Enterprise
+R03r2002,2026-03-07,2026-03,Revenue,124106.14,Stark,subscription,Enterprise
+R03r2003,2026-03-19,2026-03,Revenue,126439.39,Initech,subscription,Enterprise
+R03r2004,2026-03-06,2026-03,Revenue,126152.01,Umbrella,subscription,SMB
+R03r2005,2026-03-12,2026-03,Revenue,124962.81,Hooli,subscription,SMB
+R03r2006,2026-03-11,2026-03,Revenue,123777.91,Vandelay,subscription,SMB
+R03r2007,2026-03-16,2026-03,Revenue,126049.0,Wonka,subscription,SMB
+O03r2000,2026-03-15,2026-03,Payroll,260000,Payroll (internal),,
+O03r2001,2026-03-15,2026-03,Rent,40000,Granby,,
+FR2,2026-03-28,2026-03,Outbound Freight,60000,Pacific Freight Partners,freight,
+R04r3000,2026-04-15,2026-04,Revenue,125318.93,Acme,subscription,Enterprise
+R04r3001,2026-04-19,2026-04,Revenue,124035.65,Globex,subscription,Enterprise
+R04r3002,2026-04-07,2026-04,Revenue,123642.16,Stark,subscription,Enterprise
+R04r3003,2026-04-13,2026-04,Revenue,123981.98,Initech,subscription,Enterprise
+R04r3004,2026-04-04,2026-04,Revenue,125789.98,Umbrella,subscription,SMB
+R04r3005,2026-04-17,2026-04,Revenue,126312.96,Hooli,subscription,SMB
+R04r3006,2026-04-10,2026-04,Revenue,127357.86,Vandelay,subscription,SMB
+R04r3007,2026-04-22,2026-04,Revenue,126875.45,Wonka,subscription,SMB
+O04r3000,2026-04-15,2026-04,Payroll,260000,Payroll (internal),,
+O04r3001,2026-04-15,2026-04,Rent,40000,Granby,,
+FR3,2026-04-28,2026-04,Outbound Freight,60000,Pacific Freight Partners,freight,
+R05r4000,2026-05-04,2026-05,Revenue,124028.27,Acme,subscription,Enterprise
+R05r4001,2026-05-06,2026-05,Revenue,122974.81,Globex,subscription,Enterprise
+R05r4002,2026-05-26,2026-05,Revenue,126847.62,Stark,subscription,Enterprise
+R05r4003,2026-05-24,2026-05,Revenue,124103.6,Initech,subscription,Enterprise
+R05r4004,2026-05-15,2026-05,Revenue,127250.89,Umbrella,subscription,SMB
+R05r4005,2026-05-23,2026-05,Revenue,124911.61,Hooli,subscription,SMB
+R05r4006,2026-05-20,2026-05,Revenue,123540.0,Vandelay,subscription,SMB
+R05r4007,2026-05-24,2026-05,Revenue,123415.04,Wonka,subscription,SMB
+O05r4000,2026-05-15,2026-05,Payroll,260000,Payroll (internal),,
+O05r4001,2026-05-15,2026-05,Rent,40000,Granby,,
+FR4,2026-05-28,2026-05,Outbound Freight,60000,Pacific Freight Partners,freight,
+R06r5000,2026-06-23,2026-06,Revenue,124854.66,Acme,subscription,Enterprise
+R06r5001,2026-06-05,2026-06,Revenue,124049.39,Globex,subscription,Enterprise
+R06r5002,2026-06-18,2026-06,Revenue,125341.02,Stark,subscription,Enterprise
+R06r5003,2026-06-16,2026-06,Revenue,126674.76,Initech,subscription,Enterprise
+R06r5004,2026-06-14,2026-06,Revenue,124962.35,Umbrella,subscription,SMB
+R06r5005,2026-06-22,2026-06,Revenue,127239.62,Hooli,subscription,SMB
+R06r5006,2026-06-13,2026-06,Revenue,122611.44,Vandelay,subscription,SMB
+R06r5007,2026-06-10,2026-06,Revenue,124413.25,Wonka,subscription,SMB
+O06r5000,2026-06-15,2026-06,Payroll,260000,Payroll (internal),,
+O06r5001,2026-06-15,2026-06,Rent,40000,Granby,,
+FR5,2026-06-28,2026-06,Outbound Freight,60000,Pacific Freight Partners,freight,
+R07r6000,2026-07-04,2026-07,Revenue,127478.73,Acme,subscription,Enterprise
+R07r6001,2026-07-07,2026-07,Revenue,125768.97,Globex,subscription,Enterprise
+R07r6002,2026-07-09,2026-07,Revenue,124944.86,Stark,subscription,Enterprise
+R07r6003,2026-07-27,2026-07,Revenue,123914.88,Initech,subscription,Enterprise
+R07r6004,2026-07-07,2026-07,Revenue,123069.18,Umbrella,subscription,SMB
+R07r6005,2026-07-25,2026-07,Revenue,125524.76,Hooli,subscription,SMB
+R07r6006,2026-07-11,2026-07,Revenue,125769.27,Vandelay,subscription,SMB
+R07r6007,2026-07-19,2026-07,Revenue,126671.21,Wonka,subscription,SMB
+O07r6000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,
+O07r6001,2026-07-15,2026-07,Rent,40000,Granby,,
+FR6,2026-07-28,2026-07,Freight (COGS),60000,Pacific Freight Partners,freight,
+R08r7000,2026-08-09,2026-08,Revenue,126670.29,Acme,subscription,Enterprise
+R08r7001,2026-08-15,2026-08,Revenue,123772.7,Globex,subscription,Enterprise
+R08r7002,2026-08-19,2026-08,Revenue,124346.91,Stark,subscription,Enterprise
+R08r7003,2026-08-20,2026-08,Revenue,122885.06,Initech,subscription,Enterprise
+R08r7004,2026-08-17,2026-08,Revenue,125928.09,Umbrella,subscription,SMB
+R08r7005,2026-08-18,2026-08,Revenue,124677.09,Hooli,subscription,SMB
+R08r7006,2026-08-04,2026-08,Revenue,126898.88,Vandelay,subscription,SMB
+R08r7007,2026-08-04,2026-08,Revenue,122764.71,Wonka,subscription,SMB
+O08r7000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,
+O08r7001,2026-08-15,2026-08,Rent,40000,Granby,,
+FR7,2026-08-28,2026-08,Freight (COGS),60000,Pacific Freight Partners,freight,
+R09r8000,2026-09-19,2026-09,Revenue,125931.78,Acme,subscription,Enterprise
+R09r8001,2026-09-23,2026-09,Revenue,122808.33,Globex,subscription,Enterprise
+R09r8002,2026-09-09,2026-09,Revenue,123793.63,Stark,subscription,Enterprise
+R09r8003,2026-09-03,2026-09,Revenue,126514.17,Initech,subscription,Enterprise
+R09r8004,2026-09-21,2026-09,Revenue,124204.89,Umbrella,subscription,SMB
+R09r8005,2026-09-12,2026-09,Revenue,127009.52,Hooli,subscription,SMB
+R09r8006,2026-09-18,2026-09,Revenue,123882.89,Vandelay,subscription,SMB
+R09r8007,2026-09-05,2026-09,Revenue,123513.78,Wonka,subscription,SMB
+O09r8000,2026-09-15,2026-09,Payroll,260000,Payroll (internal),,
+O09r8001,2026-09-15,2026-09,Rent,40000,Granby,,
+FR8,2026-09-28,2026-09,Freight (COGS),60000,Pacific Freight Partners,freight,
+R10r9000,2026-10-04,2026-10,Revenue,124296.31,Acme,subscription,Enterprise
+R10r9001,2026-10-05,2026-10,Revenue,125201.97,Globex,subscription,Enterprise
+R10r9002,2026-10-26,2026-10,Revenue,127284.87,Stark,subscription,Enterprise
+R10r9003,2026-10-10,2026-10,Revenue,123713.37,Initech,subscription,Enterprise
+R10r9004,2026-10-03,2026-10,Revenue,126773.97,Umbrella,subscription,SMB
+R10r9005,2026-10-21,2026-10,Revenue,126100.41,Hooli,subscription,SMB
+R10r9006,2026-10-04,2026-10,Revenue,126779.81,Vandelay,subscription,SMB
+R10r9007,2026-10-24,2026-10,Revenue,125907.99,Wonka,subscription,SMB
+O10r9000,2026-10-15,2026-10,Payroll,260000,Payroll (internal),,
+O10r9001,2026-10-15,2026-10,Rent,40000,Granby,,
+FR9,2026-10-28,2026-10,Freight (COGS),60000,Pacific Freight Partners,freight,

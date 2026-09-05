@@ -1,0 +1,185 @@
+{
+  "steps": [
+    {
+      "period": "2026-03",
+      "prior_period": "2026-02",
+      "feedback": [],
+      "ground_truth": {
+        "expected_material_variances": [],
+        "expected_immaterial": [],
+        "expected_top_drivers": {},
+        "expected_unexplained_amount": null,
+        "expected_unexplained_min_share": null,
+        "expected_data_quality_flags": [],
+        "expected_no_data_quality_flags": [],
+        "expected_memory_usage": [],
+        "expected_memory_rejected": [],
+        "forbidden_claims": [],
+        "forbidden_patterns": [],
+        "required_patterns": [],
+        "acceptable_confidence": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "expected_abstention": false,
+        "expected_abstention_scope": [],
+        "max_tool_calls": 30,
+        "notes": ""
+      },
+      "score": false
+    },
+    {
+      "period": "2026-04",
+      "prior_period": "2026-03",
+      "feedback": [],
+      "ground_truth": {
+        "expected_material_variances": [],
+        "expected_immaterial": [],
+        "expected_top_drivers": {},
+        "expected_unexplained_amount": null,
+        "expected_unexplained_min_share": null,
+        "expected_data_quality_flags": [],
+        "expected_no_data_quality_flags": [],
+        "expected_memory_usage": [],
+        "expected_memory_rejected": [],
+        "forbidden_claims": [],
+        "forbidden_patterns": [],
+        "required_patterns": [],
+        "acceptable_confidence": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "expected_abstention": false,
+        "expected_abstention_scope": [],
+        "max_tool_calls": 30,
+        "notes": ""
+      },
+      "score": false
+    },
+    {
+      "period": "2026-05",
+      "prior_period": "2026-04",
+      "feedback": [],
+      "ground_truth": {
+        "expected_material_variances": [],
+        "expected_immaterial": [],
+        "expected_top_drivers": {},
+        "expected_unexplained_amount": null,
+        "expected_unexplained_min_share": null,
+        "expected_data_quality_flags": [],
+        "expected_no_data_quality_flags": [],
+        "expected_memory_usage": [],
+        "expected_memory_rejected": [],
+        "forbidden_claims": [],
+        "forbidden_patterns": [],
+        "required_patterns": [],
+        "acceptable_confidence": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "expected_abstention": false,
+        "expected_abstention_scope": [],
+        "max_tool_calls": 30,
+        "notes": ""
+      },
+      "score": false
+    },
+    {
+      "period": "2026-06",
+      "prior_period": "2026-05",
+      "feedback": [],
+      "ground_truth": {
+        "expected_material_variances": [],
+        "expected_immaterial": [],
+        "expected_top_drivers": {},
+        "expected_unexplained_amount": null,
+        "expected_unexplained_min_share": null,
+        "expected_data_quality_flags": [],
+        "expected_no_data_quality_flags": [],
+        "expected_memory_usage": [],
+        "expected_memory_rejected": [],
+        "forbidden_claims": [],
+        "forbidden_patterns": [],
+        "required_patterns": [],
+        "acceptable_confidence": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "expected_abstention": false,
+        "expected_abstention_scope": [],
+        "max_tool_calls": 30,
+        "notes": ""
+      },
+      "score": false
+    },
+    {
+      "period": "2026-07",
+      "prior_period": "2026-06",
+      "feedback": [],
+      "ground_truth": {
+        "expected_material_variances": [],
+        "expected_immaterial": [],
+        "expected_top_drivers": {},
+        "expected_unexplained_amount": null,
+        "expected_unexplained_min_share": null,
+        "expected_data_quality_flags": [],
+        "expected_no_data_quality_flags": [],
+        "expected_memory_usage": [],
+        "expected_memory_rejected": [],
+        "forbidden_claims": [],
+        "forbidden_patterns": [],
+        "required_patterns": [],
+        "acceptable_confidence": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "expected_abstention": false,
+        "expected_abstention_scope": [],
+        "max_tool_calls": 30,
+        "notes": ""
+      },
+      "score": false
+    },
+    {
+      "period": "2026-08",
+      "prior_period": "2026-07",
+      "feedback": [],
+      "ground_truth": {
+        "expected_material_variances": [],
+        "expected_immaterial": [],
+        "expected_top_drivers": {},
+        "expected_unexplained_amount": null,
+        "expected_unexplained_min_share": null,
+        "expected_data_quality_flags": [],
+        "expected_no_data_quality_flags": [],
+        "expected_memory_usage": [],
+        "expected_memory_rejected": [],
+        "forbidden_claims": [],
+        "forbidden_patterns": [
+          "\\bchurn",
+          "lost the customer"
+        ],
+        "required_patterns": [
+          "has bought none since",
+          "annualised Revenue at risk",
+          "(Carried from earlier runs, |Context from memory )PR-000\\d"
+        ],
+        "acceptable_confidence": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "expected_abstention": false,
+        "expected_abstention_scope": [],
+        "max_tool_calls": 30,
+        "notes": ""
+      },
+      "score": true
+    }
+  ]
+}

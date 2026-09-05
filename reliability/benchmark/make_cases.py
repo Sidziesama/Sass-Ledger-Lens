@@ -12,7 +12,7 @@ import os
 import random
 import shutil
 
-from .schema import new_case
+from .schema import new_case, new_sequence
 from ..memory.store import PriorStore
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -51,8 +51,12 @@ def write(case, txns, summary=None, memory=None, policy=None, raw_txn_rows=None,
         summary = [{"period": p, "account": a, "amount": round(v, 2)} for (p, a), v in sorted(agg.items())]
     with open(os.path.join(d, "monthly_summary.csv"), "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=["period", "account", "amount"]); w.writeheader(); w.writerows(summary)
+    seq = case.pop("sequence", None)
     with open(os.path.join(d, "case.json"), "w") as f:
         json.dump(case, f, indent=2)
+    if seq:
+        with open(os.path.join(d, "sequence.json"), "w") as f:
+            json.dump(seq, f, indent=2)
     if memory:
         memory.path = os.path.join(d, "memory.json"); memory.save()
     if policy:
@@ -592,6 +596,89 @@ def build():
     cases.append((new_case("M10_rejected_prior", "memory", "A reviewer-rejected prior is never applied", AUG, JUL,
                            expected_material_variances=["Cloud Expense"], expected_memory_rejected=["PR-0001"],
                            required_patterns=[r"was not applied.*rejected"], forbidden_patterns=[r"consistent with"]), tx, None, st))
+
+    # ================================================================ sequences (§13)
+    def months(start, n):
+        y, m = int(start[:4]), int(start[5:]); out = []
+        for _ in range(n):
+            out.append(f"{y:04d}-{m:02d}"); m += 1
+            if m == 13:
+                m, y = 1, y + 1
+        return out
+
+    # S01 the cloud story: learn from the reviewer, verify against it, retire it
+    ps = months("2026-06", 7)
+    cloud = {"2026-06": 82_000, "2026-07": 102_500, "2026-08": 110_700, "2026-09": 148_300,
+             "2026-10": 150_000, "2026-11": 150_000, "2026-12": 195_000}
+    tx = []
+    for k, p in enumerate(ps):
+        tx += base_month(p, CUSTS, 1_000_000, [("Payroll", 260_000, "Payroll (internal)"), ("Cloud Expense", cloud[p], "AWS"),
+                                                  ("Rent", 40_000, "Granby")], f"s{k}")
+    aws_prior = {"op": "add", "type": "counterparty", "scope": {"account": "Cloud Expense", "vendor": "AWS"},
+                 "statement": "AWS migration of the analytics workload began in July and is expected to elevate cloud spend through September",
+                 "implication": "expect month-on-month increases of up to +30% through 2026-09",
+                 "confidence": 0.95, "source_type": "user_verified", "valid_from": "2026-07", "valid_until": "2026-09",
+                 "expectation": {"max_increase_pct": 30}}
+    cases.append((new_sequence("S01_cloud_story", "memory", "Cloud: +25% learn, +8% consistent, +34% exceeds, +30% in Dec after expiry", [
+        {"period": "2026-07", "prior_period": "2026-06",
+         "ground_truth": {"expected_material_variances": ["Cloud Expense"], "required_patterns": [r"does not establish why"]}},
+        {"period": "2026-08", "prior_period": "2026-07", "feedback": [aws_prior],
+         "ground_truth": {"expected_material_variances": ["Cloud Expense"], "expected_memory_usage": ["PR-0001"],
+                          "required_patterns": [r"consistent with the reviewer-provided context"], "forbidden_patterns": [r"exceeds that range"]}},
+        {"period": "2026-09", "prior_period": "2026-08",
+         "ground_truth": {"expected_material_variances": ["Cloud Expense"], "expected_memory_usage": ["PR-0001"],
+                          "required_patterns": [r"exceeds that range"], "acceptable_confidence": ["medium", "low"]}},
+        {"period": "2026-12", "prior_period": "2026-11",
+         "ground_truth": {"expected_material_variances": ["Cloud Expense"], "expected_memory_rejected": ["PR-0001"],
+                          "required_patterns": [r"was not applied.*expired"], "forbidden_patterns": [r"consistent with the reviewer"]}},
+    ]), tx))
+
+    # S02 a one-off the system learns by itself, then explains the following month
+    ps = months("2026-01", 10)
+    tx = []
+    for k, p in enumerate(ps):
+        tx += base_month(p, CUSTS, 1_000_000, OPEX + [("Professional Fees", 12_000 + 300 * (k % 3), "Bellweather")], f"o{k}")
+    tx.append(T("SETTLE", "2026-08-18", "Professional Fees", 95_000, "Bellweather", description="Settlement - Ridgeline contract dispute"))
+    cases.append((new_sequence("S02_one_time_learned", "memory", "Aug settlement detected; Sep decrease explained by memory, not as a saving", [
+        {"period": "2026-08", "prior_period": "2026-07",
+         "ground_truth": {"expected_material_variances": ["Professional Fees"], "required_patterns": [r"non-recurring item"]}},
+        {"period": "2026-09", "prior_period": "2026-08",
+         "ground_truth": {"expected_material_variances": ["Professional Fees"], "expected_memory_usage": ["PR-0001"],
+                          "required_patterns": [r"consistent with PR-0001"], "forbidden_patterns": [r"cost (saving|discipline)", r"savings"]}},
+    ]), tx))
+
+    # S03 a reclass learned in July is still known in August, when nothing moves
+    ps = months("2026-01", 10)
+    tx = []
+    for k, p in enumerate(ps):
+        tx += base_month(p, CUSTS, 1_000_000, [("Payroll", 260_000, "Payroll (internal)"), ("Rent", 40_000, "Granby")], f"r{k}")
+        acct = "Outbound Freight" if p < "2026-07" else "Freight (COGS)"
+        tx.append(T(f"FR{k}", f"{p}-28", acct, 60_000, "Pacific Freight Partners", description="freight"))
+    cases.append((new_sequence("S03_reclass_carried_forward", "memory", "Freight reclass learned in July; cited in August without a movement", [
+        {"period": "2026-07", "prior_period": "2026-06",
+         "ground_truth": {"expected_material_variances": ["Outbound Freight", "Freight (COGS)"], "required_patterns": [r"reclassification"]}},
+        {"period": "2026-08", "prior_period": "2026-07",
+         "ground_truth": {"required_patterns": [r"(Carried from earlier runs, |Context from memory )PR-000\d"], "expected_memory_usage": ["PR-0001"]}},
+    ]), tx))
+
+    # S04 silent churn across six consecutive runs: nothing is ever booked
+    ps = months("2025-01", 20)
+    standing = {f"Program {i}": (22_000 + 1_500 * i, ps[13 + i]) for i in range(7)}   # stop 2026-02 .. 2026-08
+    tx = []
+    for k, p in enumerate(ps):
+        tx += base_month(p, CUSTS, 1_200_000 * (1 + 0.01 * k), OPEX, f"c{k}")
+        for name, (amt, stop) in standing.items():
+            if p < stop:
+                tx.append(T(f"EQ{k}{name[-1]}", f"{p}-{8 + int(name[-1]):02d}", "Revenue",
+                            round(amt * RNG.uniform(0.92, 1.08), 2), name, segment="SMB", category="Equipment",
+                            description="monthly equipment program"))
+    steps = [{"period": ps[i], "prior_period": ps[i - 1], "score": False} for i in range(14, 19)]
+    steps.append({"period": ps[19], "prior_period": ps[18],
+                  "ground_truth": {"required_patterns": [r"has bought none since", r"annualised Revenue at risk",
+                                                         r"(Carried from earlier runs, |Context from memory )PR-000\d"],
+                                   "forbidden_patterns": [r"\bchurn", r"lost the customer"]}})
+    cases.append((new_sequence("S04_silent_churn_sequence", "memory",
+                               "Seven monthly programs stop one by one; by the sixth run memory names them", steps), tx))
 
     return cases
 

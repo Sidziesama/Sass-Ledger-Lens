@@ -27,6 +27,57 @@ sys.path.insert(0, ROOT)
 from reliability.benchmark.schema import GROUND_TRUTH_DEFAULTS, validate_result       # noqa: E402
 from reliability.benchmark.taxonomy import classify                                    # noqa: E402
 from reliability.policy.language import lint                                  # noqa: E402
+from reliability.memory.store import PriorStore                                 # noqa: E402
+
+
+def apply_feedback(memory_path, ops):
+    """Reviewer actions between runs, applied to the shared memory file."""
+    if not ops:
+        return
+    store = PriorStore(memory_path)
+    for op in ops:
+        kind = op["op"]
+        if kind == "add":
+            store.add(op["type"], op["scope"], op["statement"], op.get("implication", ""),
+                      {"source": "reviewer_feedback"}, op.get("confidence", 0.9),
+                      source_type=op.get("source_type", "user_verified"), source="finance_reviewer",
+                      valid_from=op.get("valid_from"), valid_until=op.get("valid_until"),
+                      expectation=op.get("expectation"), status="confirmed")
+        elif kind in ("confirm", "reject", "contest"):
+            store.set_status(op["id"], {"confirm": "confirmed", "reject": "rejected", "contest": "contested"}[kind],
+                             note=op.get("note"), by="finance_reviewer")
+        elif kind == "correct":
+            store.correct(op["id"], op["statement"], op.get("implication"), note=op.get("note"))
+    store.save()
+
+
+def run_sequence(case, runner):
+    """Run every step against one memory file; score the steps that ask to be scored."""
+    mem = os.path.join(tempfile.mkdtemp(), "memory.json")
+    seed = os.path.join(case["dir"], "memory.json")
+    if os.path.exists(seed):
+        shutil.copy(seed, mem)
+    else:
+        PriorStore(mem).save()
+    merged = {"checks": {}, "failed": [], "classes": []}
+    last_result = None
+    for i, st in enumerate(case["sequence"]["steps"], 1):
+        apply_feedback(mem, st["feedback"])
+        result = runner(case["dir"], st["period"], st["prior_period"], mem)
+        last_result = result
+        if not st.get("score", True):
+            continue
+        sc = score({"ground_truth": st["ground_truth"]}, result, case["dir"])
+        for k, v in sc["checks"].items():
+            merged["checks"][f"step{i}:{k}"] = v
+        merged["failed"] += [f"step{i}:{k}" for k in sc["failed"]]
+        merged["classes"] += sc["classes"]
+    merged["classes"] = sorted(set(merged["classes"]))
+    merged["passed"] = not merged["failed"]
+    n = len(merged["checks"]) or 1
+    merged["score"] = round((n - len(merged["failed"])) / n, 3)
+    merged["memory_final"] = PriorStore(mem).summary()
+    return merged, last_result
 
 
 def load_cases(root=os.path.join(HERE, "cases"), only=None):
@@ -39,6 +90,10 @@ def load_cases(root=os.path.join(HERE, "cases"), only=None):
             gt = dict(GROUND_TRUTH_DEFAULTS); gt.update(case.get("ground_truth", {}))
             case["ground_truth"] = gt
             case["dir"] = os.path.join(root, d)
+            sj = os.path.join(root, d, "sequence.json")
+            if os.path.exists(sj):
+                with open(sj) as f:
+                    case["sequence"] = json.load(f)
             out.append(case)
     return out
 
@@ -193,7 +248,11 @@ def main(argv=None):
         if os.path.exists(mem):
             mem_tmp = os.path.join(tempfile.mkdtemp(), "memory.json"); shutil.copy(mem, mem_tmp)
         try:
-            result = runner(case["dir"], case["period"], case["prior_period"], mem_tmp)
+            if case.get("sequence"):
+                sc, result = run_sequence(case, runner)
+            else:
+                result = runner(case["dir"], case["period"], case["prior_period"], mem_tmp)
+                sc = score(case, result, case["dir"])
             err = None
         except Exception as e:                            # noqa: BLE001
             import traceback
@@ -201,8 +260,6 @@ def main(argv=None):
         if err:
             sc = {"checks": {"tool_error": {"passed": False, "detail": err}}, "failed": ["tool_error"],
                   "passed": False, "classes": ["TOOL_FAILURE"], "score": 0.0}
-        else:
-            sc = score(case, result, case["dir"])
         rows.append({"id": case["id"], "category": case["category"], "title": case["title"],
                      "passed": sc["passed"], "score": sc["score"], "failed": sc["failed"],
                      "classes": sc["classes"], "checks": sc["checks"],

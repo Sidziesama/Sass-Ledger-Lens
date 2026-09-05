@@ -37,19 +37,19 @@
           "status": "proposed",
           "confidence": 0.9,
           "statement": "cloud spend will fall from August",
-          "changed_at": "2026-09-05T16:44:25+00:00",
+          "changed_at": "2026-09-05T16:55:34+00:00",
           "by": "system",
           "note": "contradicted in a prior run"
         }
       ],
       "times_observed": 1,
       "times_applied": 0,
-      "learned_at": "2026-09-05T16:44:25+00:00",
-      "last_observed_at": "2026-09-05T16:44:25+00:00",
+      "learned_at": "2026-09-05T16:55:34+00:00",
+      "last_observed_at": "2026-09-05T16:55:34+00:00",
       "last_confirmed_at": null,
       "user_note": "contradicted in a prior run"
     }
   ],
   "runs": [],
-  "updated_at": "2026-09-05T16:44:25+00:00"
+  "updated_at": "2026-09-05T16:55:34+00:00"
 }

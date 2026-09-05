@@ -155,13 +155,17 @@ def detect_one_time(ds, period, z=3.0, min_amount=25_000):
 
 
 # ---------------------------------------------------------------------------
-def detect_silent_churn(ds, period, lookback=3, min_history=10, min_monthly=4_000):
+def detect_silent_churn(ds, period, lookback=3, min_history=10, min_monthly=4_000,
+                        section="Revenue", dim="category"):
     """Revenue that stopped arriving.
 
     A variance report can only see rows that exist. This finds counterparty x
-    category relationships that were reliably present for many months and have
+    `dim` relationships that were reliably present for many months and have
     since produced nothing at all. No transaction is created when a customer
     stops buying, so this is invisible to any period-over-period difference.
+
+    Works on any dataset exposing statement_section / counterparty_id; `dim`
+    falls back to the counterparty alone when the column is absent.
     """
     periods = [p for p in ds.periods if p <= period]
     if len(periods) < min_history + lookback:
@@ -173,9 +177,9 @@ def detect_silent_churn(ds, period, lookback=3, min_history=10, min_monthly=4_00
     names = {}
     for p in periods:
         for t in ds.txns(p):
-            if t["gl_account"] != "4000" or not t["counterparty_id"]:
+            if t["statement_section"] != section or not t["counterparty_id"]:
                 continue
-            k = (t["counterparty_id"], t["category"])
+            k = (t["counterparty_id"], (t.get(dim) or "") if dim else "")
             amounts[(k, p)] += t["amount"]
             seen[k].add(p)
             names[t["counterparty_id"]] = t["counterparty_name"]
@@ -191,9 +195,10 @@ def detect_silent_churn(ds, period, lookback=3, min_history=10, min_monthly=4_00
             continue
         last = max(h)
         ev = [t for t in ds.txns(last)
-              if t["counterparty_id"] == cid and t["category"] == cat and t["gl_account"] == "4000"]
+              if t["counterparty_id"] == cid and (t.get(dim) or "") == cat and t["statement_section"] == section]
         findings.append({
-            "customer_id": cid, "customer": names[cid], "category": cat,
+            "customer_id": cid, "customer": names[cid], "category": cat or "(all)",
+            "section": section,
             "months_active": len(h), "months_available": len(hist),
             "consistency_pct": round(len(h) / len(hist) * 100, 1),
             "avg_monthly_revenue": round(avg, 2),
@@ -202,9 +207,9 @@ def detect_silent_churn(ds, period, lookback=3, min_history=10, min_monthly=4_00
             "annualised_run_rate_lost": round(avg * 12, 2),
             "verdict": "recurring revenue stopped — no transaction exists to flag this",
             "confidence": round(min(0.96, 0.5 + len(h) / len(hist) * 0.45), 2),
-            "evidence": [{"txn_id": t["txn_id"], "date": t["date"], "doc_id": t["doc_id"],
+            "evidence": [{"txn_id": t["txn_id"], "date": t["date"], "doc_id": t.get("doc_id", ""),
                           "description": t["description"], "amount": t["amount"],
-                          "memo": t["memo"]} for t in sorted(ev, key=lambda x: -x["amount"])[:3]],
+                          "memo": t.get("memo", "")} for t in sorted(ev, key=lambda x: -x["amount"])[:3]],
         })
     return sorted(findings, key=lambda f: -f["avg_monthly_revenue"])
 

@@ -1,0 +1,132 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R01o0000,2026-01-12,2026-01,Revenue,127342.25,Acme,subscription,Enterprise
+R01o0001,2026-01-05,2026-01,Revenue,126822.26,Globex,subscription,Enterprise
+R01o0002,2026-01-27,2026-01,Revenue,125631.08,Stark,subscription,Enterprise
+R01o0003,2026-01-17,2026-01,Revenue,126310.84,Initech,subscription,Enterprise
+R01o0004,2026-01-09,2026-01,Revenue,127282.02,Umbrella,subscription,SMB
+R01o0005,2026-01-05,2026-01,Revenue,125495.04,Hooli,subscription,SMB
+R01o0006,2026-01-24,2026-01,Revenue,123571.78,Vandelay,subscription,SMB
+R01o0007,2026-01-21,2026-01,Revenue,123148.36,Wonka,subscription,SMB
+O01o0000,2026-01-15,2026-01,Payroll,260000,Payroll (internal),,
+O01o0001,2026-01-15,2026-01,Marketing,90000,Fieldmark,,
+O01o0002,2026-01-15,2026-01,Cloud Expense,82000,AWS,,
+O01o0003,2026-01-15,2026-01,Rent,40000,Granby Properties,,
+O01o0004,2026-01-15,2026-01,Professional Fees,12000,Bellweather,,
+R02o1000,2026-02-26,2026-02,Revenue,123170.6,Acme,subscription,Enterprise
+R02o1001,2026-02-02,2026-02,Revenue,126788.9,Globex,subscription,Enterprise
+R02o1002,2026-02-04,2026-02,Revenue,127290.29,Stark,subscription,Enterprise
+R02o1003,2026-02-10,2026-02,Revenue,127363.58,Initech,subscription,Enterprise
+R02o1004,2026-02-08,2026-02,Revenue,125368.98,Umbrella,subscription,SMB
+R02o1005,2026-02-05,2026-02,Revenue,126833.57,Hooli,subscription,SMB
+R02o1006,2026-02-12,2026-02,Revenue,122969.13,Vandelay,subscription,SMB
+R02o1007,2026-02-19,2026-02,Revenue,126983.66,Wonka,subscription,SMB
+O02o1000,2026-02-15,2026-02,Payroll,260000,Payroll (internal),,
+O02o1001,2026-02-15,2026-02,Marketing,90000,Fieldmark,,
+O02o1002,2026-02-15,2026-02,Cloud Expense,82000,AWS,,
+O02o1003,2026-02-15,2026-02,Rent,40000,Granby Properties,,
+O02o1004,2026-02-15,2026-02,Professional Fees,12300,Bellweather,,
+R03o2000,2026-03-02,2026-03,Revenue,127407.15,Acme,subscription,Enterprise
+R03o2001,2026-03-08,2026-03,Revenue,123406.98,Globex,subscription,Enterprise
+R03o2002,2026-03-26,2026-03,Revenue,125568.82,Stark,subscription,Enterprise
+R03o2003,2026-03-03,2026-03,Revenue,125035.32,Initech,subscription,Enterprise
+R03o2004,2026-03-09,2026-03,Revenue,123069.59,Umbrella,subscription,SMB
+R03o2005,2026-03-03,2026-03,Revenue,123392.31,Hooli,subscription,SMB
+R03o2006,2026-03-05,2026-03,Revenue,122897.53,Vandelay,subscription,SMB
+R03o2007,2026-03-25,2026-03,Revenue,123943.67,Wonka,subscription,SMB
+O03o2000,2026-03-15,2026-03,Payroll,260000,Payroll (internal),,
+O03o2001,2026-03-15,2026-03,Marketing,90000,Fieldmark,,
+O03o2002,2026-03-15,2026-03,Cloud Expense,82000,AWS,,
+O03o2003,2026-03-15,2026-03,Rent,40000,Granby Properties,,
+O03o2004,2026-03-15,2026-03,Professional Fees,12600,Bellweather,,
+R04o3000,2026-04-19,2026-04,Revenue,126481.78,Acme,subscription,Enterprise
+R04o3001,2026-04-17,2026-04,Revenue,124494.7,Globex,subscription,Enterprise
+R04o3002,2026-04-20,2026-04,Revenue,127319.11,Stark,subscription,Enterprise
+R04o3003,2026-04-04,2026-04,Revenue,127052.19,Initech,subscription,Enterprise
+R04o3004,2026-04-03,2026-04,Revenue,125327.32,Umbrella,subscription,SMB
+R04o3005,2026-04-15,2026-04,Revenue,124342.58,Hooli,subscription,SMB
+R04o3006,2026-04-14,2026-04,Revenue,124818.08,Vandelay,subscription,SMB
+R04o3007,2026-04-22,2026-04,Revenue,127436.01,Wonka,subscription,SMB
+O04o3000,2026-04-15,2026-04,Payroll,260000,Payroll (internal),,
+O04o3001,2026-04-15,2026-04,Marketing,90000,Fieldmark,,
+O04o3002,2026-04-15,2026-04,Cloud Expense,82000,AWS,,
+O04o3003,2026-04-15,2026-04,Rent,40000,Granby Properties,,
+O04o3004,2026-04-15,2026-04,Professional Fees,12000,Bellweather,,
+R05o4000,2026-05-03,2026-05,Revenue,124614.31,Acme,subscription,Enterprise
+R05o4001,2026-05-12,2026-05,Revenue,125410.22,Globex,subscription,Enterprise
+R05o4002,2026-05-02,2026-05,Revenue,125413.5,Stark,subscription,Enterprise
+R05o4003,2026-05-02,2026-05,Revenue,126064.82,Initech,subscription,Enterprise
+R05o4004,2026-05-10,2026-05,Revenue,126845.87,Umbrella,subscription,SMB
+R05o4005,2026-05-21,2026-05,Revenue,124070.55,Hooli,subscription,SMB
+R05o4006,2026-05-16,2026-05,Revenue,124992.11,Vandelay,subscription,SMB
+R05o4007,2026-05-04,2026-05,Revenue,127059.92,Wonka,subscription,SMB
+O05o4000,2026-05-15,2026-05,Payroll,260000,Payroll (internal),,
+O05o4001,2026-05-15,2026-05,Marketing,90000,Fieldmark,,
+O05o4002,2026-05-15,2026-05,Cloud Expense,82000,AWS,,
+O05o4003,2026-05-15,2026-05,Rent,40000,Granby Properties,,
+O05o4004,2026-05-15,2026-05,Professional Fees,12300,Bellweather,,
+R06o5000,2026-06-10,2026-06,Revenue,123943.61,Acme,subscription,Enterprise
+R06o5001,2026-06-02,2026-06,Revenue,123153.8,Globex,subscription,Enterprise
+R06o5002,2026-06-09,2026-06,Revenue,125162.66,Stark,subscription,Enterprise
+R06o5003,2026-06-17,2026-06,Revenue,124425.49,Initech,subscription,Enterprise
+R06o5004,2026-06-12,2026-06,Revenue,123698.28,Umbrella,subscription,SMB
+R06o5005,2026-06-11,2026-06,Revenue,123768.2,Hooli,subscription,SMB
+R06o5006,2026-06-13,2026-06,Revenue,127010.25,Vandelay,subscription,SMB
+R06o5007,2026-06-04,2026-06,Revenue,123740.0,Wonka,subscription,SMB
+O06o5000,2026-06-15,2026-06,Payroll,260000,Payroll (internal),,
+O06o5001,2026-06-15,2026-06,Marketing,90000,Fieldmark,,
+O06o5002,2026-06-15,2026-06,Cloud Expense,82000,AWS,,
+O06o5003,2026-06-15,2026-06,Rent,40000,Granby Properties,,
+O06o5004,2026-06-15,2026-06,Professional Fees,12600,Bellweather,,
+R07o6000,2026-07-21,2026-07,Revenue,125432.96,Acme,subscription,Enterprise
+R07o6001,2026-07-23,2026-07,Revenue,122623.74,Globex,subscription,Enterprise
+R07o6002,2026-07-21,2026-07,Revenue,123999.43,Stark,subscription,Enterprise
+R07o6003,2026-07-23,2026-07,Revenue,124707.14,Initech,subscription,Enterprise
+R07o6004,2026-07-14,2026-07,Revenue,123990.46,Umbrella,subscription,SMB
+R07o6005,2026-07-27,2026-07,Revenue,124324.97,Hooli,subscription,SMB
+R07o6006,2026-07-16,2026-07,Revenue,122945.91,Vandelay,subscription,SMB
+R07o6007,2026-07-05,2026-07,Revenue,125426.71,Wonka,subscription,SMB
+O07o6000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,
+O07o6001,2026-07-15,2026-07,Marketing,90000,Fieldmark,,
+O07o6002,2026-07-15,2026-07,Cloud Expense,82000,AWS,,
+O07o6003,2026-07-15,2026-07,Rent,40000,Granby Properties,,
+O07o6004,2026-07-15,2026-07,Professional Fees,12000,Bellweather,,
+R08o7000,2026-08-18,2026-08,Revenue,123085.23,Acme,subscription,Enterprise
+R08o7001,2026-08-03,2026-08,Revenue,123782.74,Globex,subscription,Enterprise
+R08o7002,2026-08-22,2026-08,Revenue,124012.84,Stark,subscription,Enterprise
+R08o7003,2026-08-17,2026-08,Revenue,125363.82,Initech,subscription,Enterprise
+R08o7004,2026-08-15,2026-08,Revenue,125272.06,Umbrella,subscription,SMB
+R08o7005,2026-08-18,2026-08,Revenue,124844.37,Hooli,subscription,SMB
+R08o7006,2026-08-03,2026-08,Revenue,124259.03,Vandelay,subscription,SMB
+R08o7007,2026-08-17,2026-08,Revenue,124821.41,Wonka,subscription,SMB
+O08o7000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,
+O08o7001,2026-08-15,2026-08,Marketing,90000,Fieldmark,,
+O08o7002,2026-08-15,2026-08,Cloud Expense,82000,AWS,,
+O08o7003,2026-08-15,2026-08,Rent,40000,Granby Properties,,
+O08o7004,2026-08-15,2026-08,Professional Fees,12300,Bellweather,,
+R09o8000,2026-09-12,2026-09,Revenue,124465.66,Acme,subscription,Enterprise
+R09o8001,2026-09-08,2026-09,Revenue,124268.41,Globex,subscription,Enterprise
+R09o8002,2026-09-02,2026-09,Revenue,122931.87,Stark,subscription,Enterprise
+R09o8003,2026-09-17,2026-09,Revenue,125046.1,Initech,subscription,Enterprise
+R09o8004,2026-09-09,2026-09,Revenue,124287.96,Umbrella,subscription,SMB
+R09o8005,2026-09-04,2026-09,Revenue,126312.23,Hooli,subscription,SMB
+R09o8006,2026-09-13,2026-09,Revenue,124456.8,Vandelay,subscription,SMB
+R09o8007,2026-09-21,2026-09,Revenue,126003.65,Wonka,subscription,SMB
+O09o8000,2026-09-15,2026-09,Payroll,260000,Payroll (internal),,
+O09o8001,2026-09-15,2026-09,Marketing,90000,Fieldmark,,
+O09o8002,2026-09-15,2026-09,Cloud Expense,82000,AWS,,
+O09o8003,2026-09-15,2026-09,Rent,40000,Granby Properties,,
+O09o8004,2026-09-15,2026-09,Professional Fees,12600,Bellweather,,
+R10o9000,2026-10-21,2026-10,Revenue,123009.39,Acme,subscription,Enterprise
+R10o9001,2026-10-03,2026-10,Revenue,125002.06,Globex,subscription,Enterprise
+R10o9002,2026-10-18,2026-10,Revenue,124414.99,Stark,subscription,Enterprise
+R10o9003,2026-10-21,2026-10,Revenue,126677.28,Initech,subscription,Enterprise
+R10o9004,2026-10-13,2026-10,Revenue,123233.79,Umbrella,subscription,SMB
+R10o9005,2026-10-04,2026-10,Revenue,123122.21,Hooli,subscription,SMB
+R10o9006,2026-10-07,2026-10,Revenue,125224.7,Vandelay,subscription,SMB
+R10o9007,2026-10-22,2026-10,Revenue,123462.53,Wonka,subscription,SMB
+O10o9000,2026-10-15,2026-10,Payroll,260000,Payroll (internal),,
+O10o9001,2026-10-15,2026-10,Marketing,90000,Fieldmark,,
+O10o9002,2026-10-15,2026-10,Cloud Expense,82000,AWS,,
+O10o9003,2026-10-15,2026-10,Rent,40000,Granby Properties,,
+O10o9004,2026-10-15,2026-10,Professional Fees,12000,Bellweather,,
+SETTLE,2026-08-18,2026-08,Professional Fees,95000,Bellweather,Settlement - Ridgeline contract dispute,

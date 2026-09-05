@@ -1,0 +1,353 @@
+transaction_id,date,period,account,amount,counterparty,description,segment,category
+R01c0000,2025-01-14,2025-01,Revenue,150876.83,Acme,subscription,Enterprise,
+R01c0001,2025-01-11,2025-01,Revenue,152918.67,Globex,subscription,Enterprise,
+R01c0002,2025-01-18,2025-01,Revenue,150651.02,Stark,subscription,Enterprise,
+R01c0003,2025-01-13,2025-01,Revenue,151724.46,Initech,subscription,Enterprise,
+R01c0004,2025-01-12,2025-01,Revenue,152371.24,Umbrella,subscription,SMB,
+R01c0005,2025-01-27,2025-01,Revenue,148268.09,Hooli,subscription,SMB,
+R01c0006,2025-01-22,2025-01,Revenue,151671.95,Vandelay,subscription,SMB,
+R01c0007,2025-01-20,2025-01,Revenue,151371.91,Wonka,subscription,SMB,
+O01c0000,2025-01-15,2025-01,Payroll,260000,Payroll (internal),,,
+O01c0001,2025-01-15,2025-01,Marketing,90000,Fieldmark,,,
+O01c0002,2025-01-15,2025-01,Cloud Expense,82000,AWS,,,
+O01c0003,2025-01-15,2025-01,Rent,40000,Granby Properties,,,
+EQ00,2025-01-08,2025-01,Revenue,20501.52,Program 0,monthly equipment program,SMB,Equipment
+EQ01,2025-01-09,2025-01,Revenue,21905.14,Program 1,monthly equipment program,SMB,Equipment
+EQ02,2025-01-10,2025-01,Revenue,26594.5,Program 2,monthly equipment program,SMB,Equipment
+EQ03,2025-01-11,2025-01,Revenue,25922.85,Program 3,monthly equipment program,SMB,Equipment
+EQ04,2025-01-12,2025-01,Revenue,27877.88,Program 4,monthly equipment program,SMB,Equipment
+EQ05,2025-01-13,2025-01,Revenue,31734.08,Program 5,monthly equipment program,SMB,Equipment
+EQ06,2025-01-14,2025-01,Revenue,29487.38,Program 6,monthly equipment program,SMB,Equipment
+R02c1000,2025-02-03,2025-02,Revenue,152318.86,Acme,subscription,Enterprise,
+R02c1001,2025-02-18,2025-02,Revenue,150399.98,Globex,subscription,Enterprise,
+R02c1002,2025-02-07,2025-02,Revenue,152946.97,Stark,subscription,Enterprise,
+R02c1003,2025-02-13,2025-02,Revenue,149261.36,Initech,subscription,Enterprise,
+R02c1004,2025-02-27,2025-02,Revenue,153475.88,Umbrella,subscription,SMB,
+R02c1005,2025-02-13,2025-02,Revenue,149289.38,Hooli,subscription,SMB,
+R02c1006,2025-02-19,2025-02,Revenue,152813.2,Vandelay,subscription,SMB,
+R02c1007,2025-02-27,2025-02,Revenue,151299.87,Wonka,subscription,SMB,
+O02c1000,2025-02-15,2025-02,Payroll,260000,Payroll (internal),,,
+O02c1001,2025-02-15,2025-02,Marketing,90000,Fieldmark,,,
+O02c1002,2025-02-15,2025-02,Cloud Expense,82000,AWS,,,
+O02c1003,2025-02-15,2025-02,Rent,40000,Granby Properties,,,
+EQ10,2025-02-08,2025-02,Revenue,23649.71,Program 0,monthly equipment program,SMB,Equipment
+EQ11,2025-02-09,2025-02,Revenue,24592.15,Program 1,monthly equipment program,SMB,Equipment
+EQ12,2025-02-10,2025-02,Revenue,25230.93,Program 2,monthly equipment program,SMB,Equipment
+EQ13,2025-02-11,2025-02,Revenue,28058.38,Program 3,monthly equipment program,SMB,Equipment
+EQ14,2025-02-12,2025-02,Revenue,26069.24,Program 4,monthly equipment program,SMB,Equipment
+EQ15,2025-02-13,2025-02,Revenue,29412.13,Program 5,monthly equipment program,SMB,Equipment
+EQ16,2025-02-14,2025-02,Revenue,32204.21,Program 6,monthly equipment program,SMB,Equipment
+R03c2000,2025-03-17,2025-03,Revenue,151163.74,Acme,subscription,Enterprise,
+R03c2001,2025-03-03,2025-03,Revenue,156022.6,Globex,subscription,Enterprise,
+R03c2002,2025-03-16,2025-03,Revenue,150261.72,Stark,subscription,Enterprise,
+R03c2003,2025-03-04,2025-03,Revenue,151945.69,Initech,subscription,Enterprise,
+R03c2004,2025-03-07,2025-03,Revenue,153480.25,Umbrella,subscription,SMB,
+R03c2005,2025-03-14,2025-03,Revenue,152135.14,Hooli,subscription,SMB,
+R03c2006,2025-03-04,2025-03,Revenue,152176.07,Vandelay,subscription,SMB,
+R03c2007,2025-03-22,2025-03,Revenue,153201.42,Wonka,subscription,SMB,
+O03c2000,2025-03-15,2025-03,Payroll,260000,Payroll (internal),,,
+O03c2001,2025-03-15,2025-03,Marketing,90000,Fieldmark,,,
+O03c2002,2025-03-15,2025-03,Cloud Expense,82000,AWS,,,
+O03c2003,2025-03-15,2025-03,Rent,40000,Granby Properties,,,
+EQ20,2025-03-08,2025-03,Revenue,23365.07,Program 0,monthly equipment program,SMB,Equipment
+EQ21,2025-03-09,2025-03,Revenue,23677.04,Program 1,monthly equipment program,SMB,Equipment
+EQ22,2025-03-10,2025-03,Revenue,26275.95,Program 2,monthly equipment program,SMB,Equipment
+EQ23,2025-03-11,2025-03,Revenue,26724.49,Program 3,monthly equipment program,SMB,Equipment
+EQ24,2025-03-12,2025-03,Revenue,28689.29,Program 4,monthly equipment program,SMB,Equipment
+EQ25,2025-03-13,2025-03,Revenue,30398.95,Program 5,monthly equipment program,SMB,Equipment
+EQ26,2025-03-14,2025-03,Revenue,33478.15,Program 6,monthly equipment program,SMB,Equipment
+R04c3000,2025-04-18,2025-04,Revenue,152682.1,Acme,subscription,Enterprise,
+R04c3001,2025-04-27,2025-04,Revenue,154541.33,Globex,subscription,Enterprise,
+R04c3002,2025-04-03,2025-04,Revenue,153920.16,Stark,subscription,Enterprise,
+R04c3003,2025-04-06,2025-04,Revenue,151775.1,Initech,subscription,Enterprise,
+R04c3004,2025-04-24,2025-04,Revenue,156707.11,Umbrella,subscription,SMB,
+R04c3005,2025-04-22,2025-04,Revenue,151689.24,Hooli,subscription,SMB,
+R04c3006,2025-04-10,2025-04,Revenue,154808.39,Vandelay,subscription,SMB,
+R04c3007,2025-04-05,2025-04,Revenue,154515.27,Wonka,subscription,SMB,
+O04c3000,2025-04-15,2025-04,Payroll,260000,Payroll (internal),,,
+O04c3001,2025-04-15,2025-04,Marketing,90000,Fieldmark,,,
+O04c3002,2025-04-15,2025-04,Cloud Expense,82000,AWS,,,
+O04c3003,2025-04-15,2025-04,Rent,40000,Granby Properties,,,
+EQ30,2025-04-08,2025-04,Revenue,22899.05,Program 0,monthly equipment program,SMB,Equipment
+EQ31,2025-04-09,2025-04,Revenue,23256.31,Program 1,monthly equipment program,SMB,Equipment
+EQ32,2025-04-10,2025-04,Revenue,24673.19,Program 2,monthly equipment program,SMB,Equipment
+EQ33,2025-04-11,2025-04,Revenue,26086.07,Program 3,monthly equipment program,SMB,Equipment
+EQ34,2025-04-12,2025-04,Revenue,28092.96,Program 4,monthly equipment program,SMB,Equipment
+EQ35,2025-04-13,2025-04,Revenue,28464.99,Program 5,monthly equipment program,SMB,Equipment
+EQ36,2025-04-14,2025-04,Revenue,33247.32,Program 6,monthly equipment program,SMB,Equipment
+R05c4000,2025-05-06,2025-05,Revenue,154068.04,Acme,subscription,Enterprise,
+R05c4001,2025-05-13,2025-05,Revenue,157753.9,Globex,subscription,Enterprise,
+R05c4002,2025-05-13,2025-05,Revenue,154086.6,Stark,subscription,Enterprise,
+R05c4003,2025-05-23,2025-05,Revenue,153126.47,Initech,subscription,Enterprise,
+R05c4004,2025-05-07,2025-05,Revenue,158041.74,Umbrella,subscription,SMB,
+R05c4005,2025-05-11,2025-05,Revenue,158666.03,Hooli,subscription,SMB,
+R05c4006,2025-05-08,2025-05,Revenue,158611.8,Vandelay,subscription,SMB,
+R05c4007,2025-05-19,2025-05,Revenue,154860.94,Wonka,subscription,SMB,
+O05c4000,2025-05-15,2025-05,Payroll,260000,Payroll (internal),,,
+O05c4001,2025-05-15,2025-05,Marketing,90000,Fieldmark,,,
+O05c4002,2025-05-15,2025-05,Cloud Expense,82000,AWS,,,
+O05c4003,2025-05-15,2025-05,Rent,40000,Granby Properties,,,
+EQ40,2025-05-08,2025-05,Revenue,20663.88,Program 0,monthly equipment program,SMB,Equipment
+EQ41,2025-05-09,2025-05,Revenue,24987.78,Program 1,monthly equipment program,SMB,Equipment
+EQ42,2025-05-10,2025-05,Revenue,24967.46,Program 2,monthly equipment program,SMB,Equipment
+EQ43,2025-05-11,2025-05,Revenue,27075.11,Program 3,monthly equipment program,SMB,Equipment
+EQ44,2025-05-12,2025-05,Revenue,27239.56,Program 4,monthly equipment program,SMB,Equipment
+EQ45,2025-05-13,2025-05,Revenue,28195.86,Program 5,monthly equipment program,SMB,Equipment
+EQ46,2025-05-14,2025-05,Revenue,31415.91,Program 6,monthly equipment program,SMB,Equipment
+R06c5000,2025-06-21,2025-06,Revenue,156580.41,Acme,subscription,Enterprise,
+R06c5001,2025-06-15,2025-06,Revenue,158460.37,Globex,subscription,Enterprise,
+R06c5002,2025-06-11,2025-06,Revenue,157007.65,Stark,subscription,Enterprise,
+R06c5003,2025-06-06,2025-06,Revenue,155057.08,Initech,subscription,Enterprise,
+R06c5004,2025-06-21,2025-06,Revenue,156550.67,Umbrella,subscription,SMB,
+R06c5005,2025-06-23,2025-06,Revenue,155505.44,Hooli,subscription,SMB,
+R06c5006,2025-06-09,2025-06,Revenue,159098.91,Vandelay,subscription,SMB,
+R06c5007,2025-06-09,2025-06,Revenue,160070.73,Wonka,subscription,SMB,
+O06c5000,2025-06-15,2025-06,Payroll,260000,Payroll (internal),,,
+O06c5001,2025-06-15,2025-06,Marketing,90000,Fieldmark,,,
+O06c5002,2025-06-15,2025-06,Cloud Expense,82000,AWS,,,
+O06c5003,2025-06-15,2025-06,Rent,40000,Granby Properties,,,
+EQ50,2025-06-08,2025-06,Revenue,23054.93,Program 0,monthly equipment program,SMB,Equipment
+EQ51,2025-06-09,2025-06,Revenue,24757.43,Program 1,monthly equipment program,SMB,Equipment
+EQ52,2025-06-10,2025-06,Revenue,24852.76,Program 2,monthly equipment program,SMB,Equipment
+EQ53,2025-06-11,2025-06,Revenue,27350.73,Program 3,monthly equipment program,SMB,Equipment
+EQ54,2025-06-12,2025-06,Revenue,29103.06,Program 4,monthly equipment program,SMB,Equipment
+EQ55,2025-06-13,2025-06,Revenue,30707.42,Program 5,monthly equipment program,SMB,Equipment
+EQ56,2025-06-14,2025-06,Revenue,28935.83,Program 6,monthly equipment program,SMB,Equipment
+R07c6000,2025-07-17,2025-07,Revenue,156285.7,Acme,subscription,Enterprise,
+R07c6001,2025-07-21,2025-07,Revenue,158546.32,Globex,subscription,Enterprise,
+R07c6002,2025-07-19,2025-07,Revenue,160688.63,Stark,subscription,Enterprise,
+R07c6003,2025-07-04,2025-07,Revenue,158624.26,Initech,subscription,Enterprise,
+R07c6004,2025-07-17,2025-07,Revenue,161217.87,Umbrella,subscription,SMB,
+R07c6005,2025-07-13,2025-07,Revenue,161837.1,Hooli,subscription,SMB,
+R07c6006,2025-07-04,2025-07,Revenue,156563.95,Vandelay,subscription,SMB,
+R07c6007,2025-07-26,2025-07,Revenue,156382.06,Wonka,subscription,SMB,
+O07c6000,2025-07-15,2025-07,Payroll,260000,Payroll (internal),,,
+O07c6001,2025-07-15,2025-07,Marketing,90000,Fieldmark,,,
+O07c6002,2025-07-15,2025-07,Cloud Expense,82000,AWS,,,
+O07c6003,2025-07-15,2025-07,Rent,40000,Granby Properties,,,
+EQ60,2025-07-08,2025-07,Revenue,20460.04,Program 0,monthly equipment program,SMB,Equipment
+EQ61,2025-07-09,2025-07,Revenue,25020.1,Program 1,monthly equipment program,SMB,Equipment
+EQ62,2025-07-10,2025-07,Revenue,24244.01,Program 2,monthly equipment program,SMB,Equipment
+EQ63,2025-07-11,2025-07,Revenue,28590.26,Program 3,monthly equipment program,SMB,Equipment
+EQ64,2025-07-12,2025-07,Revenue,30198.84,Program 4,monthly equipment program,SMB,Equipment
+EQ65,2025-07-13,2025-07,Revenue,27238.35,Program 5,monthly equipment program,SMB,Equipment
+EQ66,2025-07-14,2025-07,Revenue,32800.39,Program 6,monthly equipment program,SMB,Equipment
+R08c7000,2025-08-18,2025-08,Revenue,157704.2,Acme,subscription,Enterprise,
+R08c7001,2025-08-13,2025-08,Revenue,158816.57,Globex,subscription,Enterprise,
+R08c7002,2025-08-16,2025-08,Revenue,163469.04,Stark,subscription,Enterprise,
+R08c7003,2025-08-15,2025-08,Revenue,163353.97,Initech,subscription,Enterprise,
+R08c7004,2025-08-06,2025-08,Revenue,157447.55,Umbrella,subscription,SMB,
+R08c7005,2025-08-13,2025-08,Revenue,158522.32,Hooli,subscription,SMB,
+R08c7006,2025-08-21,2025-08,Revenue,162899.67,Vandelay,subscription,SMB,
+R08c7007,2025-08-12,2025-08,Revenue,159016.93,Wonka,subscription,SMB,
+O08c7000,2025-08-15,2025-08,Payroll,260000,Payroll (internal),,,
+O08c7001,2025-08-15,2025-08,Marketing,90000,Fieldmark,,,
+O08c7002,2025-08-15,2025-08,Cloud Expense,82000,AWS,,,
+O08c7003,2025-08-15,2025-08,Rent,40000,Granby Properties,,,
+EQ70,2025-08-08,2025-08,Revenue,21775.84,Program 0,monthly equipment program,SMB,Equipment
+EQ71,2025-08-09,2025-08,Revenue,23217.29,Program 1,monthly equipment program,SMB,Equipment
+EQ72,2025-08-10,2025-08,Revenue,23582.96,Program 2,monthly equipment program,SMB,Equipment
+EQ73,2025-08-11,2025-08,Revenue,26703.88,Program 3,monthly equipment program,SMB,Equipment
+EQ74,2025-08-12,2025-08,Revenue,26990.96,Program 4,monthly equipment program,SMB,Equipment
+EQ75,2025-08-13,2025-08,Revenue,27715.3,Program 5,monthly equipment program,SMB,Equipment
+EQ76,2025-08-14,2025-08,Revenue,32837.03,Program 6,monthly equipment program,SMB,Equipment
+R09c8000,2025-09-26,2025-09,Revenue,162484.01,Acme,subscription,Enterprise,
+R09c8001,2025-09-20,2025-09,Revenue,160664.87,Globex,subscription,Enterprise,
+R09c8002,2025-09-03,2025-09,Revenue,162983.36,Stark,subscription,Enterprise,
+R09c8003,2025-09-08,2025-09,Revenue,164143.19,Initech,subscription,Enterprise,
+R09c8004,2025-09-06,2025-09,Revenue,164161.08,Umbrella,subscription,SMB,
+R09c8005,2025-09-12,2025-09,Revenue,162355.82,Hooli,subscription,SMB,
+R09c8006,2025-09-06,2025-09,Revenue,159127.55,Vandelay,subscription,SMB,
+R09c8007,2025-09-18,2025-09,Revenue,161913.87,Wonka,subscription,SMB,
+O09c8000,2025-09-15,2025-09,Payroll,260000,Payroll (internal),,,
+O09c8001,2025-09-15,2025-09,Marketing,90000,Fieldmark,,,
+O09c8002,2025-09-15,2025-09,Cloud Expense,82000,AWS,,,
+O09c8003,2025-09-15,2025-09,Rent,40000,Granby Properties,,,
+EQ80,2025-09-08,2025-09,Revenue,22910.0,Program 0,monthly equipment program,SMB,Equipment
+EQ81,2025-09-09,2025-09,Revenue,24071.61,Program 1,monthly equipment program,SMB,Equipment
+EQ82,2025-09-10,2025-09,Revenue,24505.88,Program 2,monthly equipment program,SMB,Equipment
+EQ83,2025-09-11,2025-09,Revenue,26552.93,Program 3,monthly equipment program,SMB,Equipment
+EQ84,2025-09-12,2025-09,Revenue,26628.75,Program 4,monthly equipment program,SMB,Equipment
+EQ85,2025-09-13,2025-09,Revenue,27369.26,Program 5,monthly equipment program,SMB,Equipment
+EQ86,2025-09-14,2025-09,Revenue,29596.03,Program 6,monthly equipment program,SMB,Equipment
+R10c9000,2025-10-18,2025-10,Revenue,161134.62,Acme,subscription,Enterprise,
+R10c9001,2025-10-24,2025-10,Revenue,160767.27,Globex,subscription,Enterprise,
+R10c9002,2025-10-13,2025-10,Revenue,163779.39,Stark,subscription,Enterprise,
+R10c9003,2025-10-17,2025-10,Revenue,160967.09,Initech,subscription,Enterprise,
+R10c9004,2025-10-14,2025-10,Revenue,162323.12,Umbrella,subscription,SMB,
+R10c9005,2025-10-03,2025-10,Revenue,164831.85,Hooli,subscription,SMB,
+R10c9006,2025-10-18,2025-10,Revenue,162978.92,Vandelay,subscription,SMB,
+R10c9007,2025-10-14,2025-10,Revenue,163834.97,Wonka,subscription,SMB,
+O10c9000,2025-10-15,2025-10,Payroll,260000,Payroll (internal),,,
+O10c9001,2025-10-15,2025-10,Marketing,90000,Fieldmark,,,
+O10c9002,2025-10-15,2025-10,Cloud Expense,82000,AWS,,,
+O10c9003,2025-10-15,2025-10,Rent,40000,Granby Properties,,,
+EQ90,2025-10-08,2025-10,Revenue,23347.86,Program 0,monthly equipment program,SMB,Equipment
+EQ91,2025-10-09,2025-10,Revenue,23799.31,Program 1,monthly equipment program,SMB,Equipment
+EQ92,2025-10-10,2025-10,Revenue,24388.43,Program 2,monthly equipment program,SMB,Equipment
+EQ93,2025-10-11,2025-10,Revenue,25585.85,Program 3,monthly equipment program,SMB,Equipment
+EQ94,2025-10-12,2025-10,Revenue,26597.96,Program 4,monthly equipment program,SMB,Equipment
+EQ95,2025-10-13,2025-10,Revenue,31547.24,Program 5,monthly equipment program,SMB,Equipment
+EQ96,2025-10-14,2025-10,Revenue,32691.16,Program 6,monthly equipment program,SMB,Equipment
+R11c10000,2025-11-21,2025-11,Revenue,164197.62,Acme,subscription,Enterprise,
+R11c10001,2025-11-23,2025-11,Revenue,162056.32,Globex,subscription,Enterprise,
+R11c10002,2025-11-03,2025-11,Revenue,163021.51,Stark,subscription,Enterprise,
+R11c10003,2025-11-07,2025-11,Revenue,162585.82,Initech,subscription,Enterprise,
+R11c10004,2025-11-18,2025-11,Revenue,168228.33,Umbrella,subscription,SMB,
+R11c10005,2025-11-02,2025-11,Revenue,161813.08,Hooli,subscription,SMB,
+R11c10006,2025-11-09,2025-11,Revenue,167198.67,Vandelay,subscription,SMB,
+R11c10007,2025-11-21,2025-11,Revenue,166013.69,Wonka,subscription,SMB,
+O11c10000,2025-11-15,2025-11,Payroll,260000,Payroll (internal),,,
+O11c10001,2025-11-15,2025-11,Marketing,90000,Fieldmark,,,
+O11c10002,2025-11-15,2025-11,Cloud Expense,82000,AWS,,,
+O11c10003,2025-11-15,2025-11,Rent,40000,Granby Properties,,,
+EQ100,2025-11-08,2025-11,Revenue,20636.41,Program 0,monthly equipment program,SMB,Equipment
+EQ101,2025-11-09,2025-11,Revenue,23727.68,Program 1,monthly equipment program,SMB,Equipment
+EQ102,2025-11-10,2025-11,Revenue,24743.87,Program 2,monthly equipment program,SMB,Equipment
+EQ103,2025-11-11,2025-11,Revenue,25128.56,Program 3,monthly equipment program,SMB,Equipment
+EQ104,2025-11-12,2025-11,Revenue,27595.21,Program 4,monthly equipment program,SMB,Equipment
+EQ105,2025-11-13,2025-11,Revenue,30868.35,Program 5,monthly equipment program,SMB,Equipment
+EQ106,2025-11-14,2025-11,Revenue,32833.62,Program 6,monthly equipment program,SMB,Equipment
+R12c11000,2025-12-08,2025-12,Revenue,169710.03,Acme,subscription,Enterprise,
+R12c11001,2025-12-17,2025-12,Revenue,168731.94,Globex,subscription,Enterprise,
+R12c11002,2025-12-05,2025-12,Revenue,163721.58,Stark,subscription,Enterprise,
+R12c11003,2025-12-04,2025-12,Revenue,165874.53,Initech,subscription,Enterprise,
+R12c11004,2025-12-16,2025-12,Revenue,167074.92,Umbrella,subscription,SMB,
+R12c11005,2025-12-24,2025-12,Revenue,164628.94,Hooli,subscription,SMB,
+R12c11006,2025-12-14,2025-12,Revenue,166202.96,Vandelay,subscription,SMB,
+R12c11007,2025-12-21,2025-12,Revenue,167764.32,Wonka,subscription,SMB,
+O12c11000,2025-12-15,2025-12,Payroll,260000,Payroll (internal),,,
+O12c11001,2025-12-15,2025-12,Marketing,90000,Fieldmark,,,
+O12c11002,2025-12-15,2025-12,Cloud Expense,82000,AWS,,,
+O12c11003,2025-12-15,2025-12,Rent,40000,Granby Properties,,,
+EQ110,2025-12-08,2025-12,Revenue,20531.31,Program 0,monthly equipment program,SMB,Equipment
+EQ111,2025-12-09,2025-12,Revenue,23224.7,Program 1,monthly equipment program,SMB,Equipment
+EQ112,2025-12-10,2025-12,Revenue,25300.09,Program 2,monthly equipment program,SMB,Equipment
+EQ113,2025-12-11,2025-12,Revenue,26367.26,Program 3,monthly equipment program,SMB,Equipment
+EQ114,2025-12-12,2025-12,Revenue,25955.94,Program 4,monthly equipment program,SMB,Equipment
+EQ115,2025-12-13,2025-12,Revenue,28882.16,Program 5,monthly equipment program,SMB,Equipment
+EQ116,2025-12-14,2025-12,Revenue,31002.24,Program 6,monthly equipment program,SMB,Equipment
+R01c12000,2026-01-19,2026-01,Revenue,168581.78,Acme,subscription,Enterprise,
+R01c12001,2026-01-10,2026-01,Revenue,168671.85,Globex,subscription,Enterprise,
+R01c12002,2026-01-03,2026-01,Revenue,167956.23,Stark,subscription,Enterprise,
+R01c12003,2026-01-06,2026-01,Revenue,171150.42,Initech,subscription,Enterprise,
+R01c12004,2026-01-02,2026-01,Revenue,166912.72,Umbrella,subscription,SMB,
+R01c12005,2026-01-21,2026-01,Revenue,169202.08,Hooli,subscription,SMB,
+R01c12006,2026-01-16,2026-01,Revenue,170030.23,Vandelay,subscription,SMB,
+R01c12007,2026-01-11,2026-01,Revenue,170898.98,Wonka,subscription,SMB,
+O01c12000,2026-01-15,2026-01,Payroll,260000,Payroll (internal),,,
+O01c12001,2026-01-15,2026-01,Marketing,90000,Fieldmark,,,
+O01c12002,2026-01-15,2026-01,Cloud Expense,82000,AWS,,,
+O01c12003,2026-01-15,2026-01,Rent,40000,Granby Properties,,,
+EQ120,2026-01-08,2026-01,Revenue,23040.47,Program 0,monthly equipment program,SMB,Equipment
+EQ121,2026-01-09,2026-01,Revenue,24081.19,Program 1,monthly equipment program,SMB,Equipment
+EQ122,2026-01-10,2026-01,Revenue,25158.34,Program 2,monthly equipment program,SMB,Equipment
+EQ123,2026-01-11,2026-01,Revenue,28084.57,Program 3,monthly equipment program,SMB,Equipment
+EQ124,2026-01-12,2026-01,Revenue,25902.48,Program 4,monthly equipment program,SMB,Equipment
+EQ125,2026-01-13,2026-01,Revenue,27203.21,Program 5,monthly equipment program,SMB,Equipment
+EQ126,2026-01-14,2026-01,Revenue,30825.01,Program 6,monthly equipment program,SMB,Equipment
+R02c13000,2026-02-06,2026-02,Revenue,166769.84,Acme,subscription,Enterprise,
+R02c13001,2026-02-20,2026-02,Revenue,166707.66,Globex,subscription,Enterprise,
+R02c13002,2026-02-06,2026-02,Revenue,167635.68,Stark,subscription,Enterprise,
+R02c13003,2026-02-26,2026-02,Revenue,168646.12,Initech,subscription,Enterprise,
+R02c13004,2026-02-15,2026-02,Revenue,170704.27,Umbrella,subscription,SMB,
+R02c13005,2026-02-02,2026-02,Revenue,171464.0,Hooli,subscription,SMB,
+R02c13006,2026-02-25,2026-02,Revenue,169859.65,Vandelay,subscription,SMB,
+R02c13007,2026-02-19,2026-02,Revenue,169551.26,Wonka,subscription,SMB,
+O02c13000,2026-02-15,2026-02,Payroll,260000,Payroll (internal),,,
+O02c13001,2026-02-15,2026-02,Marketing,90000,Fieldmark,,,
+O02c13002,2026-02-15,2026-02,Cloud Expense,82000,AWS,,,
+O02c13003,2026-02-15,2026-02,Rent,40000,Granby Properties,,,
+EQ131,2026-02-09,2026-02,Revenue,23187.61,Program 1,monthly equipment program,SMB,Equipment
+EQ132,2026-02-10,2026-02,Revenue,23747.35,Program 2,monthly equipment program,SMB,Equipment
+EQ133,2026-02-11,2026-02,Revenue,25159.91,Program 3,monthly equipment program,SMB,Equipment
+EQ134,2026-02-12,2026-02,Revenue,28948.9,Program 4,monthly equipment program,SMB,Equipment
+EQ135,2026-02-13,2026-02,Revenue,30819.47,Program 5,monthly equipment program,SMB,Equipment
+EQ136,2026-02-14,2026-02,Revenue,30716.41,Program 6,monthly equipment program,SMB,Equipment
+R03c14000,2026-03-04,2026-03,Revenue,171869.99,Acme,subscription,Enterprise,
+R03c14001,2026-03-13,2026-03,Revenue,171294.08,Globex,subscription,Enterprise,
+R03c14002,2026-03-21,2026-03,Revenue,170127.87,Stark,subscription,Enterprise,
+R03c14003,2026-03-19,2026-03,Revenue,168211.62,Initech,subscription,Enterprise,
+R03c14004,2026-03-24,2026-03,Revenue,172738.6,Umbrella,subscription,SMB,
+R03c14005,2026-03-07,2026-03,Revenue,173504.18,Hooli,subscription,SMB,
+R03c14006,2026-03-16,2026-03,Revenue,170059.83,Vandelay,subscription,SMB,
+R03c14007,2026-03-17,2026-03,Revenue,173101.0,Wonka,subscription,SMB,
+O03c14000,2026-03-15,2026-03,Payroll,260000,Payroll (internal),,,
+O03c14001,2026-03-15,2026-03,Marketing,90000,Fieldmark,,,
+O03c14002,2026-03-15,2026-03,Cloud Expense,82000,AWS,,,
+O03c14003,2026-03-15,2026-03,Rent,40000,Granby Properties,,,
+EQ142,2026-03-10,2026-03,Revenue,23578.95,Program 2,monthly equipment program,SMB,Equipment
+EQ143,2026-03-11,2026-03,Revenue,26369.89,Program 3,monthly equipment program,SMB,Equipment
+EQ144,2026-03-12,2026-03,Revenue,26686.77,Program 4,monthly equipment program,SMB,Equipment
+EQ145,2026-03-13,2026-03,Revenue,30022.48,Program 5,monthly equipment program,SMB,Equipment
+EQ146,2026-03-14,2026-03,Revenue,33377.39,Program 6,monthly equipment program,SMB,Equipment
+R04c15000,2026-04-15,2026-04,Revenue,170717.66,Acme,subscription,Enterprise,
+R04c15001,2026-04-17,2026-04,Revenue,171134.9,Globex,subscription,Enterprise,
+R04c15002,2026-04-15,2026-04,Revenue,171754.17,Stark,subscription,Enterprise,
+R04c15003,2026-04-17,2026-04,Revenue,171804.33,Initech,subscription,Enterprise,
+R04c15004,2026-04-17,2026-04,Revenue,172052.26,Umbrella,subscription,SMB,
+R04c15005,2026-04-23,2026-04,Revenue,171545.99,Hooli,subscription,SMB,
+R04c15006,2026-04-26,2026-04,Revenue,174219.43,Vandelay,subscription,SMB,
+R04c15007,2026-04-13,2026-04,Revenue,169131.88,Wonka,subscription,SMB,
+O04c15000,2026-04-15,2026-04,Payroll,260000,Payroll (internal),,,
+O04c15001,2026-04-15,2026-04,Marketing,90000,Fieldmark,,,
+O04c15002,2026-04-15,2026-04,Cloud Expense,82000,AWS,,,
+O04c15003,2026-04-15,2026-04,Rent,40000,Granby Properties,,,
+EQ153,2026-04-11,2026-04,Revenue,25601.41,Program 3,monthly equipment program,SMB,Equipment
+EQ154,2026-04-12,2026-04,Revenue,28205.05,Program 4,monthly equipment program,SMB,Equipment
+EQ155,2026-04-13,2026-04,Revenue,31665.84,Program 5,monthly equipment program,SMB,Equipment
+EQ156,2026-04-14,2026-04,Revenue,29545.26,Program 6,monthly equipment program,SMB,Equipment
+R05c16000,2026-05-08,2026-05,Revenue,170964.99,Acme,subscription,Enterprise,
+R05c16001,2026-05-04,2026-05,Revenue,172998.29,Globex,subscription,Enterprise,
+R05c16002,2026-05-03,2026-05,Revenue,174120.03,Stark,subscription,Enterprise,
+R05c16003,2026-05-18,2026-05,Revenue,175152.77,Initech,subscription,Enterprise,
+R05c16004,2026-05-23,2026-05,Revenue,172775.04,Umbrella,subscription,SMB,
+R05c16005,2026-05-16,2026-05,Revenue,172652.4,Hooli,subscription,SMB,
+R05c16006,2026-05-21,2026-05,Revenue,174408.62,Vandelay,subscription,SMB,
+R05c16007,2026-05-23,2026-05,Revenue,171289.68,Wonka,subscription,SMB,
+O05c16000,2026-05-15,2026-05,Payroll,260000,Payroll (internal),,,
+O05c16001,2026-05-15,2026-05,Marketing,90000,Fieldmark,,,
+O05c16002,2026-05-15,2026-05,Cloud Expense,82000,AWS,,,
+O05c16003,2026-05-15,2026-05,Rent,40000,Granby Properties,,,
+EQ164,2026-05-12,2026-05,Revenue,28089.43,Program 4,monthly equipment program,SMB,Equipment
+EQ165,2026-05-13,2026-05,Revenue,30197.93,Program 5,monthly equipment program,SMB,Equipment
+EQ166,2026-05-14,2026-05,Revenue,28960.06,Program 6,monthly equipment program,SMB,Equipment
+R06c17000,2026-06-11,2026-06,Revenue,175840.69,Acme,subscription,Enterprise,
+R06c17001,2026-06-21,2026-06,Revenue,175851.14,Globex,subscription,Enterprise,
+R06c17002,2026-06-26,2026-06,Revenue,173262.17,Stark,subscription,Enterprise,
+R06c17003,2026-06-07,2026-06,Revenue,176252.72,Initech,subscription,Enterprise,
+R06c17004,2026-06-04,2026-06,Revenue,174881.4,Umbrella,subscription,SMB,
+R06c17005,2026-06-27,2026-06,Revenue,176930.23,Hooli,subscription,SMB,
+R06c17006,2026-06-18,2026-06,Revenue,173047.78,Vandelay,subscription,SMB,
+R06c17007,2026-06-11,2026-06,Revenue,174916.68,Wonka,subscription,SMB,
+O06c17000,2026-06-15,2026-06,Payroll,260000,Payroll (internal),,,
+O06c17001,2026-06-15,2026-06,Marketing,90000,Fieldmark,,,
+O06c17002,2026-06-15,2026-06,Cloud Expense,82000,AWS,,,
+O06c17003,2026-06-15,2026-06,Rent,40000,Granby Properties,,,
+EQ175,2026-06-13,2026-06,Revenue,31759.81,Program 5,monthly equipment program,SMB,Equipment
+EQ176,2026-06-14,2026-06,Revenue,32311.62,Program 6,monthly equipment program,SMB,Equipment
+R07c18000,2026-07-25,2026-07,Revenue,177077.74,Acme,subscription,Enterprise,
+R07c18001,2026-07-18,2026-07,Revenue,173609.44,Globex,subscription,Enterprise,
+R07c18002,2026-07-21,2026-07,Revenue,175425.9,Stark,subscription,Enterprise,
+R07c18003,2026-07-10,2026-07,Revenue,179173.83,Initech,subscription,Enterprise,
+R07c18004,2026-07-18,2026-07,Revenue,176817.66,Umbrella,subscription,SMB,
+R07c18005,2026-07-06,2026-07,Revenue,178475.12,Hooli,subscription,SMB,
+R07c18006,2026-07-27,2026-07,Revenue,174652.21,Vandelay,subscription,SMB,
+R07c18007,2026-07-12,2026-07,Revenue,174600.02,Wonka,subscription,SMB,
+O07c18000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,,
+O07c18001,2026-07-15,2026-07,Marketing,90000,Fieldmark,,,
+O07c18002,2026-07-15,2026-07,Cloud Expense,82000,AWS,,,
+O07c18003,2026-07-15,2026-07,Rent,40000,Granby Properties,,,
+EQ186,2026-07-14,2026-07,Revenue,32136.92,Program 6,monthly equipment program,SMB,Equipment
+R08c19000,2026-08-22,2026-08,Revenue,180088.57,Acme,subscription,Enterprise,
+R08c19001,2026-08-19,2026-08,Revenue,177548.57,Globex,subscription,Enterprise,
+R08c19002,2026-08-06,2026-08,Revenue,175197.29,Stark,subscription,Enterprise,
+R08c19003,2026-08-03,2026-08,Revenue,176365.0,Initech,subscription,Enterprise,
+R08c19004,2026-08-03,2026-08,Revenue,179904.55,Umbrella,subscription,SMB,
+R08c19005,2026-08-26,2026-08,Revenue,176082.43,Hooli,subscription,SMB,
+R08c19006,2026-08-24,2026-08,Revenue,176813.6,Vandelay,subscription,SMB,
+R08c19007,2026-08-13,2026-08,Revenue,175814.84,Wonka,subscription,SMB,
+O08c19000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,,
+O08c19001,2026-08-15,2026-08,Marketing,90000,Fieldmark,,,
+O08c19002,2026-08-15,2026-08,Cloud Expense,82000,AWS,,,
+O08c19003,2026-08-15,2026-08,Rent,40000,Granby Properties,,,

@@ -1,0 +1,78 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R06s0000,2026-06-09,2026-06,Revenue,124285.03,Acme,subscription,Enterprise
+R06s0001,2026-06-17,2026-06,Revenue,124858.37,Globex,subscription,Enterprise
+R06s0002,2026-06-06,2026-06,Revenue,124342.39,Stark,subscription,Enterprise
+R06s0003,2026-06-06,2026-06,Revenue,127060.87,Initech,subscription,Enterprise
+R06s0004,2026-06-07,2026-06,Revenue,122749.04,Umbrella,subscription,SMB
+R06s0005,2026-06-08,2026-06,Revenue,125991.11,Hooli,subscription,SMB
+R06s0006,2026-06-21,2026-06,Revenue,125369.1,Vandelay,subscription,SMB
+R06s0007,2026-06-17,2026-06,Revenue,123254.23,Wonka,subscription,SMB
+O06s0000,2026-06-15,2026-06,Payroll,260000,Payroll (internal),,
+O06s0001,2026-06-15,2026-06,Cloud Expense,82000,AWS,,
+O06s0002,2026-06-15,2026-06,Rent,40000,Granby,,
+R07s1000,2026-07-02,2026-07,Revenue,123830.74,Acme,subscription,Enterprise
+R07s1001,2026-07-10,2026-07,Revenue,123039.11,Globex,subscription,Enterprise
+R07s1002,2026-07-25,2026-07,Revenue,126113.09,Stark,subscription,Enterprise
+R07s1003,2026-07-18,2026-07,Revenue,126117.8,Initech,subscription,Enterprise
+R07s1004,2026-07-11,2026-07,Revenue,126741.26,Umbrella,subscription,SMB
+R07s1005,2026-07-11,2026-07,Revenue,126804.31,Hooli,subscription,SMB
+R07s1006,2026-07-03,2026-07,Revenue,125473.04,Vandelay,subscription,SMB
+R07s1007,2026-07-22,2026-07,Revenue,123750.87,Wonka,subscription,SMB
+O07s1000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,
+O07s1001,2026-07-15,2026-07,Cloud Expense,102500,AWS,,
+O07s1002,2026-07-15,2026-07,Rent,40000,Granby,,
+R08s2000,2026-08-09,2026-08,Revenue,123323.44,Acme,subscription,Enterprise
+R08s2001,2026-08-21,2026-08,Revenue,125722.3,Globex,subscription,Enterprise
+R08s2002,2026-08-20,2026-08,Revenue,125060.87,Stark,subscription,Enterprise
+R08s2003,2026-08-06,2026-08,Revenue,127268.73,Initech,subscription,Enterprise
+R08s2004,2026-08-06,2026-08,Revenue,124850.06,Umbrella,subscription,SMB
+R08s2005,2026-08-27,2026-08,Revenue,123547.39,Hooli,subscription,SMB
+R08s2006,2026-08-11,2026-08,Revenue,125187.51,Vandelay,subscription,SMB
+R08s2007,2026-08-03,2026-08,Revenue,123926.57,Wonka,subscription,SMB
+O08s2000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,
+O08s2001,2026-08-15,2026-08,Cloud Expense,110700,AWS,,
+O08s2002,2026-08-15,2026-08,Rent,40000,Granby,,
+R09s3000,2026-09-16,2026-09,Revenue,127111.99,Acme,subscription,Enterprise
+R09s3001,2026-09-14,2026-09,Revenue,122844.65,Globex,subscription,Enterprise
+R09s3002,2026-09-06,2026-09,Revenue,123771.91,Stark,subscription,Enterprise
+R09s3003,2026-09-25,2026-09,Revenue,123783.11,Initech,subscription,Enterprise
+R09s3004,2026-09-05,2026-09,Revenue,126867.52,Umbrella,subscription,SMB
+R09s3005,2026-09-18,2026-09,Revenue,123192.92,Hooli,subscription,SMB
+R09s3006,2026-09-08,2026-09,Revenue,127368.44,Vandelay,subscription,SMB
+R09s3007,2026-09-16,2026-09,Revenue,126943.74,Wonka,subscription,SMB
+O09s3000,2026-09-15,2026-09,Payroll,260000,Payroll (internal),,
+O09s3001,2026-09-15,2026-09,Cloud Expense,148300,AWS,,
+O09s3002,2026-09-15,2026-09,Rent,40000,Granby,,
+R10s4000,2026-10-12,2026-10,Revenue,123335.06,Acme,subscription,Enterprise
+R10s4001,2026-10-18,2026-10,Revenue,124781.52,Globex,subscription,Enterprise
+R10s4002,2026-10-07,2026-10,Revenue,124394.08,Stark,subscription,Enterprise
+R10s4003,2026-10-10,2026-10,Revenue,123430.2,Initech,subscription,Enterprise
+R10s4004,2026-10-14,2026-10,Revenue,127272.35,Umbrella,subscription,SMB
+R10s4005,2026-10-21,2026-10,Revenue,122558.63,Hooli,subscription,SMB
+R10s4006,2026-10-04,2026-10,Revenue,124915.72,Vandelay,subscription,SMB
+R10s4007,2026-10-15,2026-10,Revenue,126252.69,Wonka,subscription,SMB
+O10s4000,2026-10-15,2026-10,Payroll,260000,Payroll (internal),,
+O10s4001,2026-10-15,2026-10,Cloud Expense,150000,AWS,,
+O10s4002,2026-10-15,2026-10,Rent,40000,Granby,,
+R11s5000,2026-11-07,2026-11,Revenue,127477.24,Acme,subscription,Enterprise
+R11s5001,2026-11-05,2026-11,Revenue,123616.74,Globex,subscription,Enterprise
+R11s5002,2026-11-03,2026-11,Revenue,123637.82,Stark,subscription,Enterprise
+R11s5003,2026-11-22,2026-11,Revenue,124117.55,Initech,subscription,Enterprise
+R11s5004,2026-11-14,2026-11,Revenue,122880.59,Umbrella,subscription,SMB
+R11s5005,2026-11-18,2026-11,Revenue,127324.28,Hooli,subscription,SMB
+R11s5006,2026-11-24,2026-11,Revenue,124273.99,Vandelay,subscription,SMB
+R11s5007,2026-11-18,2026-11,Revenue,125987.21,Wonka,subscription,SMB
+O11s5000,2026-11-15,2026-11,Payroll,260000,Payroll (internal),,
+O11s5001,2026-11-15,2026-11,Cloud Expense,150000,AWS,,
+O11s5002,2026-11-15,2026-11,Rent,40000,Granby,,
+R12s6000,2026-12-18,2026-12,Revenue,123125.18,Acme,subscription,Enterprise
+R12s6001,2026-12-20,2026-12,Revenue,122989.97,Globex,subscription,Enterprise
+R12s6002,2026-12-12,2026-12,Revenue,126231.6,Stark,subscription,Enterprise
+R12s6003,2026-12-12,2026-12,Revenue,122968.72,Initech,subscription,Enterprise
+R12s6004,2026-12-05,2026-12,Revenue,125956.78,Umbrella,subscription,SMB
+R12s6005,2026-12-12,2026-12,Revenue,124501.86,Hooli,subscription,SMB
+R12s6006,2026-12-10,2026-12,Revenue,122761.92,Vandelay,subscription,SMB
+R12s6007,2026-12-19,2026-12,Revenue,125474.49,Wonka,subscription,SMB
+O12s6000,2026-12-15,2026-12,Payroll,260000,Payroll (internal),,
+O12s6001,2026-12-15,2026-12,Cloud Expense,195000,AWS,,
+O12s6002,2026-12-15,2026-12,Rent,40000,Granby,,
