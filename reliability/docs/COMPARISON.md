@@ -1,6 +1,6 @@
 # Benchmark comparison — `main` (latest) vs reference investigator
 
-Same 52 cases, same evaluator, same ground truth. `main` is scored through
+Same 56 cases, same evaluator, same ground truth. `main` is scored through
 `benchmark/adapters/main_v1.py`, which feeds the case files to `src/` unchanged
 and, from `main@33fea51`, uses the product's own `EvidenceBoundExplainer` with
 its offline `TemplateExplanationProvider` for the memo text — so the language
@@ -11,14 +11,14 @@ python -m reliability.benchmark.evaluate                                        
 python -m reliability.benchmark.evaluate --runner reliability.benchmark.adapters.main_v1:run  # main
 ```
 
-| | `main` @ 33fea51 | reference |
+| | `main` @ 3d74433 | reference |
 |---|---|---|
-| **Overall** | **0 / 52** (5 / 52 before the false-precision rule, see below) | **52 / 52** |
+| **Overall** | **0 / 56** (5 / 52 before the false-precision rule, see below) | **56 / 56** |
 | normal | 0 / 11 | 11 / 11 |
 | ambiguous | 0 / 10 | 10 / 10 |
 | data quality | 0 / 11 | 11 / 11 |
 | adversarial | 0 / 10 | 10 / 10 |
-| memory | 0 / 10 | 10 / 10 |
+| memory (incl. 4 multi-run sequences) | 0 / 14 | 14 / 14 |
 
 ## The one-line fix that unlocks 47 checks
 
@@ -43,8 +43,8 @@ describes that state.
 
 | Failed check | Cases | What it means | Where the reference does it |
 |---|---|---|---|
-| `number_lint` | 47 | Unrounded Decimals in the memo (above). | round to 0–1 decimals; `_money()` / `_signed()` |
-| `required_pattern` | 37 | The memo does not say what the evidence requires: "not meaningful" on a zero base, "reversal", "reclassification", "distributed across", "no activity in … (new)", "cannot reliably attribute", "does not establish why", "consistent with PR-…", "was not applied: expired". `main` reports drivers and stops. | `agent/reference.py` claim templates; `finance/detectors.py` |
+| `number_lint` | 51 | Unrounded Decimals in the memo (above). | round to 0–1 decimals; `_money()` / `_signed()` |
+| `required_pattern` | 41 | The memo does not say what the evidence requires: "not meaningful" on a zero base, "reversal", "reclassification", "distributed across", "no activity in … (new)", "cannot reliably attribute", "does not establish why", "consistent with PR-…", "was not applied: expired". `main` reports drivers and stops. | `agent/reference.py` claim templates; `finance/detectors.py` |
 | `data_quality_flags` | 19 | No gate. Reconciliation gaps, duplicates, reversals, conflicting summaries, missing columns/periods, cutoff, mixed currency, look-alike names all pass through silently. | `quality/gate.py` (23 checks, blocker/warning/info) |
 | `confidence` | 7 | One coverage number → "high" even when the summary conflicts or memory is contested. | `policy/uncertainty.py` |
 | `abstention` / `abstention_scope` | 6 + 5 | `main` never abstains. On a $90K reconciliation gap it still attributes. | gate blockers → refuse attribution on scope |
@@ -55,8 +55,8 @@ describes that state.
 
 | Class | `main` | reference |
 |---|---|---|
-| HALLUCINATED_CLAIM (false precision) | 47 | 0 |
-| PREMATURE_STOPPING | 33 | 0 |
+| HALLUCINATED_CLAIM (false precision) | 51 | 0 |
+| PREMATURE_STOPPING | 37 | 0 |
 | DATA_QUALITY_FAILURE | 19 | 0 |
 | CONFIDENCE_CALIBRATION_FAILURE | 7 | 0 |
 | ABSTENTION_FAILURE | 6 | 0 |
