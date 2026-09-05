@@ -7,6 +7,7 @@ from src.agent import FinancialTools, Investigator
 from src.ingestion.models import (
     BusinessContext,
     InvestigationRun,
+    ReviewerCorrection,
     ReviewerFeedback,
 )
 from src.memory import JsonMemoryStore
@@ -100,3 +101,63 @@ def test_feedback_for_unknown_run_fails(tmp_path):
         JsonMemoryStore(tmp_path).add_reviewer_feedback(
             "missing", ReviewerFeedback(reviewer="finance", status="rejected")
         )
+
+
+def test_reviewer_correction_becomes_future_business_context(tmp_path):
+    memory = JsonMemoryStore(tmp_path)
+    memory.save_investigation_run(
+        InvestigationRun(
+            run_id="run-reviewed",
+            prior_period=date(2026, 1, 1),
+            current_period=date(2026, 2, 1),
+        )
+    )
+    memory.add_reviewer_feedback(
+        "run-reviewed",
+        ReviewerFeedback(
+            reviewer="Finance team",
+            status="needs_revision",
+            corrections=[
+                ReviewerCorrection(
+                    correction_id="renewal-event",
+                    subject="Revenue",
+                    description="Acme growth came from an early renewal, not new business.",
+                    effective_period=date(2026, 2, 1),
+                    tags=["renewal"],
+                )
+            ],
+        ),
+    )
+    context = memory.get_business_context(subject="Revenue", as_of=date(2026, 3, 1))
+    assert context[0].description.endswith("not new business.")
+    assert context[0].source == "reviewer:Finance team;run:run-reviewed"
+    assert set(context[0].tags) >= {
+        "renewal",
+        "reviewer-correction",
+        "needs_revision",
+    }
+
+
+def test_reviewer_correction_is_idempotent_on_feedback_replay(tmp_path):
+    memory = JsonMemoryStore(tmp_path)
+    memory.save_investigation_run(
+        InvestigationRun(
+            run_id="run-reviewed",
+            prior_period=date(2026, 1, 1),
+            current_period=date(2026, 2, 1),
+        )
+    )
+    feedback = ReviewerFeedback(
+        reviewer="Finance",
+        status="approved",
+        corrections=[
+            ReviewerCorrection(
+                correction_id="known-event",
+                subject="Revenue",
+                description="Known event",
+            )
+        ],
+    )
+    memory.add_reviewer_feedback("run-reviewed", feedback)
+    memory.add_reviewer_feedback("run-reviewed", feedback)
+    assert len(memory.get_business_context(subject="Revenue")) == 1

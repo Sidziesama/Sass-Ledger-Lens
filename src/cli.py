@@ -7,6 +7,8 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
+from dotenv import load_dotenv
+
 from src.agent import FinancialTools, Investigator
 from src.evidence import build_claim_lineage
 from src.explanation import (
@@ -19,6 +21,7 @@ from src.memory import JsonMemoryStore
 from src.observability import InMemoryTraceObserver, PrismTraceObserver
 
 ROOT = Path(__file__).parents[1]
+load_dotenv(ROOT / ".env")
 
 
 def parser() -> argparse.ArgumentParser:
@@ -49,19 +52,39 @@ def parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Use the configured OpenAI-compatible provider instead of the offline template.",
     )
+    command.add_argument(
+        "--llm-debug",
+        action="store_true",
+        help="Print a credential-safe reason when the configured model falls back.",
+    )
     return command
 
 
-def build_artifact(result, transactions, events, provider=None) -> dict[str, Any]:
+def build_artifact(
+    result, transactions, events, provider=None, explanation_observer=None
+) -> dict[str, Any]:
     explanation_provider = provider or TemplateExplanationProvider()
     accounts = []
     for account in result.accounts:
         claims = build_claim_lineage(account, transactions)
-        explanation = (
-            EvidenceBoundExplainer(explanation_provider).explain(account, claims)
-            if claims
-            else None
-        )
+        explanation = None
+        explanation_error = None
+        if claims:
+            try:
+                explanation = EvidenceBoundExplainer(
+                    explanation_provider,
+                    explanation_observer,
+                    manage_run=explanation_observer is None,
+                ).explain(account, claims)
+            except Exception as exc:
+                if isinstance(explanation_provider, TemplateExplanationProvider):
+                    raise
+                explanation_error = f"{type(exc).__name__}: {exc}"
+                explanation = EvidenceBoundExplainer(
+                    TemplateExplanationProvider(),
+                    explanation_observer,
+                    manage_run=explanation_observer is None,
+                ).explain(account, claims)
         accounts.append(
             {
                 "account": account.variance.account,
@@ -92,6 +115,7 @@ def build_artifact(result, transactions, events, provider=None) -> dict[str, Any
                 ],
                 "claims": [claim.model_dump(mode="json") for claim in claims],
                 "explanation": explanation.model_dump(mode="json") if explanation else None,
+                "explanation_error": explanation_error,
                 "business_context": [
                     context.model_dump(mode="json") for context in account.business_context
                 ],
@@ -106,7 +130,7 @@ def build_artifact(result, transactions, events, provider=None) -> dict[str, Any
     }
 
 
-def print_report(artifact: dict[str, Any]) -> None:
+def print_report(artifact: dict[str, Any], *, llm_debug: bool = False) -> None:
     print(f"Ledger Lens investigation: {artifact['prior_period']} -> {artifact['current_period']}")
     if not artifact["accounts"]:
         print("No material variances found.")
@@ -130,6 +154,13 @@ def print_report(artifact: dict[str, Any]) -> None:
             )
         if account["explanation"]:
             print(f"  explanation: {account['explanation']['summary']}")
+        if account["explanation_error"]:
+            print(
+                "  LLM status: configured model failed validation or generation; "
+                "used deterministic fallback"
+            )
+            if llm_debug:
+                print(f"  LLM diagnostic: {account['explanation_error']}")
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
@@ -137,13 +168,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     transactions = load_transactions(args.transactions)
     memory = JsonMemoryStore(args.memory)
     local_trace = InMemoryTraceObserver()
-    observer = PrismTraceObserver.from_env() if args.prism else local_trace
     investigator = Investigator(
         FinancialTools(summaries, transactions),
         target_coverage=args.coverage,
         max_drivers=args.max_drivers,
         memory=memory,
-        observer=observer,
+        observer=local_trace,
     )
     result = investigator.investigate(
         args.prior,
@@ -151,7 +181,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         args.absolute_threshold,
         args.percentage_threshold,
     )
-    events = getattr(observer, "events", local_trace.events)
+    events = local_trace.events
     provider = None
     if args.llm:
         provider = OpenAICompatibleProvider.from_env()
@@ -160,7 +190,16 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 "--llm requires LEDGER_LENS_LLM_BASE_URL, LEDGER_LENS_LLM_API_KEY, "
                 "and LEDGER_LENS_LLM_MODEL"
             )
-    artifact = build_artifact(result, transactions, events, provider)
+    artifact = build_artifact(result, transactions, events, provider, local_trace)
+    if args.prism:
+        prism_observer = PrismTraceObserver.from_env()
+        if not isinstance(prism_observer, PrismTraceObserver):
+            raise RuntimeError(
+                "--prism requires PRISMTRACE_API_KEY, PRISMTRACE_HOST, and PRISMTRACE_PROJECT_ID"
+            )
+        artifact["prism_submission"] = prism_observer.submit_existing(
+            result.run_id, events, "success"
+        )
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(artifact, indent=2) + "\n", encoding="utf-8")
@@ -172,7 +211,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.current <= args.prior:
         parser().error("--current must be after --prior")
     artifact = run(args)
-    print_report(artifact)
+    print_report(artifact, llm_debug=args.llm_debug)
     if args.output:
         print(f"\nJSON artifact: {args.output}")
     return 0

@@ -34,6 +34,8 @@ def evaluate_case(case: BenchmarkCase, tools: FinancialTools) -> CaseScore:
         case.percentage_threshold,
     )
     actual = {account.variance.account: account for account in result.accounts}
+    expected_account_names = {item.account for item in case.expected_accounts}
+    account_set_accuracy = Decimal(actual.keys() == expected_account_names)
     variance_checks = []
     driver_checks = []
     reconciliation_checks = []
@@ -73,6 +75,7 @@ def evaluate_case(case: BenchmarkCase, tools: FinancialTools) -> CaseScore:
 
     score = CaseScore(
         case_id=case.case_id,
+        account_set_accuracy=account_set_accuracy,
         variance_accuracy=_rate(variance_checks),
         driver_accuracy=_rate(driver_checks),
         reconciliation_rate=_rate(reconciliation_checks),
@@ -84,6 +87,7 @@ def evaluate_case(case: BenchmarkCase, tools: FinancialTools) -> CaseScore:
             "passed": all(
                 metric == Decimal("1")
                 for metric in (
+                    score.account_set_accuracy,
                     score.variance_accuracy,
                     score.driver_accuracy,
                     score.reconciliation_rate,
@@ -105,6 +109,8 @@ def run_benchmark(
     scores = [evaluate_case(case, tools) for case in load_cases(cases_path)]
     result = BenchmarkScore(
         cases=scores,
+        account_set_accuracy=sum((score.account_set_accuracy for score in scores), Decimal("0"))
+        / len(scores),
         variance_accuracy=sum((score.variance_accuracy for score in scores), Decimal("0"))
         / len(scores),
         driver_accuracy=sum((score.driver_accuracy for score in scores), Decimal("0"))

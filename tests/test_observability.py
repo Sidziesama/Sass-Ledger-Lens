@@ -6,7 +6,12 @@ import pytest
 from src.agent import FinancialTools, Investigator
 from src.evidence import build_claim_lineage
 from src.ingestion.models import AccountSummary, Transaction
-from src.observability import InMemoryTraceObserver, NullTraceObserver, PrismTraceObserver
+from src.observability import (
+    InMemoryTraceObserver,
+    NullTraceObserver,
+    PrismTraceObserver,
+    TraceEvent,
+)
 
 PRIOR = date(2026, 1, 1)
 CURRENT = date(2026, 2, 1)
@@ -60,10 +65,18 @@ def test_failure_is_observed_and_reraised():
 class FakePrismClient:
     def __init__(self):
         self.payload = None
+        self.llm_payloads = []
+        self.flushed = False
 
     def submit_trajectory(self, **payload):
         self.payload = payload
         return {"id": "trajectory-1"}
+
+    def trace_llm(self, **payload):
+        self.llm_payloads.append(payload)
+
+    def flush(self):
+        self.flushed = True
 
 
 def test_prism_adapter_submits_sdk_trajectory():
@@ -77,6 +90,25 @@ def test_prism_adapter_submits_sdk_trajectory():
     assert client.payload["final_status"] == "success"
     assert client.payload["steps"]
     assert any(step.get("tool_name") == "build_claim_lineage" for step in client.payload["steps"])
+
+
+def test_prism_adapter_submits_an_existing_complete_trajectory():
+    client = FakePrismClient()
+    observer = PrismTraceObserver(client)
+    events = [
+        TraceEvent(step_type="tool_call", label="Investigate"),
+        TraceEvent(step_type="llm_call", label="Explain"),
+    ]
+    result = observer.submit_existing("run-1", events)
+    assert result == {"id": "trajectory-1"}
+    assert client.payload["request_id"] == "run-1"
+    assert [step["step_type"] for step in client.payload["steps"]] == [
+        "tool_call",
+        "llm_call",
+    ]
+    assert client.llm_payloads[0]["metadata"]["session_id"] == "run-1"
+    assert client.llm_payloads[0]["agent_id"] == "ledger-lens"
+    assert client.flushed is True
 
 
 def test_missing_prism_configuration_is_offline_safe(monkeypatch):

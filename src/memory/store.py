@@ -72,6 +72,19 @@ class JsonMemoryStore:
                 updated = run.model_copy(update={"feedback": [*run.feedback, feedback]})
                 runs[index] = updated
                 self._write_models(self.runs_path, runs)
+                for correction in feedback.corrections:
+                    self.save_business_context(
+                        BusinessContext(
+                            context_id=f"feedback:{run_id}:{correction.correction_id}",
+                            subject=correction.subject,
+                            description=correction.description,
+                            effective_period=correction.effective_period,
+                            source=f"reviewer:{feedback.reviewer};run:{run_id}",
+                            tags=sorted(
+                                set(correction.tags) | {"reviewer-correction", feedback.status}
+                            ),
+                        )
+                    )
                 return updated
         raise KeyError(f"unknown investigation run: {run_id}")
 

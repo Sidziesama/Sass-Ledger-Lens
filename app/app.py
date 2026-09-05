@@ -1,20 +1,27 @@
 """Ledger Lens Streamlit dashboard."""
 
 import json
+import os
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
 
 import streamlit as st
+from dotenv import load_dotenv
 from pydantic import ValidationError
 
 from src.agent import FinancialTools, Investigator
 from src.evidence import build_claim_lineage
-from src.explanation import EvidenceBoundExplainer, TemplateExplanationProvider
+from src.explanation import (
+    EvidenceBoundExplainer,
+    OpenAICompatibleProvider,
+    TemplateExplanationProvider,
+)
 from src.ingestion.loaders import load_account_summaries, load_transactions
 from src.ingestion.models import (
     EvidenceClaim,
     InvestigationRun,
+    ReviewerCorrection,
     ReviewerFeedback,
     RunAccountSummary,
 )
@@ -25,6 +32,8 @@ from src.observability import InMemoryTraceObserver
 ROOT = Path(__file__).parents[1]
 SAMPLE = ROOT / "data" / "sample"
 MEMORY = ROOT / "data" / "memory"
+if os.getenv("LEDGER_LENS_DISABLE_DOTENV") != "1":
+    load_dotenv(ROOT / ".env")
 
 
 def money(value: Decimal) -> str:
@@ -84,7 +93,32 @@ def run_dashboard(
     result = Investigator(
         FinancialTools(summaries, transactions), memory=memory, observer=observer
     ).investigate(prior, current, absolute, percentage)
-    return result, transactions, observer, memory
+    configured_provider = OpenAICompatibleProvider.from_env()
+    provider = configured_provider or TemplateExplanationProvider()
+    explanations = {}
+    explanation_errors = {}
+    for account in result.accounts:
+        claims = build_claim_lineage(account, transactions)
+        if not claims:
+            continue
+        try:
+            explanations[account.variance.account] = EvidenceBoundExplainer(provider).explain(
+                account, claims
+            )
+        except Exception as exc:
+            explanation_errors[account.variance.account] = str(exc)
+            explanations[account.variance.account] = EvidenceBoundExplainer(
+                TemplateExplanationProvider()
+            ).explain(account, claims)
+    return (
+        result,
+        transactions,
+        observer,
+        memory,
+        explanations,
+        explanation_errors,
+        provider.name,
+    )
 
 
 st.set_page_config(page_title="Ledger Lens", page_icon="◉", layout="wide")
@@ -174,7 +208,15 @@ if (
         )
         st.session_state.dataset_signature = dataset_signature
 
-result, transactions, observer, memory = st.session_state.investigation
+(
+    result,
+    transactions,
+    observer,
+    memory,
+    explanations,
+    explanation_errors,
+    explanation_provider_name,
+) = st.session_state.investigation
 
 for warning in dataset_warnings:
     st.warning(warning)
@@ -224,15 +266,17 @@ with overview:
     )
     for item in result.accounts:
         st.markdown(f"#### {item.variance.account}")
-        claims = build_claim_lineage(item, transactions)
-        if claims:
-            explanation = EvidenceBoundExplainer(TemplateExplanationProvider()).explain(
-                item, claims
-            )
+        explanation = explanations.get(item.variance.account)
+        if explanation:
             st.write(explanation.summary)
             st.caption(
                 f"Grounded · {len(explanation.claim_ids)} verified claims · {explanation.provider}"
             )
+            if item.variance.account in explanation_errors:
+                st.warning(
+                    "The configured LLM response failed grounding or connection checks; "
+                    "the displayed explanation uses the deterministic fallback."
+                )
         else:
             st.write(evidence_summary(item))
 
@@ -279,6 +323,7 @@ with evidence_tab:
                 )
 
 with trace_tab:
+    st.caption(f"Explanation provider: {explanation_provider_name}")
     st.dataframe(
         [event.as_prism_step() for event in observer.events],
         width="stretch",
@@ -326,18 +371,52 @@ with memory_tab:
             st.success("Investigation saved to structured memory.")
             st.rerun()
     else:
+        saved_current_run = next(
+            run for run in memory.list_investigation_runs() if run.run_id == result.run_id
+        )
         st.success("Investigation is saved.")
         with st.form("review_form", clear_on_submit=True):
             reviewer = st.text_input("Reviewer", value="Finance team")
             status = st.selectbox("Decision", ["approved", "needs_revision", "rejected"])
             comment = st.text_area("Comment")
+            st.markdown("**Optional correction to remember**")
+            correction_subject = st.selectbox(
+                "Correction subject",
+                ["None", *[account.variance.account for account in result.accounts]],
+            )
+            correction_description = st.text_area(
+                "Correction detail",
+                help="A verified business event or reviewer correction for future investigations.",
+            )
+            correction_tags = st.text_input(
+                "Correction tags", placeholder="renewal, pricing, one-time"
+            )
             submitted = st.form_submit_button("Save feedback")
         if submitted:
+            corrections = []
+            if correction_subject != "None" and correction_description.strip():
+                corrections.append(
+                    ReviewerCorrection(
+                        correction_id=f"correction-{len(saved_current_run.feedback) + 1}",
+                        subject=correction_subject,
+                        description=correction_description.strip(),
+                        effective_period=result.current_period,
+                        tags=[tag.strip() for tag in correction_tags.split(",") if tag.strip()],
+                    )
+                )
             memory.add_reviewer_feedback(
                 result.run_id,
-                ReviewerFeedback(reviewer=reviewer, status=status, comment=comment or None),
+                ReviewerFeedback(
+                    reviewer=reviewer,
+                    status=status,
+                    comment=comment or None,
+                    corrections=corrections,
+                ),
             )
-            st.success("Reviewer feedback saved.")
+            message = "Reviewer feedback saved."
+            if corrections:
+                message += " The correction is now available to future investigations."
+            st.success(message)
 
 with history_tab:
     st.subheader("Saved investigation history")
@@ -354,6 +433,7 @@ with history_tab:
                     "Accounts": len(run.accounts),
                     "Claims": len(run.claims),
                     "Latest review": run.feedback[-1].status if run.feedback else "unreviewed",
+                    "Corrections": sum(len(feedback.corrections) for feedback in run.feedback),
                 }
                 for run in reversed(saved_runs)
             ],

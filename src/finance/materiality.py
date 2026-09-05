@@ -22,6 +22,7 @@ def rank_material_variances(
     for result in variances:
         abs_change = abs(result.variance)
         pct_change = abs(result.variance_pct or Decimal("0"))
-        is_material = abs_change >= absolute_threshold and pct_change >= percentage_threshold
+        percentage_passes = result.variance_pct is None or pct_change >= percentage_threshold
+        is_material = abs_change >= absolute_threshold and percentage_passes
         ranked.append(MaterialVariance(result, is_material, abs_change))
     return sorted(ranked, key=lambda item: (-item.materiality_score, item.result.account))

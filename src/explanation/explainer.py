@@ -84,9 +84,16 @@ def build_evidence_packet(investigation: AccountInvestigation, claims: list[Clai
 
 
 class EvidenceBoundExplainer:
-    def __init__(self, provider: ExplanationProvider, observer: TraceObserver | None = None):
+    def __init__(
+        self,
+        provider: ExplanationProvider,
+        observer: TraceObserver | None = None,
+        *,
+        manage_run: bool = True,
+    ):
         self.provider = provider
         self.observer = observer or NullTraceObserver()
+        self.manage_run = manage_run
 
     def explain(
         self, investigation: AccountInvestigation, claims: list[ClaimLineage]
@@ -95,7 +102,8 @@ class EvidenceBoundExplainer:
             raise UngroundedExplanationError("cannot explain an account without evidence claims")
         packet = build_evidence_packet(investigation, claims)
         run_id = f"explanation-{uuid4()}"
-        self.observer.start_run(run_id)
+        if self.manage_run:
+            self.observer.start_run(run_id)
         started = perf_counter()
         try:
             raw = self.provider.generate(system=SYSTEM_PROMPT, prompt=json.dumps(packet))
@@ -115,7 +123,8 @@ class EvidenceBoundExplainer:
                     duration_ms=int((perf_counter() - started) * 1000),
                 )
             )
-            self.observer.finish_run("success")
+            if self.manage_run:
+                self.observer.finish_run("success")
             return result
         except Exception as exc:
             self.observer.record(
@@ -127,7 +136,8 @@ class EvidenceBoundExplainer:
                     status="error",
                 )
             )
-            self.observer.finish_run("error")
+            if self.manage_run:
+                self.observer.finish_run("error")
             raise
 
     @staticmethod

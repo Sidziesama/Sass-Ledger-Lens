@@ -52,10 +52,19 @@ class EvidenceClaim(LedgerModel):
     transaction_ids: list[str] = Field(min_length=1)
 
 
+class ReviewerCorrection(LedgerModel):
+    correction_id: str
+    subject: str
+    description: str
+    effective_period: date | None = None
+    tags: list[str] = Field(default_factory=list)
+
+
 class ReviewerFeedback(LedgerModel):
     reviewer: str
     status: Literal["approved", "rejected", "needs_revision"]
     comment: str | None = None
+    corrections: list[ReviewerCorrection] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 

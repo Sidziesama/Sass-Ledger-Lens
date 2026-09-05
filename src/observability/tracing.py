@@ -97,6 +97,34 @@ class PrismTraceObserver(InMemoryTraceObserver):
             final_status=status,
         )
 
+    def submit_existing(
+        self, run_id: str, events: list[TraceEvent], status: str = "success"
+    ) -> dict | None:
+        """Submit a complete trajectory assembled by the application pipeline."""
+        self.start_run(run_id)
+        for event in events:
+            self.record(event)
+        result = self.finish_run(status)
+        for index, event in enumerate(events):
+            if event.step_type != "llm_call":
+                continue
+            self.client.trace_llm(
+                model="ledger-lens-explanation",
+                input_messages=[{"role": "system", "content": event.input_summary}],
+                output=event.output_summary,
+                latency_ms=event.duration_ms,
+                trace_id=f"{run_id}-llm-{index}",
+                agent_id=self.agent_id,
+                agent_name=self.agent_name,
+                metadata={
+                    "session_id": run_id,
+                    "conversation_id": run_id,
+                    "source": "ledger-lens-live",
+                },
+            )
+        self.client.flush()
+        return result
+
 
 def summarize(value: Any) -> str:
     """Create compact, deterministic summaries safe for trace metadata."""

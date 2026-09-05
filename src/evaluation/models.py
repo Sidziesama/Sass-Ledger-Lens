@@ -26,6 +26,7 @@ class BenchmarkCase(LedgerModel):
 
 class CaseScore(LedgerModel):
     case_id: str
+    account_set_accuracy: Decimal
     variance_accuracy: Decimal
     driver_accuracy: Decimal
     reconciliation_rate: Decimal
@@ -35,6 +36,7 @@ class CaseScore(LedgerModel):
 
 class BenchmarkScore(LedgerModel):
     cases: list[CaseScore]
+    account_set_accuracy: Decimal
     variance_accuracy: Decimal
     driver_accuracy: Decimal
     reconciliation_rate: Decimal

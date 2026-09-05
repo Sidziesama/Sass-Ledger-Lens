@@ -4,6 +4,7 @@ from decimal import Decimal
 from src.ingestion.models import (
     EvidenceClaim,
     InvestigationRun,
+    ReviewerCorrection,
     ReviewerFeedback,
     RunAccountSummary,
 )
@@ -45,7 +46,19 @@ def test_run_comparison_tracks_accounts_drivers_and_review():
         current_period=date(2026, 3, 1),
         accounts=[account("Revenue", "60"), account("Hosting Expense", "20", False)],
         claims=[claim("two", "Globex")],
-        feedback=[ReviewerFeedback(reviewer="Finance", status="needs_revision")],
+        feedback=[
+            ReviewerFeedback(
+                reviewer="Finance",
+                status="needs_revision",
+                corrections=[
+                    ReviewerCorrection(
+                        correction_id="one",
+                        subject="Revenue",
+                        description="Renewal timing",
+                    )
+                ],
+            )
+        ],
     )
 
     comparison = compare_investigation_runs(previous, current)
