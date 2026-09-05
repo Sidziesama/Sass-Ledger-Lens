@@ -59,11 +59,20 @@ class ReviewerFeedback(LedgerModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
+class RunAccountSummary(LedgerModel):
+    account: str
+    variance: Decimal
+    variance_pct: Decimal | None
+    coverage: Decimal = Field(ge=0, le=1)
+    evidence_sufficient: bool
+
+
 class InvestigationRun(LedgerModel):
     run_id: str
     prior_period: date
     current_period: date
     claims: list[EvidenceClaim] = Field(default_factory=list)
+    accounts: list[RunAccountSummary] = Field(default_factory=list)
     feedback: list[ReviewerFeedback] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 

@@ -37,6 +37,8 @@ The dashboard presents material period changes, evidence-backed summaries, ranke
 
 Upload a monthly-summary JSON file and a transaction JSON file together from the sidebar to investigate another dataset. Both files are validated against strict Pydantic schemas; duplicate transaction IDs are rejected and summary-to-detail reconciliation differences are shown before investigation.
 
+Saved investigations appear in the Run history tab with periods, account results, claim counts, and review status. Any two stored runs can be compared to show variance changes and newly appearing or disappearing drivers.
+
 ```bash
 streamlit run app/app.py
 ```

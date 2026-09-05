@@ -12,9 +12,14 @@ from src.agent import FinancialTools, Investigator
 from src.evidence import build_claim_lineage
 from src.explanation import EvidenceBoundExplainer, TemplateExplanationProvider
 from src.ingestion.loaders import load_account_summaries, load_transactions
-from src.ingestion.models import EvidenceClaim, InvestigationRun, ReviewerFeedback
+from src.ingestion.models import (
+    EvidenceClaim,
+    InvestigationRun,
+    ReviewerFeedback,
+    RunAccountSummary,
+)
 from src.ingestion.validation import validate_dataset
-from src.memory import JsonMemoryStore
+from src.memory import JsonMemoryStore, compare_investigation_runs
 from src.observability import InMemoryTraceObserver
 
 ROOT = Path(__file__).parents[1]
@@ -186,8 +191,15 @@ metric_columns[1].metric("Net material change", signed_money(total_change))
 metric_columns[2].metric("Evidence sufficient", f"{supported}/{len(result.accounts)}")
 metric_columns[3].metric("Trace steps", len(observer.events))
 
-overview, drivers_tab, evidence_tab, trace_tab, memory_tab = st.tabs(
-    ["Overview", "Drivers", "Evidence", "Investigation trace", "Memory & review"]
+overview, drivers_tab, evidence_tab, trace_tab, memory_tab, history_tab = st.tabs(
+    [
+        "Overview",
+        "Drivers",
+        "Evidence",
+        "Investigation trace",
+        "Memory & review",
+        "Run history",
+    ]
 )
 
 with overview:
@@ -299,6 +311,16 @@ with memory_tab:
                     prior_period=result.prior_period,
                     current_period=result.current_period,
                     claims=all_claims,
+                    accounts=[
+                        RunAccountSummary(
+                            account=account.variance.account,
+                            variance=account.variance.variance,
+                            variance_pct=account.variance.variance_pct,
+                            coverage=account.stop_decision.coverage,
+                            evidence_sufficient=account.stop_decision.evidence_sufficient,
+                        )
+                        for account in result.accounts
+                    ],
                 )
             )
             st.success("Investigation saved to structured memory.")
@@ -316,3 +338,56 @@ with memory_tab:
                 ReviewerFeedback(reviewer=reviewer, status=status, comment=comment or None),
             )
             st.success("Reviewer feedback saved.")
+
+with history_tab:
+    st.subheader("Saved investigation history")
+    saved_runs = memory.list_investigation_runs()
+    if not saved_runs:
+        st.caption("Save an investigation to begin building run history.")
+    else:
+        st.dataframe(
+            [
+                {
+                    "Run": run.run_id,
+                    "Prior period": run.prior_period.isoformat(),
+                    "Current period": run.current_period.isoformat(),
+                    "Accounts": len(run.accounts),
+                    "Claims": len(run.claims),
+                    "Latest review": run.feedback[-1].status if run.feedback else "unreviewed",
+                }
+                for run in reversed(saved_runs)
+            ],
+            width="stretch",
+            hide_index=True,
+        )
+
+        selected_run_id = st.selectbox("Inspect run", [run.run_id for run in reversed(saved_runs)])
+        selected_run = next(run for run in saved_runs if run.run_id == selected_run_id)
+        if selected_run.accounts:
+            st.dataframe(
+                [account.model_dump(mode="json") for account in selected_run.accounts],
+                width="stretch",
+                hide_index=True,
+            )
+
+        if len(saved_runs) >= 2:
+            st.markdown("#### Compare two runs")
+            previous_id = st.selectbox(
+                "Previous run", [run.run_id for run in saved_runs[:-1]], key="previous_run"
+            )
+            current_id = st.selectbox(
+                "Current run", [run.run_id for run in saved_runs[1:]], key="current_run"
+            )
+            previous_run = next(run for run in saved_runs if run.run_id == previous_id)
+            current_run = next(run for run in saved_runs if run.run_id == current_id)
+            comparison = compare_investigation_runs(previous_run, current_run)
+            st.dataframe(
+                [change.model_dump(mode="json") for change in comparison.account_changes],
+                width="stretch",
+                hide_index=True,
+            )
+            left, right = st.columns(2)
+            left.write("**New drivers**")
+            left.write(comparison.added_drivers or ["None"])
+            right.write("**Drivers no longer present**")
+            right.write(comparison.removed_drivers or ["None"])
