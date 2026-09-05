@@ -29,3 +29,31 @@ Machine-evaluated. Each pass ran all 33 cases against the reference investigator
 | ARITHMETIC_FAILURE (C32) | 1 | The *evaluator* summed two conflicting summary rows to compute "truth" — the same bug fixed in the agent one pass earlier | Truth is undefined when the summary conflicts; the check falls back to transaction totals. |
 
 ## Pass 4 — 33/33
+
+## Pass 5 — benchmark extended to 52 cases
+
+19 new cases (2 ambiguous, 7 data-quality, 4 adversarial, 6 memory). First run: **46/52**.
+
+| Class | Count | Root cause | Fix |
+|---|---|---|---|
+| ABSTENTION_FAILURE (A07, B01, B02) | 3 | Three new cases used identical consecutive-day amounts, which tripped PROBABLE_DUPLICATE as a blocker. Legitimate as a pair; not as a run of four. | Gate: 3+ identical charges are a **series** (per-diems, instalments) → `RECURRING_SERIES` info, never a blocker. Cases also given realistic varied amounts. |
+| PREMATURE_STOPPING (A08) | 1 | A renamed vendor appears as one counterparty going inactive and a new one appearing; the offsetting claim named both but never said "no activity … does not establish whether the relationship ended". | Inactive counterparties on the opposing side of an offset get the explicit inactive sentence. |
+| PREMATURE_STOPPING (B02) | 1 | Same duplicate artifact as above. | — |
+| HALLUCINATED_CLAIM (M05) | 1 | Hypothesis-source prior was wrapped in "unverified hypothesis" language but the inner text still said "reviewer-provided". | Neutralise source wording before wrapping. |
+| HALLUCINATED_CLAIM (M08) | 1 | Linter read the "10" in "not valid before 2026-10" as an ungrounded figure. | Periods and dates are stripped before the number scan. |
+| Ground truth (A07) | 1 | Forbidden pattern `ACME \+` matched the correct merged output under case-insensitive matching. | Ground truth distinguishes merged vs unmerged by amount. |
+
+New reference capabilities forced by this batch: counterparty grouping on the
+normalized key ("Acme" / "acme " / "ACME" are one customer); hypothesis and
+contested priors get distinct, weaker language and cap confidence at medium;
+gross-margin mix-vs-rate bridge by any shared dimension (Simpson's paradox is
+named as a composition effect, not an operational improvement).
+
+Result: **52/52**.
+
+## Pass 6 — false precision
+
+Scoring `main`'s own explainer exposed memos like "40.90037309924180988050104740%".
+The linter's false-precision rule only caught "NN.NN% confident". Widened to any
+percentage with more than two decimals and any bare figure with three or more.
+Reference unaffected (52/52); `main` 5/52 → 0/52 until the template rounds.

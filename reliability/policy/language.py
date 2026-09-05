@@ -22,7 +22,11 @@ CAUSAL = re.compile(
     r"\b(caused|causes|causing|because of|resulted from|as a result of|led to|leads to|"
     r"owing to|thanks to|attributable to the decision|in response to|"
     r"triggered by|stems from|stemming from)\b", re.I)
-FALSE_PRECISION = re.compile(r"\b\d{2}\.\d{2,}\s?%\s*(confident|confidence|certain)", re.I)
+FALSE_PRECISION = re.compile(
+    r"\b\d{1,3}\.\d{2,}\s?%\s*(confident|confidence|certain)"   # "93.72% confident"
+    r"|\b\d[\d,]*\.\d{3,}\s?%"                                    # "40.90037309924%" -- a Decimal dump
+    r"|\$?\d[\d,]*\.\d{3,}\b(?!\s?%)",                            # "203518.9612" in a memo
+    re.I)
 NONSENSE = re.compile(r"\b(infinit(y|e|ely)|inf%|nan%|undefined%)\b", re.I)
 # A figure may end a sentence ("... of $84,000.") -- a trailing period followed by
 # a non-digit must not make the regex backtrack to a shorter, wrong number.

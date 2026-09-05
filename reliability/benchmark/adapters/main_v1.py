@@ -29,6 +29,13 @@ from src.agent.tools import FinancialTools
 from src.evidence.lineage import EvidenceError, build_claim_lineage
 from src.ingestion.models import AccountSummary, Transaction
 
+try:                                   # present from main@33fea51 onwards
+    from src.explanation.explainer import EvidenceBoundExplainer, UngroundedExplanationError
+    from src.explanation.providers import TemplateExplanationProvider
+    _EXPLAINER = EvidenceBoundExplainer(TemplateExplanationProvider())
+except Exception:                      # noqa: BLE001
+    _EXPLAINER, UngroundedExplanationError = None, Exception
+
 REVENUE_HINTS = ("revenue", "sales", "income")
 ABS_THRESHOLD = Decimal("1000")
 PCT_THRESHOLD = Decimal("0")
@@ -165,6 +172,27 @@ def _run(case_dir, period, prior_period, memory_path=None, normalized=False):
                            "numbers": [float(calc.variance), float(calc.prior_amount), float(calc.current_amount)]
                            + ([float(calc.contribution_pct)] if calc.contribution_pct is not None else [])})
             sentences.append(f"{txt} [{cid}]")
+        # Their memo, their words: prefer the product's own explainer when it runs.
+        if _EXPLAINER is not None and lineage:
+            try:
+                ex = _EXPLAINER.explain(ai, lineage)
+                n += 1
+                cid = f"claim_{n:03d}"
+                prose = f"{ex.headline} {ex.summary}".strip()
+                claims.append({"claim_id": cid, "claim": prose, "kind": "explanation", "account": v.account,
+                               "variance": float(v.variance), "driver_amount": None, "contribution_pct": None,
+                               "drivers": [cl.driver for cl in lineage], "transaction_ids": ["summary"],
+                               "calculation": None, "detector": f"explainer:{ex.provider}", "confidence": 1.0,
+                               "supporting_priors": [], "verified": bool(ex.grounded),
+                               "verification_note": "product explainer (grounded=%s)" % ex.grounded,
+                               "numbers": []})
+                sentences.append(f"{prose} [{cid}]")
+            except UngroundedExplanationError as e:
+                flags.append({"code": "EXPLAINER_REJECTED", "severity": "warning", "detail": str(e)[:200],
+                              "scope": {"account": v.account}})
+            except Exception as e:                        # noqa: BLE001
+                flags.append({"code": "EXPLAINER_ERROR", "severity": "warning",
+                              "detail": f"{type(e).__name__}: {e}"[:200], "scope": {"account": v.account}})
         cov = ai.stop_decision.coverage
         attributed = abs(v.variance) * cov
         total_attr += attributed

@@ -11,14 +11,14 @@ Its policy, in one line:
 | Module | Responsibility |
 |---|---|
 | `ingestion/normalize.py` | Canonical CSV schema. Parses `$1,234`, `(500)`, `−250`, `1,000-`, four date formats (ambiguous ones flagged, never guessed), six period formats, unicode look-alike names. Nothing unparseable is coerced. |
-| `quality/gate.py` | 22 data-quality checks with `blocker / warning / info` severity. Reconciliation, exact and near duplicates (with a materiality floor), reversals, naming variants, sign consistency, conflicting summary rows, cutoff. A blocker refuses attribution on its scope. |
+| `quality/gate.py` | 23 data-quality checks with `blocker / warning / info` severity. Reconciliation, exact and near duplicates (with a materiality floor), reversals, naming variants, sign consistency, conflicting summary rows, cutoff. A blocker refuses attribution on its scope. |
 | `finance/` | Deterministic engine: exact MECE decomposition, margin bridges (volume / mix / rate), seasonal baselines, detectors (reclass, timing, one-time, silent churn, AR deterioration). |
 | `evidence/claims.py` | Every factual statement is a `Claim` with its calculation, its transaction ids, and the `numbers` it states. Claims are verified before they can be shown. |
 | `policy/uncertainty.py` | Four measured dimensions — data, attribution, context, evidence coverage — and a categorical `high / medium / low` verdict from explicit rules. No single "93.7% confident" number exists anywhere. |
 | `policy/language.py` | Deterministic linter over the final memo: causal verbs without a causal claim, false precision, nonsense figures, and **any number that does not trace to a verified claim**. |
 | `memory/store.py` | Priors with `source_type` (user-verified / system-inferred / hypothesis), validity windows, `contested` status, versioned reviewer corrections. `retrieve()` returns what it rejected and why. |
 | `agent/reference.py` | The deterministic reference investigator — the floor any shipped investigator must clear. |
-| `benchmark/` | 33 machine-evaluable cases with ground truth, an evaluator, and an 18-class failure taxonomy. |
+| `benchmark/` | 52 machine-evaluable cases with ground truth, an evaluator, and an 18-class failure taxonomy. |
 
 ## Contracts
 
@@ -42,8 +42,11 @@ The benchmark was built to break the agent, and it did. Every failure was classi
 | 2 | 20 / 33 | Agent stopped at segment level and never named the customer; a $102 accidental duplicate blocked a whole account; linter regex backtracking at sentence ends |
 | 3 | 31 / 33 | Seasonality judged by sigma alone (any deviation on clean history looked abnormal); conflicting summary rows were being summed |
 | 4 | **33 / 33** | — |
+| 5 | 46 → **52 / 52** | Benchmark extended to 52 cases; a run of identical charges was being treated as a duplicate pair; renamed vendors, hypothesis priors, date tokens in the linter |
+| 6 | 52 / 52 | False-precision rule widened after scoring the `main` explainer (26-decimal percentages) |
 
-Final: adversarial 6/6, data-quality 4/4, memory 4/4, ambiguous 8/8, normal 11/11.
+Final: adversarial 10/10, data-quality 11/11, memory 10/10, ambiguous 10/10, normal 11/11.
+Comparison with the `main` investigator: `docs/COMPARISON.md`.
 
 ## What the agent will say when it cannot prove something
 
