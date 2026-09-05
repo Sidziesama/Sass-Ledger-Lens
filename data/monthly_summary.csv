@@ -1,0 +1,19 @@
+month,account,amount
+2026-07,Revenue,1000000
+2026-07,COGS,420000
+2026-07,Cloud Costs,82000
+2026-07,Marketing,90000
+2026-07,Payroll,260000
+2026-07,Operating Cash Flow,120000
+2026-08,Revenue,1180000
+2026-08,COGS,515000
+2026-08,Cloud Costs,121000
+2026-08,Marketing,88000
+2026-08,Payroll,275000
+2026-08,Operating Cash Flow,-190000
+2026-09,Revenue,1293000
+2026-09,COGS,584000
+2026-09,Cloud Costs,160000
+2026-09,Marketing,92000
+2026-09,Payroll,277000
+2026-09,Operating Cash Flow,-245000

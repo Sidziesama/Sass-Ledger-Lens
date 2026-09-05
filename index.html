@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="LedgerLens is a deterministic financial variance courtroom for money operations reviews."
+    />
+    <title>LedgerLens | Financial Variance Courtroom</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="root" class="app" aria-live="polite"></main>
+
+    <input id="summaryInput" class="sr-only" type="file" accept=".csv,text/csv" />
+    <input id="transactionInput" class="sr-only" type="file" accept=".csv,text/csv" />
+
+    <script src="./node_modules/papaparse/papaparse.min.js"></script>
+    <script src="./node_modules/lucide/dist/umd/lucide.min.js"></script>
+    <script src="./data/story.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

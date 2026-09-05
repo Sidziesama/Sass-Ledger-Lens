@@ -1,0 +1,56 @@
+{
+  "model": "ledgerlens-deterministic-courtroom-v1",
+  "input_messages": [
+    {
+      "role": "user",
+      "content": "Explain material financial changes for 2026-08 to 2026-09 using monthly summaries and transaction-level CSV rows."
+    }
+  ],
+  "output_message": "LedgerLens reviewed 2026-08 to 2026-09. Revenue: +$113,000 (9.6%). Northwind +$29,000; Acme Corp +$27,000; Globex +$21,000. Remaining drivers: +$36,000. COGS: +$69,000 (13.4%). Fulfillment Network +$44,000; Data Labeling Co +$25,000. Remaining drivers: $0. Operating Cash Flow: -$55,000 (-28.9%). AP -$52,000; Payroll -$28,000; AR +$25,000. Remaining drivers: $0. Cloud Costs: +$39,000 (32.2%). Cloud change is +$39,000 against a reviewer-approved expectation of $10,000. The residual is +$29,000. The migration remains business context, not proven causation. 3 weak claim(s) were withheld from the CFO brief.",
+  "latency_ms": 0,
+  "trace_id": "ledgerlens-2026-08-to-2026-09-courtroom-demo",
+  "session_id": "ledgerlens-hackathon-demo",
+  "agent_id": "ledgerlens-financial-variance-courtroom",
+  "agent_name": "LedgerLens Financial Variance Courtroom",
+  "metadata": {
+    "track": "Maximor Money Operations",
+    "flow": "Detect -> Investigate -> Explain -> Prove -> Remember",
+    "prism_framework": "Observe -> Improve -> Prove",
+    "period_from": "2026-08",
+    "period_to": "2026-09",
+    "accepted_rows": 36,
+    "quarantined_rows": 1,
+    "issue_count": 0,
+    "publishable_claims": 13,
+    "rejected_claims": 3,
+    "blocked_claims": 0,
+    "evidence_coverage_percent": 100,
+    "top_account": "Revenue",
+    "top_account_delta": "$113,000",
+    "edge_cases_passing": 21,
+    "edge_cases_total": 21,
+    "guarded_edge_cases": [
+      "Original close",
+      "Summary mismatch",
+      "Missing invoice",
+      "Duplicate invoice",
+      "Conflicting invoice",
+      "Refund and credit",
+      "Account reclassification",
+      "Customer alias",
+      "Expired business memory",
+      "Zero prior balance",
+      "No revenue movement",
+      "Revenue decline",
+      "Tiny balance, huge percentage",
+      "Mixed currencies",
+      "Wrong accounting period",
+      "Missing prior summary",
+      "Invalid decimal precision",
+      "Instruction hidden in ledger",
+      "Wrong proposed amount",
+      "Missing citations",
+      "Fabricated citation"
+    ]
+  }
+}

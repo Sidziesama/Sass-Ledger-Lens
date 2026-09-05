@@ -1,86 +1,183 @@
-# Ledger Lens
+# LedgerLens: Financial Variance Courtroom
 
-Ledger Lens is a JSON-first financial variance investigation system for the Maximor Money Operations “Explain the Change” track.
+LedgerLens is a Maximor Money Operations hackathon project for the "Explain the Change" prompt. It ingests monthly account summaries and transaction-level CSVs, ranks meaningful period-over-period changes, drills into source rows, and produces a CFO brief only after each claim survives verification.
 
-## Milestone 1: financial foundation
+The core idea: AI can propose an explanation, but deterministic finance checks decide whether it is allowed into the brief.
 
-The current implementation validates account summaries and transactions with Pydantic, compares periods with exact `Decimal` arithmetic, ranks material variances, decomposes changes across business dimensions, and preserves transaction IDs as evidence lineage.
+## Problem Statement
 
-The governing rule is: **Python calculates. The agent investigates. The LLM explains.**
+Finance teams do not just need "Revenue increased 18%." They need to know:
 
-```bash
-source .venv/bin/activate
-pytest
+- what changed across periods
+- which changes are material
+- which transactions drove the movement
+- which explanations are evidence-backed
+- what the system learned from previous reviewed closes
+
+LedgerLens turns that into a repeatable review workflow.
+
+## Differentiation
+
+Most hackathon builds can become:
+
+```text
+CSV upload -> variance table -> AI summary
 ```
 
-Core functions are `compare_periods`, `rank_material_variances`, `breakdown_by_dimension`, and `get_top_drivers`.
+LedgerLens is built around a courtroom:
 
-## Milestone 2: investigator
-
-`FinancialTools` exposes deterministic comparison, ranking, decomposition, transaction retrieval, counterparty-history, and contribution functions. `Investigator` walks material account variances and only stops when the configured explanatory-coverage target is met and every selected driver has transaction evidence. Accounts without evidence are explicitly marked incomplete.
-
-## Milestone 3: evidence lineage
-
-`build_claim_lineage` converts investigated drivers into validated claim records containing the exact calculation, driver identity, and source transactions. Missing or mismatched transaction IDs invalidate the claim instead of allowing an unsupported explanation.
-
-## Milestone 4: structured memory
-
-`JsonMemoryStore` atomically persists business context, immutable investigation runs, and appended reviewer feedback as validated JSON. Context retrieval filters by account subject, tags, and effective date. When configured with this store, the investigator attaches relevant prior context to each account investigation so repeated runs benefit from finance-team knowledge without changing deterministic financial truth.
-
-## Milestone 5: PRISM observability
-
-The investigator emits an ordered trajectory covering materiality ranking, driver-decomposition tool calls, context retrieval, stopping decisions, final outcomes, and failures. Evidence construction adds claim-verification steps to the same trace. `PrismTraceObserver.from_env()` connects to `prismtrace-sdk` when the three values in `.env.example` are configured and otherwise degrades to a no-op observer, keeping financial calculations available offline.
-
-## Milestone 6: Streamlit investigation workspace
-
-The dashboard presents material period changes, evidence-backed summaries, ranked driver charts, transaction lineage, the complete PRISM-shaped investigation trace, remembered context, and reviewer feedback. Investigation runs are only persisted when a reviewer explicitly saves them.
-
-Upload a monthly-summary JSON file and a transaction JSON file together from the sidebar to investigate another dataset. Both files are validated against strict Pydantic schemas; duplicate transaction IDs are rejected and summary-to-detail reconciliation differences are shown before investigation.
-
-Saved investigations appear in the Run history tab with periods, account results, claim counts, and review status. Any two stored runs can be compared to show variance changes and newly appearing or disappearing drivers.
-
-```bash
-streamlit run app/app.py
+```text
+CSV input -> data quality checks -> materiality ranking -> driver drilldown -> claim courtroom -> evidence graph -> local business memory -> CFO brief
 ```
 
-## Command-line investigations
+Every proposed explanation is marked:
 
-Run the same deterministic workflow without the UI and optionally save a portable JSON artifact containing variances, drivers, claims, transaction lineage, business context, and the investigation trace:
+- `approved`: math ties and citations cover the complete source set
+- `qualified`: numbers are proven, but the wording must preserve a caveat
+- `rejected`: the claim is misleading, causal without evidence, or cites bad rows
+- `blocked`: source data does not reconcile, so the explanation is withheld
+
+That is the edge: the product does not ask judges to trust AI. It proves or withholds each financial claim.
+
+## Key Features
+
+- CSV import for monthly summaries and transaction-level evidence.
+- Deterministic cent-exact money arithmetic.
+- Period comparison and materiality ranking.
+- Driver decomposition by customer, vendor, segment, or category.
+- Source-row evidence graph for every selected claim.
+- CFO brief generated only from approved or qualified claims.
+- Reviewer-approved business memory stored locally and reused only when still valid.
+- Stale-memory defense using a reproducibility fingerprint.
+- Edge-case lab with 21 controlled scenarios.
+- PRISM trace preview generated from the same courtroom engine.
+
+## Edge Cases Covered
+
+The verification suite and browser UI cover:
+
+- summary totals that do not tie to transactions
+- missing transaction evidence
+- duplicate and conflicting transaction IDs
+- refunds and negative revenue credits
+- reclassifications between accounts
+- approved customer aliases
+- expired business memory
+- zero prior-period balances
+- no-movement periods
+- revenue declines
+- tiny balances with huge percentages
+- mixed currencies
+- wrong accounting periods
+- missing summaries
+- invalid decimal precision
+- instruction text embedded inside ledger data
+- wrong proposed amounts
+- missing source-row citations
+- fabricated citations
+- generated reconciled ledgers for conservation checks
+
+## Tech Stack
+
+- Static HTML, CSS, and JavaScript.
+- `engine.mjs` for deterministic finance logic and claim verification.
+- `scenarios.mjs` for controlled edge-case mutations.
+- Papa Parse for CSV ingestion.
+- Lucide icons for UI controls.
+- Node test runner for verification.
+
+No model is trained in this demo. The current product is a deterministic courtroom prototype with clear AI boundaries. A live LLM can be added later to propose narratives, but it must not replace the finance engine.
+
+## How It Works
+
+1. Load monthly summary rows and transaction rows.
+2. Validate schema, dates, USD amounts, duplicate IDs, and posting status.
+3. Reconcile every account to both period summaries.
+4. Rank material movements.
+5. Generate candidate claims.
+6. Judge each claim against tie-outs, driver math, citations, and memory provenance.
+7. Publish only approved or qualified explanations into the CFO brief.
+8. Let the reviewer approve a finding as local business memory for future periods.
+
+Detailed architecture: `docs/ARCHITECTURE.md`
+
+Demo script: `docs/DEMO_SCRIPT.md`
+
+## How To Run
+
+From this folder:
 
 ```bash
-python -m src.cli \
-  --prior 2026-01-01 \
-  --current 2026-02-01 \
-  --output data/runs/demo-investigation.json
+npm install
+npm run dev
 ```
 
-Add `--prism` to submit the trajectory when the `PRISMTRACE_*` environment variables are configured.
-Add `--llm` to use the configured OpenAI-compatible provider; otherwise the grounded offline template is used.
+Open:
 
-## Evidence-constrained explanations
+```text
+http://localhost:8000
+```
 
-`EvidenceBoundExplainer` sends a structured packet of deterministic results and verified claims to a pluggable provider. It rejects unknown claim citations and any numeric fact not present in the evidence packet. `TemplateExplanationProvider` works offline; `OpenAICompatibleProvider` can use a hosted provider or GIDE's local API through the `LEDGER_LENS_LLM_*` settings in `.env.example`.
-
-## Deterministic benchmark
-
-The multi-period benchmark proves exact variance results, correct top-driver selection, full decomposition reconciliation, and transaction-evidence completeness against known outcomes:
+Run verification:
 
 ```bash
-python -m src.evaluation.benchmark --output data/runs/benchmark-score.json
+npm test
 ```
 
-The command exits nonzero if any benchmark case fails, making it suitable for CI and PRISM's “Prove” stage.
-
-## Development quality checks
-
-Install development dependencies and run the same checks enforced by GitHub Actions:
+Refresh sample CSVs from the embedded demo dataset:
 
 ```bash
-python -m pip install -r requirements-dev.txt
-ruff check .
-ruff format --check .
-pytest -q
-python -m src.evaluation.benchmark
+npm run sync:data
 ```
 
-CI runs these checks for every pull request and every push to `main`.
+## PRISM
+
+PRISM setup is optional until credentials are available. The current repo includes a preview trace generated from the same courtroom result:
+
+```bash
+npm run trace:preview
+```
+
+That writes:
+
+```text
+artifacts/prism-trace-preview.json
+```
+
+To send a real trace later, set:
+
+- `PRISMTRACE_HOST`
+- `PRISMTRACE_PROJECT_ID`
+- `PRISMTRACE_API_KEY`
+
+Then run:
+
+```bash
+npm run trace:send
+```
+
+Do not commit `.env`.
+
+## GIDE
+
+GIDE is installed separately and should be used before submission if the hackathon requires it. Suggested command after sign-in/model setup:
+
+```bash
+gide -p "Analyze this repo and identify bugs in the financial variance analysis and claim-verification pipeline"
+```
+
+Only say GIDE was used after that command has actually run against the repo.
+
+## Demo Flow
+
+1. Start on the September close review.
+2. Show the materiality table and the CFO brief.
+3. Click Revenue: broad-growth and pricing-cause claims are rejected.
+4. Open Evidence: show the graph, tie-outs, cited rows, and duplicate quarantine.
+5. Open Test lab: show 21/21 edge cases passing.
+6. Open Summary mismatch: Revenue is blocked and disappears from the CFO brief.
+7. Open Business memory: approve a verified finding and explain that memory is reused only when source evidence stays unchanged.
+
+Closing line:
+
+> LedgerLens does not ask you to trust AI. It makes every financial claim prove itself before it reaches the CFO.

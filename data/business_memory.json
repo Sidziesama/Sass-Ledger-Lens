@@ -1,0 +1,28 @@
+[
+  {
+    "id": "migration",
+    "kind": "cloud-baseline",
+    "account": "Cloud Costs",
+    "title": "Cloud migration budget",
+    "detail": "Expected incremental cloud cost: August $26,000; September $10,000. This is a budget assumption, not evidence of causation.",
+    "expected": {
+      "2026-08": 26000,
+      "2026-09": 10000
+    },
+    "approved": true,
+    "source": "Synthetic finance planning note FIN-042",
+    "validFrom": "2026-08",
+    "validThrough": "2026-09"
+  },
+  {
+    "id": "pricing",
+    "kind": "context",
+    "account": "Revenue",
+    "title": "Enterprise packaging changed",
+    "detail": "Effective August 1. Contract-level data is needed to isolate a pricing effect from volume and mix.",
+    "approved": true,
+    "source": "Synthetic product change log PRC-08",
+    "validFrom": "2026-08",
+    "validThrough": "2026-09"
+  }
+]
