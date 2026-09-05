@@ -118,7 +118,7 @@ The scenario suite covers failures that a normal AI summary can miss:
 
 ## PRISM
 
-`npm run trace:preview` writes a PRISM-style trace payload using the same courtroom result. `npm run trace:send` is ready for real PRISM credentials, but no credentials are committed.
+`npm run trace:preview` writes a PRISM-style trace payload using the same courtroom result. `npm run trace:handshake`, `npm run trace:send`, and `npm run trace:doctor` verify live PRISM ingestion when local credentials are present. No credentials are committed.
 
 ## Demo Thesis
 

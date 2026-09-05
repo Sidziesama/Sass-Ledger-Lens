@@ -177,7 +177,7 @@ function renderHeader(result, error) {
       <div class="status-stack" aria-label="Demo status">
         <span class="badge strong">${state.mode === "demo" ? "Synthetic ledger" : "Imported ledger"}</span>
         <span class="badge">Deterministic checks</span>
-        <span class="badge muted">PRISM not connected</span>
+        <span class="badge muted">PRISM trace-ready</span>
       </div>
     </header>
 

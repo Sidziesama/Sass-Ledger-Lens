@@ -8,7 +8,9 @@
     "test": "node scripts/verify.mjs",
     "sync:data": "node scripts/sync_csv.mjs",
     "trace:preview": "node scripts/emit_prism_trace.mjs",
-    "trace:send": "node scripts/emit_prism_trace.mjs --send"
+    "trace:handshake": "node scripts/prism_doctor.mjs --handshake",
+    "trace:send": "node scripts/emit_prism_trace.mjs --send",
+    "trace:doctor": "node scripts/prism_doctor.mjs"
   },
   "keywords": [
     "finance",

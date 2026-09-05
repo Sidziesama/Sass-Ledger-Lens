@@ -132,7 +132,7 @@ npm run sync:data
 
 ## PRISM
 
-PRISM setup is optional until credentials are available. The current repo includes a preview trace generated from the same courtroom result:
+The current repo includes a preview trace generated from the same courtroom result:
 
 ```bash
 npm run trace:preview
@@ -150,10 +150,12 @@ To send a real trace later, set:
 - `PRISMTRACE_PROJECT_ID`
 - `PRISMTRACE_API_KEY`
 
-Then run:
+Then verify and send:
 
 ```bash
+npm run trace:handshake
 npm run trace:send
+npm run trace:doctor
 ```
 
 Do not commit `.env`.
