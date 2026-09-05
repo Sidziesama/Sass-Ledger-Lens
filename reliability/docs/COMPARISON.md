@@ -11,14 +11,22 @@ python -m reliability.benchmark.evaluate                                        
 python -m reliability.benchmark.evaluate --runner reliability.benchmark.adapters.main_v1:run  # main
 ```
 
-| | `main` @ 3d74433 | reference |
-|---|---|---|
-| **Overall** | **0 / 56** (5 / 52 before the false-precision rule, see below) | **56 / 56** |
-| normal | 0 / 11 | 11 / 11 |
-| ambiguous | 0 / 10 | 10 / 10 |
-| data quality | 0 / 11 | 11 / 11 |
-| adversarial | 0 / 10 | 10 / 10 |
-| memory (incl. 4 multi-run sequences) | 0 / 14 | 14 / 14 |
+| | `main` @ 3d74433 | `reliability-hardening` @ 9b0eed8 | reference |
+|---|---|---|---|
+| **Overall** | **0 / 56** (one root cause, below) | **5 / 56** | **56 / 56** |
+| normal | 0 / 11 | 3 / 11 | 11 / 11 |
+| ambiguous | 0 / 10 | 0 / 10 | 10 / 10 |
+| data quality | 0 / 11 | 0 / 11 | 11 / 11 |
+| adversarial | 0 / 10 | 1 / 10 | 10 / 10 |
+| memory (incl. 4 multi-run sequences) | 0 / 14 | 1 / 14 | 14 / 14 |
+
+`reliability-hardening` fixes the false-precision defect (0 `number_lint` failures) and
+copies six of these cases into its own tree. Score another branch without touching it:
+
+```bash
+git worktree add /tmp/rh origin/reliability-hardening
+python -m reliability.benchmark.evaluate --src-root /tmp/rh --runner reliability.benchmark.adapters.main_v1:run
+```
 
 ## The one-line fix that unlocks 47 checks
 
@@ -53,16 +61,16 @@ describes that state.
 
 ## Failure classes
 
-| Class | `main` | reference |
-|---|---|---|
-| HALLUCINATED_CLAIM (false precision) | 51 | 0 |
-| PREMATURE_STOPPING | 37 | 0 |
-| DATA_QUALITY_FAILURE | 19 | 0 |
-| CONFIDENCE_CALIBRATION_FAILURE | 7 | 0 |
-| ABSTENTION_FAILURE | 6 | 0 |
-| MEMORY_RETRIEVAL_FAILURE | 6 | 0 |
-| STALE_MEMORY_FAILURE | 3 | 0 |
-| DRIVER_ATTRIBUTION_FAILURE | 1 | 0 |
+| Class | `main` | `reliability-hardening` | reference |
+|---|---|---|---|
+| HALLUCINATED_CLAIM (false precision) | 51 | 0 | 0 |
+| PREMATURE_STOPPING | 37 | 37 | 0 |
+| DATA_QUALITY_FAILURE | 19 | 19 | 0 |
+| CONFIDENCE_CALIBRATION_FAILURE | 7 | 8 | 0 |
+| ABSTENTION_FAILURE | 6 | 6 | 0 |
+| MEMORY_RETRIEVAL_FAILURE | 6 | 10 | 0 |
+| STALE_MEMORY_FAILURE | 3 | 4 | 0 |
+| DRIVER_ATTRIBUTION_FAILURE | 1 | 1 | 0 |
 
 The reference started at 2 / 33 on the first version of this benchmark.
 `docs/IMPROVEMENT_LOG.md` records every pass.

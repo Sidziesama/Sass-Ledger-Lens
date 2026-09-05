@@ -237,9 +237,22 @@ def main(argv=None):
     ap.add_argument("--only", default=None)
     ap.add_argument("--out", default=os.path.join(HERE, "results"))
     ap.add_argument("-v", "--verbose", action="store_true")
+    ap.add_argument("--src-root", default=None,
+                    help="directory whose src/ package the adapter should score (e.g. a git worktree of another branch)")
     ap.add_argument("--llm", action="store_true",
                     help="also have GIDE's model draft each memo; report how many drafts the linter rejects")
     args = ap.parse_args(argv)
+    if args.src_root:
+        # Pin that tree's src/ before anything imports it, so a worktree of
+        # another branch is what gets scored -- never this checkout's copy.
+        root = os.path.abspath(args.src_root)
+        sys.path.insert(0, root)
+        import importlib as _il
+        for m in list(sys.modules):
+            if m == "src" or m.startswith("src."):
+                del sys.modules[m]
+        src = _il.import_module("src")
+        print(f"scoring src/ from {os.path.dirname(src.__file__)}")
     runner, rname = resolve_runner(args.runner)
     llm = None
     memo_stats = Counter()
