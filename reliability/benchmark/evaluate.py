@@ -237,8 +237,17 @@ def main(argv=None):
     ap.add_argument("--only", default=None)
     ap.add_argument("--out", default=os.path.join(HERE, "results"))
     ap.add_argument("-v", "--verbose", action="store_true")
+    ap.add_argument("--llm", action="store_true",
+                    help="also have GIDE's model draft each memo; report how many drafts the linter rejects")
     args = ap.parse_args(argv)
     runner, rname = resolve_runner(args.runner)
+    llm = None
+    memo_stats = Counter()
+    if args.llm:
+        from reliability.agent.llm import LLM
+        from reliability.agent.memo import write_memo
+        llm = LLM()
+        print(f"model memo mode: {llm.describe()}")
     os.makedirs(args.out, exist_ok=True)
     cases = load_cases(only=args.only)
     rows, class_hist, cat_stats = [], Counter(), defaultdict(lambda: [0, 0])
@@ -260,11 +269,21 @@ def main(argv=None):
         if err:
             sc = {"checks": {"tool_error": {"passed": False, "detail": err}}, "failed": ["tool_error"],
                   "passed": False, "classes": ["TOOL_FAILURE"], "score": 0.0}
+        memo = None
+        if llm is not None and result and result.get("claims"):
+            memo = write_memo(llm, result)
+            if any(v["type"] == "MODEL_UNAVAILABLE" for v in memo["violations"]):
+                memo_stats["unavailable"] += 1
+            else:
+                memo_stats["accepted" if memo["source"].startswith("model") else "rejected"] += 1
+                for v in memo["violations"]:
+                    memo_stats[f"violation:{v['type']}"] += 1
         rows.append({"id": case["id"], "category": case["category"], "title": case["title"],
                      "passed": sc["passed"], "score": sc["score"], "failed": sc["failed"],
                      "classes": sc["classes"], "checks": sc["checks"],
                      "narrative": (result or {}).get("narrative"),
-                     "confidence": (result or {}).get("confidence", {}).get("overall")})
+                     "confidence": (result or {}).get("confidence", {}).get("overall"),
+                     "memo": memo})
         for c in sc["classes"]:
             class_hist[c] += 1
         cat_stats[case["category"]][1] += 1
@@ -285,9 +304,17 @@ def main(argv=None):
         print("failure classes:")
         for c, n in class_hist.most_common():
             print(f"  {n:3}  {c}")
+    if llm is not None:
+        acc, rej, na = memo_stats.get("accepted", 0), memo_stats.get("rejected", 0), memo_stats.get("unavailable", 0)
+        print(f"model memos: {acc} accepted, {rej} rejected by the linter, {na} model unavailable"
+              + (f"  ({acc / (acc + rej):.0%} clean)" if acc + rej else ""))
+        for k, n in memo_stats.most_common():
+            if k.startswith("violation:"):
+                print(f"  {n:3}  {k[10:]}")
     with open(os.path.join(args.out, "latest.json"), "w") as f:
         json.dump({"runner": rname, "passed": passed, "total": total, "by_category": dict(cat_stats),
-                   "failure_classes": dict(class_hist), "cases": rows}, f, indent=2, default=str)
+                   "failure_classes": dict(class_hist), "model_memos": dict(memo_stats),
+                   "cases": rows}, f, indent=2, default=str)
     return 0 if passed == total else 1
 
 

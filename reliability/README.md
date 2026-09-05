@@ -20,6 +20,28 @@ Its policy, in one line:
 | `agent/reference.py` | The deterministic reference investigator — the floor any shipped investigator must clear. |
 | `benchmark/` | 52 machine-evaluable cases with ground truth, an evaluator, and an 18-class failure taxonomy. |
 
+## Run it
+
+```bash
+# one period, deterministic
+python -m reliability.agent.run reliability/benchmark/cases/C29_outlier_masks_decline 2026-08 --prior 2026-07
+
+# same, with memory that persists across runs, and GIDE's model writing the memo
+python -m reliability.agent.run <case_dir> 2026-08 --memory runs/memory.json --llm
+
+# reviewer feedback between runs (every action is versioned)
+python -m reliability.memory.feedback --memory runs/memory.json list
+python -m reliability.memory.feedback --memory runs/memory.json confirm PR-0003
+python -m reliability.memory.feedback --memory runs/memory.json add --account "Cloud Expense" \
+    --statement "AWS migration elevates cloud spend through September" --implication "expect up to +30%" \
+    --valid-from 2026-07 --valid-until 2026-09 --max-increase-pct 30
+```
+
+The model is GIDE's local server (`gide apikey create`, discovered from `~/.gide/server-port.json`;
+`GIDE_BASE_URL` / `GIDE_API_KEY` in `.env`). The model only writes the memo, from verified claims;
+its draft is linted and replaced by the templated memo if it fails. `python -m reliability.benchmark.evaluate --llm`
+reports how many of the 56 drafts the linter rejected, and why.
+
 ## Contracts
 
 Any Ledger Lens implementation can be scored by producing a `RunResult` (see `benchmark/schema.py`) from `run(case_dir, period, prior_period, memory_path)`. The evaluator does not care which implementation it is talking to:
@@ -29,6 +51,11 @@ python -m reliability.benchmark.make_cases              # generate cases
 python -m reliability.benchmark.evaluate                 # reference investigator
 python -m reliability.benchmark.evaluate --runner pkg.mod:fn   # your investigator
 ```
+
+A case directory may also carry a `sequence.json`: several periods run in order against one memory
+file, with reviewer feedback ops applied between runs, and ground truth checked at each step. Four
+such sequences cover the cloud-migration story, a one-off the system learns by itself, a reclass
+carried forward, and silent churn across six consecutive months.
 
 Each case checks: data-quality flags raised, material variances investigated, immaterial ones ignored, expected drivers found, forbidden phrases absent, required phrases present, confidence in the acceptable set, abstention correct, memory used or rejected as expected, every cited transaction id exists, every observation's arithmetic reproduces from the records, and the memo passes the language linter.
 
