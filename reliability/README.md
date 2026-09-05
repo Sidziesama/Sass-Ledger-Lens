@@ -57,6 +57,10 @@ file, with reviewer feedback ops applied between runs, and ground truth checked 
 such sequences cover the cloud-migration story, a one-off the system learns by itself, a reclass
 carried forward, and silent churn across six consecutive months.
 
+Any branch can be scored the same way: `--src-root <checkout>` for the Python versions,
+`COURTROOM_ROOT=<checkout>` with the `courtroom_v1` adapter for the JavaScript courtroom on `main`.
+Results for every version are in `docs/COMPARISON.md`.
+
 Each case checks: data-quality flags raised, material variances investigated, immaterial ones ignored, expected drivers found, forbidden phrases absent, required phrases present, confidence in the acceptable set, abstention correct, memory used or rejected as expected, every cited transaction id exists, every observation's arithmetic reproduces from the records, and the memo passes the language linter.
 
 ## Observe → Improve → Prove

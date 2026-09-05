@@ -130,7 +130,10 @@ def score(case, result, case_dir):
     narrative = result.get("narrative") or ""
     claims = result.get("claims") or []
     verified = [c for c in claims if c.get("verified")]
-    all_text = narrative + " " + " ".join(c.get("claim", "") for c in claims)
+    # Only what the system ASSERTS is scanned: the memo plus verified claims.
+    # A rejected candidate ("Proposed: growth was broad-based" -> rejected) is
+    # evidence of judgement, not an assertion, and must not count against it.
+    all_text = narrative + " " + " ".join(c.get("claim", "") for c in verified)
     flags = {f["code"] for f in result["data_quality"]["flags"]}
     investigated = [m["account"] for m in result["material_variances"]]
     inv_l = {a.lower() for a in investigated}

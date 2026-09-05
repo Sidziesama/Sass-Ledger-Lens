@@ -1,34 +1,49 @@
-# Benchmark comparison — `main` (latest) vs reference investigator
+# Benchmark comparison — every branch vs the reference investigator
 
-Same 56 cases, same evaluator, same ground truth. `main` is scored through
-`benchmark/adapters/main_v1.py`, which feeds the case files to `src/` unchanged
-and, from `main@33fea51`, uses the product's own `EvidenceBoundExplainer` with
-its offline `TemplateExplanationProvider` for the memo text — so the language
-checks measure their words, not the adapter's.
+Same 56 cases, same evaluator, same ground truth. Each version is scored through an
+adapter that feeds it the case files and renders a `RunResult` from **its own** output
+(its claim text, its statuses, its flags). Nothing under any teammate branch is modified.
 
 ```bash
-python -m reliability.benchmark.evaluate                                                     # reference
-python -m reliability.benchmark.evaluate --runner reliability.benchmark.adapters.main_v1:run  # main
-```
-
-| | `main` @ 3d74433 | `reliability-hardening` @ 9b0eed8 | reference |
-|---|---|---|---|
-| **Overall** | **0 / 56** (one root cause, below) | **5 / 56** | **56 / 56** |
-| normal | 0 / 11 | 3 / 11 | 11 / 11 |
-| ambiguous | 0 / 10 | 0 / 10 | 10 / 10 |
-| data quality | 0 / 11 | 0 / 11 | 11 / 11 |
-| adversarial | 0 / 10 | 1 / 10 | 10 / 10 |
-| memory (incl. 4 multi-run sequences) | 0 / 14 | 1 / 14 | 14 / 14 |
-
-`reliability-hardening` fixes the false-precision defect (0 `number_lint` failures) and
-copies six of these cases into its own tree. Score another branch without touching it:
-
-```bash
+python -m reliability.benchmark.evaluate                                                                  # reference
 git worktree add /tmp/rh origin/reliability-hardening
 python -m reliability.benchmark.evaluate --src-root /tmp/rh --runner reliability.benchmark.adapters.main_v1:run
+git worktree add /tmp/court origin/main
+COURTROOM_ROOT=/tmp/court python -m reliability.benchmark.evaluate --runner reliability.benchmark.adapters.courtroom_v1:run_normalized
 ```
 
-## The one-line fix that unlocks 47 checks
+| | `main` @ d180870 (JS courtroom) | old `main` @ 3d74433 (Python) | `reliability-hardening` @ 9b0eed8 | reference |
+|---|---|---|---|---|
+| **Overall** | **8 / 56** normalized · 0 / 56 raw | 0 / 56 | 5 / 56 | **56 / 56** |
+| normal | 4 / 11 | 0 / 11 | 3 / 11 | 11 / 11 |
+| ambiguous | 0 / 10 | 0 / 10 | 0 / 10 | 10 / 10 |
+| data quality | 2 / 11 | 0 / 11 | 0 / 11 | 11 / 11 |
+| adversarial | 1 / 10 | 0 / 10 | 1 / 10 | 10 / 10 |
+| memory (incl. 4 multi-run sequences) | 1 / 14 | 0 / 14 | 1 / 14 | 14 / 14 |
+
+Only asserted text is scanned for forbidden language — a candidate the courtroom
+*rejects* ("Proposed: growth was broad-based") is judgement, not assertion.
+
+## The JavaScript courtroom (`main` @ d180870)
+
+Its engine requires `segment` and `category` on every transaction, so on the canonical
+CSVs it blocks every account (**0 / 56 raw**, 46 abstention failures). With those columns
+filled and dates normalized it runs cleanly: **8 / 56**, the best of the three teammate
+versions. It passes the duplicate-id, mixed-currency, tiny-denominator, huge-account and
+alias cases, and it correctly rejects its own "broad-based" and "pricing caused" candidates.
+
+What it still misses, in order of cases unlocked:
+
+| Failed check | Cases | What it means |
+|---|---|---|
+| `required_pattern` | 48 | The brief states movement and top drivers, never a limitation: no "not meaningful" on a zero base, no "reversal", no "reclassification" unless a row is literally categorised `Reclass`, no "does not establish why", no seasonal norm, no memory reasons. |
+| `data_quality_flags` | 12 | No reconciliation-gap wording beyond "blocked"; no reversal pairs, no near-duplicates (only exact ids), no naming variants, no sign checks. |
+| `confidence` / `abstention` | 6 + 5 | One rule: tie-out ok → approved. No partial confidence, no per-account abstention wording. |
+| `forbidden_pattern` | 5 | "Acme / acme / ACME" listed as three customers; the near-duplicate counted twice ("Fieldmark +$160,000"); "increased" on a no-change month. |
+| `material_variances` | 5 | Flat $10,000 threshold; a $2,300 move on a $500 base is immaterial, but so is a $9,000 move on a $10,000 account. |
+| `top_drivers` / `memory_used` | 3 + 3 | Drivers are top-3 by counterparty only, no drill within a segment. Memory only ever attaches to an account literally named `Cloud Costs`. |
+
+## The old Python `main` (3d74433): the one-line fix that unlocks 47 checks
 
 `TemplateExplanationProvider` prints raw `Decimal`s into the memo:
 
