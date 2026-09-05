@@ -1,16 +1,19 @@
 """Ledger Lens Streamlit dashboard."""
 
+import json
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
 
 import streamlit as st
+from pydantic import ValidationError
 
 from src.agent import FinancialTools, Investigator
 from src.evidence import build_claim_lineage
 from src.explanation import EvidenceBoundExplainer, TemplateExplanationProvider
 from src.ingestion.loaders import load_account_summaries, load_transactions
 from src.ingestion.models import EvidenceClaim, InvestigationRun, ReviewerFeedback
+from src.ingestion.validation import validate_dataset
 from src.memory import JsonMemoryStore
 from src.observability import InMemoryTraceObserver
 
@@ -68,9 +71,9 @@ def claim_models(account, transactions) -> list[EvidenceClaim]:
     ]
 
 
-def run_dashboard(prior: date, current: date, absolute: Decimal, percentage: Decimal):
-    summaries = load_account_summaries(SAMPLE / "monthly_summary.json")
-    transactions = load_transactions(SAMPLE / "transactions.json")
+def run_dashboard(
+    summaries, transactions, prior: date, current: date, absolute: Decimal, percentage: Decimal
+):
     memory = JsonMemoryStore(MEMORY)
     observer = InMemoryTraceObserver()
     result = Investigator(
@@ -96,11 +99,47 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-summaries_for_periods = load_account_summaries(SAMPLE / "monthly_summary.json")
-periods = sorted({row.period for row in summaries_for_periods})
-
 with st.sidebar:
     st.header("Investigation controls")
+    st.subheader("Data source")
+    summary_upload = st.file_uploader(
+        "Monthly summaries JSON", type=["json"], help="Upload together with transaction detail."
+    )
+    transaction_upload = st.file_uploader(
+        "Transactions JSON", type=["json"], help="Upload together with monthly summaries."
+    )
+
+if bool(summary_upload) != bool(transaction_upload):
+    st.error("Upload both JSON files together, or remove the uploaded file to use sample data.")
+    st.stop()
+
+try:
+    if summary_upload and transaction_upload:
+        summaries_for_periods = load_account_summaries(summary_upload.getvalue())
+        selected_transactions = load_transactions(transaction_upload.getvalue())
+        dataset_label = f"Uploaded: {summary_upload.name} + {transaction_upload.name}"
+        dataset_signature = (
+            summary_upload.file_id,
+            transaction_upload.file_id,
+        )
+    else:
+        summaries_for_periods = load_account_summaries(SAMPLE / "monthly_summary.json")
+        selected_transactions = load_transactions(SAMPLE / "transactions.json")
+        dataset_label = "Bundled sample data"
+        dataset_signature = ("sample", "sample")
+    dataset_warnings = validate_dataset(summaries_for_periods, selected_transactions)
+except (json.JSONDecodeError, UnicodeDecodeError, ValidationError, ValueError) as exc:
+    st.error("The selected dataset could not be validated.")
+    st.code(str(exc), language=None)
+    st.stop()
+
+periods = sorted({row.period for row in summaries_for_periods})
+if len(periods) < 2:
+    st.error("Monthly summaries must contain at least two distinct periods.")
+    st.stop()
+
+with st.sidebar:
+    st.caption(dataset_label)
     prior_period = st.selectbox("Prior period", periods, index=0)
     current_period = st.selectbox("Current period", periods, index=len(periods) - 1)
     absolute_threshold = Decimal(
@@ -111,16 +150,29 @@ with st.sidebar:
     )
     investigate = st.button("Run investigation", type="primary", width="stretch")
 
-if investigate or "investigation" not in st.session_state:
+if (
+    investigate
+    or "investigation" not in st.session_state
+    or st.session_state.get("dataset_signature") != dataset_signature
+):
     if current_period <= prior_period:
         st.error("Current period must be after the prior period.")
         st.stop()
     with st.spinner("Tracing changes to transaction evidence…"):
         st.session_state.investigation = run_dashboard(
-            prior_period, current_period, absolute_threshold, percentage_threshold
+            summaries_for_periods,
+            selected_transactions,
+            prior_period,
+            current_period,
+            absolute_threshold,
+            percentage_threshold,
         )
+        st.session_state.dataset_signature = dataset_signature
 
 result, transactions, observer, memory = st.session_state.investigation
+
+for warning in dataset_warnings:
+    st.warning(warning)
 
 if not result.accounts:
     st.info("No account variances meet the selected materiality thresholds.")
