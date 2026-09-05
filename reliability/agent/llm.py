@@ -43,14 +43,15 @@ def _load_dotenv():
 def discover():
     """Return (base_url, api_key). Either may be None."""
     _load_dotenv()
-    base = os.environ.get("GIDE_BASE_URL")
+    # Accept the main-branch names too, so one .env serves every branch.
+    base = os.environ.get("GIDE_BASE_URL") or os.environ.get("LEDGER_LENS_LLM_BASE_URL")
     if not base:
         try:
             with open(os.path.expanduser("~/.gide/server-port.json")) as f:
                 base = f"http://127.0.0.1:{json.load(f)['port']}/v1"
         except (OSError, KeyError, ValueError):
             base = None
-    key = os.environ.get("GIDE_API_KEY")
+    key = os.environ.get("GIDE_API_KEY") or os.environ.get("LEDGER_LENS_LLM_API_KEY")
     if not key:
         for p in ("~/.gide/apikey", "~/.gide/api_key", "~/.gide/apikeys/default"):
             try:
@@ -67,7 +68,7 @@ class LLM:
     def __init__(self, verbose=False):
         self.verbose = verbose
         self.base_url, self.api_key = discover()
-        self.model = os.environ.get("GIDE_MODEL")
+        self.model = os.environ.get("GIDE_MODEL") or os.environ.get("LEDGER_LENS_LLM_MODEL")
         self.calls = 0
         self.provider = None
         if os.environ.get("PRIORS_FORCE_OFFLINE") or not (self.base_url and self.api_key):
