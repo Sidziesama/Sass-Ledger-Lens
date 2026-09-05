@@ -44,6 +44,101 @@ python -m src.cli \
 Local secrets, model history, virtual environments, caches, and generated run artifacts are
 excluded from Git. Never commit `.env`.
 
+## Problem
+
+Finance teams can calculate period variances quickly, but explaining those changes reliably still
+requires manual account drill-down, transaction review, and institutional context. Generic LLM
+summaries make this riskier because they can invent amounts or overstate causes that the ledger
+does not prove.
+
+## Solution
+
+Ledger Lens autonomously identifies material changes, selects informative dimensions, ranks the
+drivers, traces every claim to transactions, and produces a concise explanation. Deterministic
+Python remains the source of financial truth; GIDE only narrates the verified evidence packet.
+Structured reviewer feedback and learned priors improve subsequent investigations without changing
+the underlying calculations.
+
+## Key features
+
+- Exact `Decimal` variance, materiality, contribution, and reconciliation calculations.
+- Autonomous dimension selection with explicit coverage and evidence stopping rules.
+- Claim → calculation → driver → transaction lineage for every supported financial statement.
+- Reliability disclosures for zero bases, inactivity, reversals, reclassifications, one-time
+  items, concentration, distributed movement, outlier masking, and unresolved causality.
+- A data-quality gate covering tie-outs, near-duplicates, naming variants, signs, period gaps, and
+  cutoff mismatches; reconciliation gaps block attribution.
+- Lifecycle-aware memory with provenance, validity windows, learned ranges, and reviewer decisions.
+- Evidence-constrained local explanations through GIDE with a deterministic offline fallback.
+- PRISM traces for tool calls, decisions, model generation, evidence verification, errors, and
+  latency, plus a repeatable benchmark and CI quality gate.
+
+## Architecture and workflow
+
+```text
+JSON summaries + transactions
+          │
+          ▼
+Pydantic validation → data-quality gate
+          │
+          ▼
+Decimal variance + materiality ranking
+          │
+          ▼
+Investigator → dimension decomposition → stopping rule
+          │
+          ├── transaction lineage + grounded claims
+          ├── structured priors + reviewer feedback
+          └── PRISM trajectory
+          │
+          ▼
+Verified evidence packet → GIDE narration / deterministic fallback
+          │
+          ▼
+Streamlit workspace + portable JSON artifact
+```
+
+The main workflow is:
+
+1. Validate JSON contracts and reconcile summary values to transaction detail.
+2. Rank account changes against absolute and percentage materiality thresholds.
+3. Decompose each material account across customer, vendor, segment, and category dimensions.
+4. Stop when selected drivers achieve the requested explanatory coverage with valid evidence.
+5. Build transaction-backed claims and retrieve applicable, auditable memory.
+6. Generate and validate the explanation; reject unsupported citations or numbers.
+7. Present the result, investigation trace, memory, and review workflow in Streamlit.
+
+## Technology
+
+- Python 3.11+, Pydantic, pandas, and exact `Decimal` arithmetic
+- Streamlit investigation workspace
+- GIDE local OpenAI-compatible model endpoint
+- PRISM Trace SDK and GitHub Actions
+- pytest and Ruff
+
+## Example investigation
+
+Using the bundled January–February sample, Ledger Lens identifies Revenue as material:
+
+```text
+Revenue: 1,000,000 → 1,180,000, variance +180,000 (18.00%)
+Top drivers: Other +65,000; Acme +52,000; Globex +41,000
+Explanatory coverage: 87.8%; evidence sufficient
+```
+
+The generated memo cites the verified drivers, applies relevant memory, and explicitly states:
+“The available data does not establish why Revenue changed.” The Evidence tab exposes the exact
+transactions behind each claim.
+
+## Demo
+
+See [`DEMO.md`](DEMO.md) for the timed 60–90 second walkthrough. Before recording or submitting,
+run the complete local gate:
+
+```bash
+./scripts/preflight.sh
+```
+
 ## Milestone 1: financial foundation
 
 The current implementation validates account summaries and transactions with Pydantic, compares periods with exact `Decimal` arithmetic, ranks material variances, decomposes changes across business dimensions, and preserves transaction IDs as evidence lineage.
@@ -158,6 +253,14 @@ CI runs these checks for every pull request and every push to `main` or
 `python-grounded-prism`.
 
 ## PRISM evaluation pipeline
+
+Ledger Lens follows **Observe → Improve → Prove**:
+
+- **Observe:** capture ordered investigator, tool, evidence, LLM, latency, fallback, and error steps.
+- **Improve:** use failed grounding, quality-gate findings, reviewer feedback, and learned priors to
+  strengthen the next run.
+- **Prove:** run deterministic benchmark cases and submit a complete trajectory through the manual
+  PRISM Evaluation workflow.
 
 The manually triggered `PRISM Evaluation` GitHub Actions workflow proves the deterministic benchmark, submits one complete investigation trajectory, and retains the benchmark and investigation JSON as workflow artifacts. Configure a GitHub environment named `prism` with the secret `PRISMTRACE_API_KEY` and these variables:
 
