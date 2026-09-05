@@ -38,10 +38,13 @@ class Tracer:
     def _connect(self):
         """prismtrace-sdk 0.4: PRISMtrace(api_key, host, project_id).submit_trajectory(steps).
 
+        Credentials: PRISMTRACE_API_KEY + PRISMTRACE_PROJECT_ID (PRISM_* also accepted).
         Host resolves from PRISMTRACE_HOST / PRISMTRACE_ENDPOINT, else the SDK default.
         Missing credentials mean local JSONL only -- never an error.
         """
-        key, proj = os.environ.get("PRISM_API_KEY"), os.environ.get("PRISM_PROJECT_ID")
+        # Same names the main-branch tracer uses, so one .env serves both versions.
+        key = os.environ.get("PRISMTRACE_API_KEY") or os.environ.get("PRISM_API_KEY")
+        proj = os.environ.get("PRISMTRACE_PROJECT_ID") or os.environ.get("PRISM_PROJECT_ID")
         if not (key and proj):
             return None
         try:

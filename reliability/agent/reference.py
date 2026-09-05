@@ -21,6 +21,7 @@ from ..ingestion.normalize import SimpleDataset
 from ..memory.learn import propose
 from ..memory.store import PriorStore
 from ..observability.prism import Tracer
+from .llm import _load_dotenv
 from ..quality.gate import run_gate
 from ..policy.language import lint
 from ..policy.uncertainty import assemble
@@ -270,6 +271,7 @@ def _rank(ds, p0, p1, gate, policy):
 
 
 def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, policy=None):
+    _load_dotenv()
     ds = SimpleDataset(case_dir)
     prior_period = prior_period or ds.prior(period)
     tr = tracer or Tracer(enabled=True, out_dir=os.path.join(
