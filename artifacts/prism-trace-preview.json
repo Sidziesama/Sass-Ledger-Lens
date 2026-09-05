@@ -20,6 +20,8 @@
       "metadata": {
         "track": "Maximor Money Operations",
         "flow": "Detect -> Investigate -> Explain -> Prove -> Remember",
+        "ai_proposer": "GIDE / Ornith 9B local model",
+        "verifier": "LedgerLens deterministic courtroom engine",
         "prism_framework": "Observe -> Improve -> Prove",
         "period_from": "2026-08",
         "period_to": "2026-09",
@@ -68,10 +70,10 @@
       "input_messages": [
         {
           "role": "user",
-          "content": "Verify whether any unsupported, causal, or uncited claim can enter the CFO brief."
+          "content": "Verify whether unsupported, causal, or uncited GIDE-proposed claims can enter the CFO brief."
         }
       ],
-      "output_message": "Courtroom result: 13 claims publishable, 3 rejected, 0 blocked. Withheld claims: broad-growth: rejected; pricing-cause: rejected; cloud-exclusive: rejected. Complete citations are required before approval or qualification.",
+      "output_message": "Courtroom result: 13 claims publishable, 3 rejected, 0 blocked. Withheld GIDE-proposed claims: broad-growth: rejected; pricing-cause: rejected; cloud-exclusive: rejected. Complete citations are required before approval or qualification.",
       "latency_ms": 180,
       "trace_id": "ledgerlens-live-courtroom-2026-09",
       "session_id": "ledgerlens-production-close-2026-08-to-2026-09",
@@ -80,6 +82,8 @@
       "metadata": {
         "track": "Maximor Money Operations",
         "flow": "Detect -> Investigate -> Explain -> Prove -> Remember",
+        "ai_proposer": "GIDE / Ornith 9B local model",
+        "verifier": "LedgerLens deterministic courtroom engine",
         "prism_framework": "Observe -> Improve -> Prove",
         "period_from": "2026-08",
         "period_to": "2026-09",
@@ -140,6 +144,8 @@
       "metadata": {
         "track": "Maximor Money Operations",
         "flow": "Detect -> Investigate -> Explain -> Prove -> Remember",
+        "ai_proposer": "GIDE / Ornith 9B local model",
+        "verifier": "LedgerLens deterministic courtroom engine",
         "prism_framework": "Observe -> Improve -> Prove",
         "period_from": "2026-08",
         "period_to": "2026-09",
