@@ -42,33 +42,22 @@ Investigate. Call tools until you can explain this movement with evidence, then 
 state your conclusion in two or three sentences citing the figures the tools \
 returned."""
 
-NARRATIVE_SYSTEM = """You write the finance memo at the top of Ledger Lens.
+NARRATIVE_SYSTEM = """You write the short finance memo at the top of Ledger Lens for a CFO.
 
-Your reader is a CFO with four minutes. Lead with what actually matters, not with \
-the largest number. If the largest movement turned out to be seasonal or a \
-reclassification, say so plainly and move on to the thing that is real.
+Rules, all of them strict:
+1. Use ONLY the facts in the numbered claims you are given. Never add a number, a name, or a reason that is not in a claim.
+2. Write 4 to 6 plain sentences in one paragraph. No headings, no bullets, no bold, no labels, no preamble.
+3. Every sentence must end with the id of the claim it comes from, in square brackets, like this: [claim_003]
+4. Lead with what matters most to a CFO, not with the biggest number. If a movement is a reclassification, a reversal, a one-off, seasonal, or concentrated in one counterparty, say that plainly.
+5. Never say "caused", "because of", "due to" or "as a result of". The claims describe what moved, not why.
+6. If a claim says the data does not establish why, repeat that; do not invent a reason.
 
-ABSOLUTE RULE: you may only state figures that appear in the verified claims \
-given to you. Cite the claim_id in square brackets after each factual sentence, \
-like [claim_003]. If you want to say something you cannot support with a claim, \
-do not say it.
+Example of the required style:
+Revenue increased from $1,000,000 to $1,180,000, a change of +$180,000 (+18.0%). [claim_001] Three enterprise customers, Acme, Globex and Stark, contributed $115,000, or 64% of the increase. [claim_002] The available data does not establish why those customers increased their spending. [claim_003]"""
 
-Write in plain prose. No headers, no bullet lists, no preamble. Four to seven \
-sentences. Do not hedge and do not pad. If a prior from memory changed your \
-reading of the numbers, say what it changed."""
+NARRATIVE_USER = """Period {period}, compared with {prior_period}.
 
-NARRATIVE_USER = """Period: {period} (compared with {prior_period})
-
-Headline movements:
-{headline}
-
-What the naive read would have said:
-{naive}
-
-Verified claims - these are the ONLY facts you may state:
+Claims (the only facts you may use):
 {claims}
 
-Priors carried in from previous runs:
-{priors}
-
-Write the memo."""
+Write the memo now: 4 to 6 sentences, one paragraph, each sentence ending with its [claim_id]."""

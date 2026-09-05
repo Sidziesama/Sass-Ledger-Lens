@@ -41,10 +41,20 @@ def _naive(result):
 
 
 def _citable(claims):
-    return "\n".join(
-        f"[{c['claim_id']}] ({c.get('kind')}) {c['claim']}"
-        + (f"  | calculation: {c['calculation']}" if c.get("calculation") else "")
-        for c in claims if c.get("verified"))
+    return "\n".join(f"{c['claim_id']}: {c['claim']}" for c in claims if c.get("verified"))
+
+
+# sentence boundary: end punctuation + space, unless what follows is a citation
+_SENT = re.compile(r"(?<=[.!?])\s+(?!\[claim_)")
+_MD = re.compile(r"(\*\*|__|^#{1,6}\s+|^\s*[-*•]\s+|`)", re.M)
+
+
+def _strip_markdown(text):
+    """Formatting is not content. Asterisks, headings and bullets are removed
+    before linting; words and numbers are never touched."""
+    t = _MD.sub("", text)
+    t = re.sub(r"^\s*(finance memo|memo)\s*:?\s*$", "", t, flags=re.I | re.M)
+    return re.sub(r"\s+", " ", t).strip()
 
 
 def write_memo(llm, result, priors_text="(none)"):
@@ -55,22 +65,38 @@ def write_memo(llm, result, priors_text="(none)"):
         return {"text": template, "source": "template", "violations": [], "draft": None}
 
     prompt = NARRATIVE_USER.format(period=result["period"], prior_period=result["prior_period"],
-                                   headline=_headline(result), naive=_naive(result),
-                                   claims=_citable(verified), priors=priors_text)
-    draft, _ = llm.chat(NARRATIVE_SYSTEM, [{"role": "user", "content": prompt}], max_tokens=700)
+                                   claims=_citable(verified))
+    draft, _ = llm.chat(NARRATIVE_SYSTEM, [{"role": "user", "content": prompt}], max_tokens=400)
     if not draft:
         return {"text": template, "source": "template", "violations": [{"type": "MODEL_UNAVAILABLE"}],
                 "draft": None}
-    draft = re.sub(r"\s+", " ", draft).strip()
+    draft = _strip_markdown(draft)
 
     causal_ids = [c["claim_id"] for c in verified if c.get("kind") == "causal"]
-    violations = lint(draft, verified, causal_ids)
-    # every sentence must cite at least one verified claim
     ids = {c["claim_id"] for c in verified}
-    for s in re.split(r"(?<=[.!?])\s+", draft):
-        if s.strip() and not (set(re.findall(r"\[(claim_\d+)\]", s)) & ids):
-            violations.append({"type": "UNCITED_SENTENCE", "sentence": s.strip()[:160]})
+
+    # A sentence that is a verbatim quote of a verified claim is traceable by
+    # construction: resolve its citation rather than reject it. Anything that
+    # is not an exact quote must carry its own [claim_id]. Counted, never reworded.
+    def _norm(t):
+        t = re.sub(r"\[claim_\d+\]", "", t)
+        return re.sub(r"[^a-z0-9%$.]+", " ", t.lower()).strip()
+    by_text = {_norm(c["claim"]): c["claim_id"] for c in verified}
+    resolved, out = 0, []
+    for sent in _SENT.split(draft):
+        if sent.strip() and not (set(re.findall(r"\[(claim_\d+)\]", sent)) & ids):
+            cid = by_text.get(_norm(sent))
+            if cid:
+                sent = f"{sent.strip()} [{cid}]"; resolved += 1
+        out.append(sent)
+    draft = " ".join(out)
+
+    violations = lint(draft, verified, causal_ids)
+    for sent in _SENT.split(draft):
+        if sent.strip() and not (set(re.findall(r"\[(claim_\d+)\]", sent)) & ids):
+            violations.append({"type": "UNCITED_SENTENCE", "sentence": sent.strip()[:160]})
     if violations:
         return {"text": template, "source": "template (model draft rejected)",
-                "violations": violations, "draft": draft}
-    return {"text": draft, "source": f"model:{llm.describe()}", "violations": [], "draft": draft}
+                "violations": violations, "draft": draft, "resolved_quotes": resolved}
+    return {"text": draft, "source": f"model:{llm.describe()}", "violations": [], "draft": draft,
+            "resolved_quotes": resolved}

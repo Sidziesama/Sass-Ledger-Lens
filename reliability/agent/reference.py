@@ -378,22 +378,30 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
                 sentences.append(f"{txt} [{c.id}]"); total_attr += amt
 
         # -- single-transaction concentration -----------------------------------
+        # Measured on the transaction's INCREMENTAL contribution (its amount less
+        # what the same counterparty booked last period), never on its face value:
+        # an account with one line a month would otherwise report "393% of the
+        # movement" for its ordinary monthly bill. Needs a populated account or a
+        # new counterparty to mean anything.
         cur_rows = [t for t in ds.txns(period) if t["account_key"] == key]
         big = max(cur_rows, key=lambda t: abs(t["amount"]), default=None)
         single_txn_driver = None
-        if big and V and abs(big["amount"]) / abs(V) >= SINGLE_TXN_SHARE and \
-                (big["amount"] > 0) == (V > 0):
-            single_txn_driver = big["counterparty_id"]
-            share = abs(big["amount"]) / abs(V)
-            txt = (f"A single transaction, {big['txn_id']} ({big['counterparty_name']}, "
-                   f"{_money(big['amount'])}), accounts for {share:.0%} of the movement in {acct}; "
-                   f"the movement is not a broad increase across the account.")
-            c = claims.add(Claim(txt, account=acct, variance=V, driver_amount=big["amount"],
-                                 drivers=[big["counterparty_name"]], kind="attribution",
-                                 detector="single_txn", confidence=1.0, numbers=[big["amount"], share * 100],
-                                 calculation=f"{big['amount']:,.2f} / {V:,.2f} = {share:.1%}",
-                                 transaction_ids=[big["txn_id"]]))
-            sentences.append(f"{txt} [{c.id}]"); tr.event("driver_found", account=acct, kind="single_txn")
+        if big and V and len(cur_rows) >= 3:
+            prior_same = sum(t["amount"] for t in ds.txns(prior_period)
+                             if t["account_key"] == key and t["counterparty_id"] == big["counterparty_id"])
+            contrib = big["amount"] - prior_same
+            share = contrib / V
+            if SINGLE_TXN_SHARE <= share <= 1.5 and (big["amount"] > 0) == (V > 0):
+                single_txn_driver = big["counterparty_id"]
+                txt = (f"A single transaction, {big['txn_id']} ({big['counterparty_name']}, "
+                       f"{_money(big['amount'])}), accounts for {share:.0%} of the movement in {acct}; "
+                       f"the movement is not a broad increase across the account.")
+                c = claims.add(Claim(txt, account=acct, variance=V, driver_amount=contrib,
+                                     drivers=[big["counterparty_name"]], kind="attribution",
+                                     detector="single_txn", confidence=1.0, numbers=[big["amount"], share * 100],
+                                     calculation=f"({big['amount']:,.2f} - {prior_same:,.2f}) / {V:,.2f} = {share:.1%}",
+                                     transaction_ids=[big["txn_id"]]))
+                sentences.append(f"{txt} [{c.id}]"); tr.event("driver_found", account=acct, kind="single_txn")
 
         # -- dimensional drill: choose the dimension that explains the most ------
         dims = [d for d in DIMS if d == "counterparty" or d in ds.dimensions]
