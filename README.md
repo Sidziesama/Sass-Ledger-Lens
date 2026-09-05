@@ -103,6 +103,8 @@ Detailed architecture: `docs/ARCHITECTURE.md`
 
 Demo script: `docs/DEMO_SCRIPT.md`
 
+Judge checklist: `docs/JUDGE_DEMO.md`
+
 ## How To Run
 
 From this folder:
