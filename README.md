@@ -2,7 +2,7 @@
 
 LedgerLens is a Maximor Money Operations hackathon project for the "Explain the Change" prompt. It ingests monthly account summaries and transaction-level CSVs, ranks meaningful period-over-period changes, drills into source rows, and produces a CFO brief only after each claim survives verification.
 
-The core idea: AI can propose an explanation, but deterministic finance checks decide whether it is allowed into the brief.
+The core idea: GIDE/Ornith can propose an explanation, but deterministic finance checks decide whether it is allowed into the brief.
 
 ## Problem Statement
 
@@ -27,7 +27,7 @@ CSV upload -> variance table -> AI summary
 LedgerLens is built around a courtroom:
 
 ```text
-CSV input -> data quality checks -> materiality ranking -> driver drilldown -> claim courtroom -> evidence graph -> local business memory -> CFO brief
+CSV input -> data quality checks -> materiality ranking -> GIDE/Ornith AI proposals -> claim courtroom -> evidence graph -> local business memory -> CFO brief
 ```
 
 Every proposed explanation is marked:
@@ -42,6 +42,7 @@ That is the edge: the product does not ask judges to trust AI. It proves or with
 ## Key Features
 
 - CSV import for monthly summaries and transaction-level evidence.
+- GIDE/Ornith AI proposal layer for draft finance narratives.
 - Deterministic cent-exact money arithmetic.
 - Period comparison and materiality ranking.
 - Driver decomposition by customer, vendor, segment, or category.
@@ -86,7 +87,7 @@ The verification suite and browser UI cover:
 - Lucide icons for UI controls.
 - Node test runner for verification.
 
-No model is trained in this demo. The current product is a deterministic courtroom prototype with clear AI boundaries. A live LLM can be added later to propose narratives, but it must not replace the finance engine.
+No model is trained in this demo. GIDE/Ornith is the local AI proposal layer; the finance decisions stay inside the deterministic courtroom engine. The model may draft candidate narratives, but it must not replace tie-outs, arithmetic, citations, or memory checks.
 
 ## How It Works
 
@@ -104,6 +105,8 @@ Detailed architecture: `docs/ARCHITECTURE.md`
 Demo script: `docs/DEMO_SCRIPT.md`
 
 Judge checklist: `docs/JUDGE_DEMO.md`
+
+GIDE AI layer: `docs/GIDE_AI_LAYER.md`
 
 ## How To Run
 
@@ -170,7 +173,7 @@ GIDE is installed separately and should be used before submission if the hackath
 gide -p "Analyze this repo and identify bugs in the financial variance analysis and claim-verification pipeline"
 ```
 
-Only say GIDE was used after that command has actually run against the repo.
+Position GIDE as the AI proposer. Position LedgerLens as the verifier that accepts, rejects, qualifies, or blocks proposed claims.
 
 ## Demo Flow
 

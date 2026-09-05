@@ -17,7 +17,7 @@ Reconciliation Engine
 Materiality Ranking
         |
         v
-Candidate Claim Generator
+GIDE/Ornith AI Candidate Proposer
         |
         v
 Financial Courtroom
@@ -39,6 +39,8 @@ Detect -> Investigate -> Explain -> Prove -> Remember
 
 The LLM is not the source of financial truth.
 
+GIDE/Ornith is used as the AI proposal layer. It can suggest finance narratives such as "revenue growth looks concentrated" or "cloud spend may relate to migration context." Those proposals then enter the deterministic courtroom.
+
 Deterministic code handles:
 
 - cent-exact money parsing
@@ -59,11 +61,11 @@ An LLM can be added later for:
 - deciding which tool to call next
 - suggesting memory updates
 
-Even then, the courtroom judge remains deterministic.
+In this demo, GIDE/Ornith fills the proposal role. The courtroom judge remains deterministic.
 
 ## Courtroom Roles
 
-- Detective: proposes movement, driver, business-memory, and causal claims.
+- Detective: GIDE/Ornith proposes movement, driver, business-memory, and causal claims.
 - Prosecutor: attacks broad, unsupported, or over-causal explanations.
 - Judge: approves, qualifies, rejects, or blocks each claim using calculations and evidence.
 

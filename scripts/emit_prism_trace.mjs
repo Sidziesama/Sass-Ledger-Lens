@@ -41,6 +41,8 @@ const output = [
 const baseMetadata = {
   track: "Maximor Money Operations",
   flow: "Detect -> Investigate -> Explain -> Prove -> Remember",
+  ai_proposer: "GIDE / Ornith 9B local model",
+  verifier: "LedgerLens deterministic courtroom engine",
   prism_framework: "Observe -> Improve -> Prove",
   period_from: period.from,
   period_to: period.to,
@@ -99,8 +101,8 @@ const payloads = [
   ),
   payload(
     `ledgerlens-live-courtroom-${period.to}`,
-    "Verify whether any unsupported, causal, or uncited claim can enter the CFO brief.",
-    `Courtroom result: ${result.publishable.length} claims publishable, ${result.rejected} rejected, ${result.blocked} blocked. Withheld claims: ${withheld}. Complete citations are required before approval or qualification.`,
+    "Verify whether unsupported, causal, or uncited GIDE-proposed claims can enter the CFO brief.",
+    `Courtroom result: ${result.publishable.length} claims publishable, ${result.rejected} rejected, ${result.blocked} blocked. Withheld GIDE-proposed claims: ${withheld}. Complete citations are required before approval or qualification.`,
     "courtroom_verification",
     180
   ),
