@@ -126,7 +126,7 @@ def _decompose(ds, p0, p1, account_key, dim, where=None):
     rows = []
     for k in set(a) | set(b):
         pa, pb = a.get(k, 0.0), b.get(k, 0.0)
-        rows.append({"name": names.get(k, k), "prior": round(pa, 2), "current": round(pb, 2),
+        rows.append({"name": names.get(k, k), "key": k, "prior": round(pa, 2), "current": round(pb, 2),
                      "change": round(pb - pa, 2),
                      "change_pct": round((pb - pa) / abs(pa) * 100, 1) if pa else None,
                      "status": "new" if not pa and pb else "inactive" if pa and not pb
@@ -378,8 +378,10 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
         # -- single-transaction concentration -----------------------------------
         cur_rows = [t for t in ds.txns(period) if t["account_key"] == key]
         big = max(cur_rows, key=lambda t: abs(t["amount"]), default=None)
+        single_txn_driver = None
         if big and V and abs(big["amount"]) / abs(V) >= SINGLE_TXN_SHARE and \
                 (big["amount"] > 0) == (V > 0):
+            single_txn_driver = big["counterparty_id"]
             share = abs(big["amount"]) / abs(V)
             txt = (f"A single transaction, {big['txn_id']} ({big['counterparty_name']}, "
                    f"{_money(big['amount'])}), accounts for {share:.0%} of the movement in {acct}; "
@@ -497,8 +499,9 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
                         names_ = ", ".join(x["name"] for x in s3)
                         tr.event("driver_found", account=acct, dimension="counterparty", depth=2,
                                  top3_share=sub["top3_share"])
-                # concentration (§C30)
-                if best["top1_share"] >= CONCENTRATION_SHARE:
+                # concentration (§C30) -- unless a single transaction already said it
+                if best["top1_share"] >= CONCENTRATION_SHARE and not (
+                        single_txn_driver and best_d == "counterparty" and same[0].get("key") == single_txn_driver):
                     txt = (f"The movement in {acct} is concentrated: {same[0]['name']} alone accounts for "
                            f"{best['top1_share']:.0%}; it is not broad-based.")
                     c2 = claims.add(Claim(txt, account=acct, variance=V, driver_amount=same[0]["change"],
