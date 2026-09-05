@@ -1,0 +1,8 @@
+[
+  {"period":"2026-01-01","account":"Revenue","amount":"1000000","currency":"USD"},
+  {"period":"2026-02-01","account":"Revenue","amount":"1180000","currency":"USD"},
+  {"period":"2026-03-01","account":"Revenue","amount":"1100000","currency":"USD"},
+  {"period":"2026-01-01","account":"Hosting Expense","amount":"120000","currency":"USD"},
+  {"period":"2026-02-01","account":"Hosting Expense","amount":"150000","currency":"USD"},
+  {"period":"2026-03-01","account":"Hosting Expense","amount":"145000","currency":"USD"}
+]

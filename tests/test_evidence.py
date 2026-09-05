@@ -39,9 +39,7 @@ def test_claims_have_calculation_driver_and_transactions():
 
 def test_missing_transaction_invalidates_claim():
     investigation, transactions = investigation_and_transactions()
-    first_driver = replace(
-        investigation.drivers[0], transaction_ids=("missing-transaction",)
-    )
+    first_driver = replace(investigation.drivers[0], transaction_ids=("missing-transaction",))
     tampered = replace(investigation, drivers=(first_driver,))
     with pytest.raises(EvidenceError, match="missing transaction"):
         build_claim_lineage(tampered, transactions)

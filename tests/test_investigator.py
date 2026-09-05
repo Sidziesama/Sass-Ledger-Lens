@@ -18,9 +18,9 @@ def tools():
 
 
 def test_investigator_stops_on_coverage_with_evidence():
-    result = Investigator(tools(), dimensions=("customer",), target_coverage=Decimal("0.80")).investigate(
-        PRIOR, CURRENT, Decimal("50000"), Decimal("10")
-    )
+    result = Investigator(
+        tools(), dimensions=("customer",), target_coverage=Decimal("0.80")
+    ).investigate(PRIOR, CURRENT, Decimal("50000"), Decimal("10"))
     assert len(result.accounts) == 1
     investigation = result.accounts[0]
     assert investigation.variance.account == "Revenue"
@@ -38,9 +38,9 @@ def test_counterparty_history_and_contribution_are_deterministic():
     financial_tools = tools()
     history = financial_tools.compare_counterparty_history("customer", "Acme", "Revenue")
     assert history == {PRIOR: Decimal("300000"), CURRENT: Decimal("352000")}
-    assert financial_tools.calculate_driver_contribution(Decimal("52000"), Decimal("180000")) == Decimal(
-        "28.88888888888888888888888889"
-    )
+    assert financial_tools.calculate_driver_contribution(
+        Decimal("52000"), Decimal("180000")
+    ) == Decimal("28.88888888888888888888888889")
 
 
 def test_account_without_transactions_does_not_claim_success():

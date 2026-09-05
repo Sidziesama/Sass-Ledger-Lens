@@ -1,0 +1,14 @@
+[
+  {"transaction_id":"r-jan-acme","period":"2026-01-01","account":"Revenue","amount":"600000","customer":"Acme","segment":"Enterprise","category":"Subscription"},
+  {"transaction_id":"r-jan-other","period":"2026-01-01","account":"Revenue","amount":"400000","customer":"Other","segment":"SMB","category":"Subscription"},
+  {"transaction_id":"r-feb-acme","period":"2026-02-01","account":"Revenue","amount":"740000","customer":"Acme","segment":"Enterprise","category":"Subscription"},
+  {"transaction_id":"r-feb-other","period":"2026-02-01","account":"Revenue","amount":"440000","customer":"Other","segment":"SMB","category":"Subscription"},
+  {"transaction_id":"r-mar-acme","period":"2026-03-01","account":"Revenue","amount":"670000","customer":"Acme","segment":"Enterprise","category":"Subscription"},
+  {"transaction_id":"r-mar-other","period":"2026-03-01","account":"Revenue","amount":"430000","customer":"Other","segment":"SMB","category":"Subscription"},
+  {"transaction_id":"h-jan-cloud","period":"2026-01-01","account":"Hosting Expense","amount":"90000","vendor":"CloudCo","category":"Infrastructure"},
+  {"transaction_id":"h-jan-cdn","period":"2026-01-01","account":"Hosting Expense","amount":"30000","vendor":"FastCDN","category":"Infrastructure"},
+  {"transaction_id":"h-feb-cloud","period":"2026-02-01","account":"Hosting Expense","amount":"115000","vendor":"CloudCo","category":"Infrastructure"},
+  {"transaction_id":"h-feb-cdn","period":"2026-02-01","account":"Hosting Expense","amount":"35000","vendor":"FastCDN","category":"Infrastructure"},
+  {"transaction_id":"h-mar-cloud","period":"2026-03-01","account":"Hosting Expense","amount":"108000","vendor":"CloudCo","category":"Infrastructure"},
+  {"transaction_id":"h-mar-cdn","period":"2026-03-01","account":"Hosting Expense","amount":"37000","vendor":"FastCDN","category":"Infrastructure"}
+]

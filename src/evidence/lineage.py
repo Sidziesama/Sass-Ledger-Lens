@@ -2,11 +2,15 @@
 
 from datetime import date
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from pydantic import Field, model_validator
 
-from src.agent import AccountInvestigation
 from src.ingestion.models import LedgerModel, Transaction
+from src.observability import NullTraceObserver, TraceEvent, TraceObserver
+
+if TYPE_CHECKING:
+    from src.agent import AccountInvestigation
 
 
 class CalculationEvidence(LedgerModel):
@@ -42,10 +46,12 @@ class EvidenceError(ValueError):
 
 
 def build_claim_lineage(
-    investigation: AccountInvestigation,
+    investigation: "AccountInvestigation",
     transactions: list[Transaction],
+    observer: TraceObserver | None = None,
 ) -> list[ClaimLineage]:
     """Create evidence records only when IDs, dimensions, and totals reconcile."""
+    trace = observer or NullTraceObserver()
     index = {tx.transaction_id: tx for tx in transactions}
     if len(index) != len(transactions):
         raise EvidenceError("transaction IDs must be unique")
@@ -97,6 +103,15 @@ def build_claim_lineage(
                     )
                     for tx in matching
                 ],
+            )
+        )
+        trace.record(
+            TraceEvent(
+                step_type="tool_call",
+                label=f"Verify evidence for {driver.driver}",
+                tool_name="build_claim_lineage",
+                input_summary=f"{len(driver.transaction_ids)} transaction IDs",
+                output_summary=f"claim reconciled; variance={driver.variance}",
             )
         )
     return claims

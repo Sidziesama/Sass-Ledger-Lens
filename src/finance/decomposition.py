@@ -8,7 +8,9 @@ from typing import Literal
 
 from src.ingestion.models import Transaction
 
-Dimension = Literal["customer", "vendor", "segment", "category", "department", "product", "geography"]
+Dimension = Literal[
+    "customer", "vendor", "segment", "category", "department", "product", "geography"
+]
 
 
 @dataclass(frozen=True)
@@ -50,7 +52,9 @@ def breakdown_by_dimension(
             prior_amount=totals[(driver, prior_period)],
             current_amount=totals[(driver, current_period)],
             variance=change,
-            contribution_pct=None if total_variance == 0 else change / total_variance * Decimal("100"),
+            contribution_pct=None
+            if total_variance == 0
+            else change / total_variance * Decimal("100"),
             transaction_ids=tuple(sorted(evidence[driver])),
         )
         for driver, change in changes.items()

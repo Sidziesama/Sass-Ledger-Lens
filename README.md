@@ -26,3 +26,57 @@ Core functions are `compare_periods`, `rank_material_variances`, `breakdown_by_d
 ## Milestone 4: structured memory
 
 `JsonMemoryStore` atomically persists business context, immutable investigation runs, and appended reviewer feedback as validated JSON. Context retrieval filters by account subject, tags, and effective date. When configured with this store, the investigator attaches relevant prior context to each account investigation so repeated runs benefit from finance-team knowledge without changing deterministic financial truth.
+
+## Milestone 5: PRISM observability
+
+The investigator emits an ordered trajectory covering materiality ranking, driver-decomposition tool calls, context retrieval, stopping decisions, final outcomes, and failures. Evidence construction adds claim-verification steps to the same trace. `PrismTraceObserver.from_env()` connects to `prismtrace-sdk` when the three values in `.env.example` are configured and otherwise degrades to a no-op observer, keeping financial calculations available offline.
+
+## Milestone 6: Streamlit investigation workspace
+
+The dashboard presents material period changes, evidence-backed summaries, ranked driver charts, transaction lineage, the complete PRISM-shaped investigation trace, remembered context, and reviewer feedback. Investigation runs are only persisted when a reviewer explicitly saves them.
+
+```bash
+streamlit run app/app.py
+```
+
+## Command-line investigations
+
+Run the same deterministic workflow without the UI and optionally save a portable JSON artifact containing variances, drivers, claims, transaction lineage, business context, and the investigation trace:
+
+```bash
+python -m src.cli \
+  --prior 2026-01-01 \
+  --current 2026-02-01 \
+  --output data/runs/demo-investigation.json
+```
+
+Add `--prism` to submit the trajectory when the `PRISMTRACE_*` environment variables are configured.
+Add `--llm` to use the configured OpenAI-compatible provider; otherwise the grounded offline template is used.
+
+## Evidence-constrained explanations
+
+`EvidenceBoundExplainer` sends a structured packet of deterministic results and verified claims to a pluggable provider. It rejects unknown claim citations and any numeric fact not present in the evidence packet. `TemplateExplanationProvider` works offline; `OpenAICompatibleProvider` can use a hosted provider or GIDE's local API through the `LEDGER_LENS_LLM_*` settings in `.env.example`.
+
+## Deterministic benchmark
+
+The multi-period benchmark proves exact variance results, correct top-driver selection, full decomposition reconciliation, and transaction-evidence completeness against known outcomes:
+
+```bash
+python -m src.evaluation.benchmark --output data/runs/benchmark-score.json
+```
+
+The command exits nonzero if any benchmark case fails, making it suitable for CI and PRISM's “Prove” stage.
+
+## Development quality checks
+
+Install development dependencies and run the same checks enforced by GitHub Actions:
+
+```bash
+python -m pip install -r requirements-dev.txt
+ruff check .
+ruff format --check .
+pytest -q
+python -m src.evaluation.benchmark
+```
+
+CI runs these checks for every pull request and every push to `main`.

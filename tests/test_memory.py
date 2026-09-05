@@ -33,7 +33,9 @@ def test_context_is_upserted_and_retrieved_by_subject_and_date(tmp_path):
         )
     )
     assert memory.get_business_context(subject="Revenue", as_of=date(2026, 1, 1)) == []
-    matches = memory.get_business_context(subject="revenue", tags={"confirmed"}, as_of=date(2026, 2, 1))
+    matches = memory.get_business_context(
+        subject="revenue", tags={"confirmed"}, as_of=date(2026, 2, 1)
+    )
     assert len(matches) == 1
     assert matches[0].description.startswith("Finance confirmed")
 
@@ -72,12 +74,24 @@ def test_investigator_receives_relevant_prior_context(tmp_path):
         AccountSummary(period=date(2026, 2, 1), account="Revenue", amount="150"),
     ]
     transactions = [
-        Transaction(transaction_id="p", period=date(2026, 1, 1), account="Revenue", amount="100", customer="A"),
-        Transaction(transaction_id="c", period=date(2026, 2, 1), account="Revenue", amount="150", customer="A"),
+        Transaction(
+            transaction_id="p",
+            period=date(2026, 1, 1),
+            account="Revenue",
+            amount="100",
+            customer="A",
+        ),
+        Transaction(
+            transaction_id="c",
+            period=date(2026, 2, 1),
+            account="Revenue",
+            amount="150",
+            customer="A",
+        ),
     ]
-    result = Investigator(FinancialTools(summaries, transactions), dimensions=("customer",), memory=memory).investigate(
-        date(2026, 1, 1), date(2026, 2, 1), Decimal("1"), Decimal("1")
-    )
+    result = Investigator(
+        FinancialTools(summaries, transactions), dimensions=("customer",), memory=memory
+    ).investigate(date(2026, 1, 1), date(2026, 2, 1), Decimal("1"), Decimal("1"))
     assert result.accounts[0].business_context[0].description == "Known renewal event"
 
 
