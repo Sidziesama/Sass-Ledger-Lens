@@ -1,5 +1,6 @@
 """One run lifecycle for investigation, explanation, validation, and telemetry."""
 
+from collections import Counter
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import Any
@@ -9,6 +10,7 @@ import httpx
 from pydantic import ValidationError
 
 from src.agent import FinancialTools, Investigator
+from src.agent.investigator import InvestigationResult
 from src.evidence import build_claim_lineage
 from src.explanation import (
     EvidenceBoundExplainer,
@@ -17,6 +19,25 @@ from src.explanation import (
 )
 from src.observability import InMemoryTraceObserver, TraceEvent
 from src.observability.tracing import RunStepObserver
+
+
+def dataset_issues(summaries, transactions, prior, current):
+    """Check identity and account coverage before materiality can hide bad data."""
+    issues = []
+    for transaction_id, count in sorted(Counter(t.transaction_id for t in transactions).items()):
+        if count > 1:
+            issues.append({"code": "DUPLICATE_TRANSACTION_ID", "transaction_id": transaction_id})
+    summary_keys = {(s.period, s.account) for s in summaries}
+    for period, account in sorted({(t.period, t.account) for t in transactions} - summary_keys):
+        if period in (prior, current):
+            issues.append(
+                {
+                    "code": "MISSING_ACCOUNT_MAPPING",
+                    "account": account,
+                    "period": period.isoformat(),
+                }
+            )
+    return issues
 
 
 def reconciliation_issues(account, summaries, transactions):
@@ -162,19 +183,25 @@ def run_workflow(
     observer.start_run(run_id)
     steps = RunStepObserver(observer)
     try:
-        result = Investigator(
-            FinancialTools(summaries, transactions),
-            memory=memory,
-            observer=steps,
-            target_coverage=target_coverage,
-            max_drivers=max_drivers,
-        ).investigate(prior, current, absolute, percentage)
+        issues = dataset_issues(summaries, transactions, prior, current)
+        duplicates = any(issue["code"] == "DUPLICATE_TRANSACTION_ID" for issue in issues)
+        if duplicates:
+            result = InvestigationResult(run_id, prior, current, ())
+        else:
+            result = Investigator(
+                FinancialTools(summaries, transactions),
+                memory=memory,
+                observer=steps,
+                target_coverage=target_coverage,
+                max_drivers=max_drivers,
+            ).investigate(prior, current, absolute, percentage)
         from dataclasses import replace
 
         result = replace(result, run_id=run_id)
         artifact = build_artifact(
             result, transactions, observer.events, provider, observer=steps, summaries=summaries
         )
+        artifact["data_quality_issues"] = issues
         statuses = [account["status"] for account in artifact["accounts"]]
         artifact["status"] = (
             "complete"
@@ -183,6 +210,16 @@ def run_workflow(
             if all(s == "blocked" for s in statuses)
             else "partial"
         )
+        if issues:
+            artifact["status"] = "blocked" if duplicates or not statuses else "partial"
+            steps.record(
+                TraceEvent(
+                    step_type="validation",
+                    label="Dataset requires review",
+                    output_summary=str(issues),
+                    status="error" if duplicates else "warning",
+                )
+            )
         steps.record(
             TraceEvent(
                 step_type="final_answer",

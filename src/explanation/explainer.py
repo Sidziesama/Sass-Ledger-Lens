@@ -54,7 +54,7 @@ def build_evidence_packet(investigation: AccountInvestigation, claims: list[Clai
                 else "not-applicable"
             ),
             "percentage_display": (
-                f"{abs(variance.variance_pct)}%"
+                f"{abs(variance.variance_pct):.2f}%"
                 if variance.variance_pct is not None
                 else "not-applicable"
             ),
@@ -96,7 +96,7 @@ def build_evidence_packet(investigation: AccountInvestigation, claims: list[Clai
     if variance.variance == 0:
         description = f"{headline}."
     elif variance.variance_pct is not None:
-        description = f"{headline} by {abs(variance.variance)} ({abs(variance.variance_pct)}%)."
+        description = f"{headline} by {abs(variance.variance)} ({abs(variance.variance_pct):.2f}%)."
     packet["approved_headlines"] = [headline]
     statements = [{"text": description, "claim_ids": [], "required": True}]
     for claim in claims:

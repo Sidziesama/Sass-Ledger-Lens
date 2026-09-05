@@ -51,11 +51,21 @@ def parser() -> argparse.ArgumentParser:
 
 def print_report(artifact: dict) -> None:
     print(f"Ledger Lens investigation: {artifact['prior_period']} -> {artifact['current_period']}")
+    for issue in artifact.get("data_quality_issues", []):
+        print(f"Needs review: {issue}")
     if not artifact["accounts"]:
-        print("No material variances found.")
+        print(
+            "Investigation requires data review."
+            if artifact.get("data_quality_issues")
+            else "No material variances found."
+        )
         return
     for account in artifact["accounts"]:
-        percent = account["variance_pct"] or "n/a"
+        percent = (
+            f"{Decimal(account['variance_pct']):.2f}"
+            if account["variance_pct"] is not None
+            else "n/a"
+        )
         status = account["status"]
         print(f"\n{account['account']}")
         print(

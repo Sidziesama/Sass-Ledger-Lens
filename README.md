@@ -100,3 +100,9 @@ python -m src.cli --prior 2026-01-01 --current 2026-02-01 --llm --prism
 PRISM receives an explicitly labeled workflow summary trace and ordered trajectory under the same run ID, including explanation validation and failures. It receives account and driver summaries, so enable it only for data you intend to share with your configured PRISM service. Delivery failure leaves local results available and is shown separately.
 
 Explanations can select only approved, evidence-backed statements. Model failures or rejected output produce a visible warning and a validated template fallback. Summary/detail discrepancies or currency mismatches block explanations; insufficient coverage remains partial with a required caveat. The workflow owns the trace lifecycle so provider calls and validation appear before completion.
+
+## Workflow edge-case regressions
+
+Seven synthetic datasets from `reliability` commit `6288a94` are preserved under `tests/fixtures/reliability`. Run `pytest -q tests/test_reliability_cases.py` to check summary/detail gaps, absent detail, missing periods, duplicate transaction IDs, mixed currencies, accounts absent from summaries, and percentage display through the actual workflow.
+
+Duplicate IDs now return a blocked, reviewable result before attribution. Accounts with transactions but no summary are reported at dataset level even if materiality would skip them. CLI and dashboard show these issues. Displayed percentages use two decimals; structured financial values retain their original precision. These seven checks do not replace the other branch's full 56-scenario benchmark.

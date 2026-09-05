@@ -215,11 +215,17 @@ if artifact["telemetry"]["status"] == "failed":
 elif artifact["telemetry"]["status"] == "delivered":
     st.caption("PRISM trajectory delivered.")
 
+for issue in artifact.get("data_quality_issues", []):
+    st.warning(f"Data requires review: {issue}")
+
 for warning in dataset_warnings:
     st.warning(warning)
 
 if not result.accounts:
-    st.info("No account variances meet the selected materiality thresholds.")
+    if artifact.get("data_quality_issues"):
+        st.error("Resolve the data issues above before treating this investigation as complete.")
+    else:
+        st.info("No account variances meet the selected materiality thresholds.")
     st.stop()
 
 total_change = sum((item.variance.variance for item in result.accounts), Decimal("0"))
