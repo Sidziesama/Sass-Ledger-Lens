@@ -14,7 +14,7 @@ COURTROOM_ROOT=/tmp/court python -m reliability.benchmark.evaluate --runner reli
 
 | | `main` @ d180870 (JS courtroom) | `python-grounded-prism` @ 6319d12 | `reliability-hardening` @ 9b0eed8 | old `main` @ 3d74433 | reference |
 |---|---|---|---|---|---|
-| **Overall** | **8 / 56** normalized · 0 / 56 raw | 0 / 56 | 5 / 56 | 0 / 56 | **56 / 56** |
+| **Overall** | **8 / 56** normalized · 0 / 56 raw | **5 / 56** live GIDE explainer · 0 / 56 template | 5 / 56 | 0 / 56 | **56 / 56** |
 | normal | 4 / 11 | 0 / 11 | 3 / 11 | 0 / 11 | 11 / 11 |
 | ambiguous | 0 / 10 | 0 / 10 | 0 / 10 | 0 / 10 | 10 / 10 |
 | data quality | 2 / 11 | 0 / 11 | 0 / 11 | 0 / 11 | 11 / 11 |
@@ -22,11 +22,20 @@ COURTROOM_ROOT=/tmp/court python -m reliability.benchmark.evaluate --runner reli
 | memory (incl. 4 multi-run sequences) | 1 / 14 | 0 / 14 | 1 / 14 | 0 / 14 | 14 / 14 |
 
 `python-grounded-prism` continues the Python lineage with a GIDE-backed grounded explainer
-(claim-id and number-token checks) and PRISM tracing. Scored with its offline template
-provider it repeats the unrounded-Decimal memo ("40.90037309924180988050104740%") — the
-rounding fix on `reliability-hardening` was never merged into it — so every case fails
-`number_lint` before anything else is measured; the rest of its profile matches the old
-Python `main` exactly (37 premature-stopping, 19 data-quality, 10 memory).
+(claim-id and number-token checks) and PRISM tracing. Two measurements:
+
+- **Offline template provider: 0 / 56.** The template prints unrounded Decimals
+  ("40.90037309924180988050104740%"); every case fails `number_lint` first.
+- **Live path (`MAIN_V1_LLM=1`, its own provider on GIDE's 1.5B): 5 / 56.** The pipeline
+  works end-to-end (~5 s a case). Its grounding gate rejected the model's draft in **53 of 56**
+  cases and accepted 3. A rejected draft leaves the account with no explanation at all, so the
+  memo is the bare structured facts — which is why the profile is then identical to the old
+  Python `main`: 37 premature-stopping, 19 data-quality, 10 memory.
+
+For contrast, the reference's memo gate on the same 1.5B accepts 50 / 56 drafts, because
+the prompt asks the model to choose and order verbatim claims rather than rewrite them, and a
+failing draft falls back to a template that still states every limitation. Both changes
+transfer directly to this branch's explainer — see `docs/HANDOFF_GROUNDED.md`.
 
 Only asserted text is scanned for forbidden language — a candidate the courtroom
 *rejects* ("Proposed: growth was broad-based") is judgement, not assertion.
