@@ -75,6 +75,15 @@ The benchmark was built to break the agent, and it did. Every failure was classi
 Final: adversarial 10/10, data-quality 11/11, memory 10/10, ambiguous 10/10, normal 11/11.
 Comparison with the `main` investigator: `docs/COMPARISON.md`.
 
+## The model step, measured
+
+With GIDE's local model writing every memo (Qwen2.5-1.5B on this 8 GB machine), the linter
+accepted **23 of 56 drafts**; the other 33 shipped the templated memo instead. Across all 56
+drafts: **1 ungrounded number, 0 causal-verb violations, 108 uncited sentences**. The model
+keeps the arithmetic honest and mostly fails on lineage — it paraphrases a claim and drops the
+`[claim_id]`. Nothing invented reached a memo. Details and the prompt iterations are in
+`docs/IMPROVEMENT_LOG.md` (pass 7 onward).
+
 ## What the agent will say when it cannot prove something
 
 - "Revenue moved from $0 to $100,000; percentage change is not meaningful because the prior-period base was zero."

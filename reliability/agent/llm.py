@@ -18,6 +18,7 @@ Configuration (any of these, first match wins):
 
 import json
 import os
+import time
 import urllib.error
 import urllib.request
 
@@ -84,22 +85,36 @@ class LLM:
             "offline (deterministic narrative only)"
 
     # -- transport ---------------------------------------------------------
-    def _request(self, path, body=None, timeout=180):
-        req = urllib.request.Request(
-            f"{self.base_url}{path}",
+    def _request(self, path, body=None, timeout=180, retries=8):
+        """GIDE's local model serves one request at a time and answers 429
+        `model_busy` to the rest. That is a queue, not a failure: wait and retry."""
+        req_kwargs = dict(
             data=json.dumps(body).encode() if body is not None else None,
             headers={"Content-Type": "application/json",
                      "Authorization": f"Bearer {self.api_key}"},
             method="POST" if body is not None else "GET")
-        try:
-            with urllib.request.urlopen(req, timeout=timeout) as r:
-                return json.loads(r.read())
-        except urllib.error.HTTPError as e:
-            if self.verbose:
-                print(f"[llm] {path} -> HTTP {e.code}: {e.read()[:200]!r}")
-        except Exception as e:                            # noqa: BLE001
-            if self.verbose:
-                print(f"[llm] {path} failed: {e}")
+        delay = 2.0
+        for attempt in range(retries + 1):
+            req = urllib.request.Request(f"{self.base_url}{path}", **req_kwargs)
+            try:
+                with urllib.request.urlopen(req, timeout=timeout) as r:
+                    return json.loads(r.read())
+            except urllib.error.HTTPError as e:
+                detail = e.read()[:300]
+                busy = e.code in (429, 503) or b"model_busy" in detail or b"isLoading" in detail
+                if busy and attempt < retries:
+                    if self.verbose:
+                        print(f"[llm] model busy, retry {attempt + 1}/{retries} in {delay:.0f}s")
+                    time.sleep(delay)
+                    delay = min(delay * 1.6, 20.0)
+                    continue
+                if self.verbose:
+                    print(f"[llm] {path} -> HTTP {e.code}: {detail!r}")
+                return None
+            except Exception as e:                        # noqa: BLE001
+                if self.verbose:
+                    print(f"[llm] {path} failed: {e}")
+                return None
         return None
 
     def _first_model(self):

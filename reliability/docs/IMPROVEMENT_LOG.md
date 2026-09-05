@@ -57,3 +57,27 @@ Scoring `main`'s own explainer exposed memos like "40.90037309924180988050104740
 The linter's false-precision rule only caught "NN.NN% confident". Widened to any
 percentage with more than two decimals and any bare figure with three or more.
 Reference unaffected (52/52); `main` 5/52 → 0/52 until the template rounds.
+
+## Pass 7 — the model step, measured
+
+GIDE local model (Qwen2.5-1.5B-Instruct Q4, the largest GIDE's memory gate allows on
+this 8 GB machine) drafted the memo for all 56 cases from verified claims only.
+Every draft went through the linter; a failing draft is replaced by the template.
+
+| Prompt | Accepted | Rejected | Uncited sentences | Ungrounded numbers | Causal-verb violations |
+|---|---|---|---|---|---|
+| v1 (claims only, one-shot, strict format) | **23 / 56 (41%)** | 33 | 108 | **1** | **0** |
+
+By category: data-quality 7/11, adversarial 5/10, ambiguous 5/10, normal 4/11, memory 2/14
+(memory memos quote long prior statements, which the model paraphrases).
+
+What the rejections were: the model rewrites a claim in its own words and drops the
+citation ("The total Marketing expenditure rose from $90,000 to $150,000, marking…").
+The numbers are right; the lineage is gone. Two drafts also inverted meaning
+("indicating a broad increase" for a claim that said the opposite) and one invented
+a movement ("Fieldmark moved from $100,000 to $0"). All were rejected.
+
+Reading the drafts also exposed a defect in the deterministic engine that the benchmark
+had not caught: single-transaction claims were computed on face value, so an account
+with one line a month reported "393% of the movement". Fixed to incremental
+contribution (pass 7 commit b22fbca).

@@ -42,22 +42,23 @@ Investigate. Call tools until you can explain this movement with evidence, then 
 state your conclusion in two or three sentences citing the figures the tools \
 returned."""
 
-NARRATIVE_SYSTEM = """You write the short finance memo at the top of Ledger Lens for a CFO.
+NARRATIVE_SYSTEM = """You assemble the short finance memo at the top of Ledger Lens for a CFO.
 
-Rules, all of them strict:
-1. Use ONLY the facts in the numbered claims you are given. Never add a number, a name, or a reason that is not in a claim.
-2. Write 4 to 6 plain sentences in one paragraph. No headings, no bullets, no bold, no labels, no preamble.
-3. Every sentence must end with the id of the claim it comes from, in square brackets, like this: [claim_003]
-4. Lead with what matters most to a CFO, not with the biggest number. If a movement is a reclassification, a reversal, a one-off, seasonal, or concentrated in one counterparty, say that plainly.
-5. Never say "caused", "because of", "due to" or "as a result of". The claims describe what moved, not why.
-6. If a claim says the data does not establish why, repeat that; do not invent a reason.
+You are given numbered claims. Your job is to CHOOSE and ORDER them, not to rewrite them.
 
-Example of the required style:
+Rules, all strict:
+1. Copy each claim's sentence exactly as written, then its id in square brackets: [claim_003]
+2. Pick 4 to 6 claims. Put the most important first: a reclassification, reversal, one-off,
+   seasonal norm, data problem, or a single counterparty that explains most of a movement
+   matters more than the biggest number.
+3. One paragraph. No headings, bullets, bold, labels, or introduction. Do not add sentences
+   of your own. Do not merge two claims into one sentence. Do not change any number or name.
+4. If a claim says the data does not establish why, include it unchanged.
+
+Example output:
 Revenue increased from $1,000,000 to $1,180,000, a change of +$180,000 (+18.0%). [claim_001] Three enterprise customers, Acme, Globex and Stark, contributed $115,000, or 64% of the increase. [claim_002] The available data does not establish why those customers increased their spending. [claim_003]"""
 
-NARRATIVE_USER = """Period {period}, compared with {prior_period}.
-
-Claims (the only facts you may use):
+NARRATIVE_USER = """Claims for {period} (compared with {prior_period}):
 {claims}
 
-Write the memo now: 4 to 6 sentences, one paragraph, each sentence ending with its [claim_id]."""
+Output only the memo: 4 to 6 of these claims, copied exactly, each followed by its [claim_id], as one paragraph. Start directly with the first claim."""
