@@ -18,8 +18,12 @@ def fixture_data():
         AccountSummary(period=CURRENT, account="Revenue", amount="150"),
     ]
     transactions = [
-        Transaction(transaction_id="p", period=PRIOR, account="Revenue", amount="100", customer="A"),
-        Transaction(transaction_id="c", period=CURRENT, account="Revenue", amount="150", customer="A"),
+        Transaction(
+            transaction_id="p", period=PRIOR, account="Revenue", amount="100", customer="A"
+        ),
+        Transaction(
+            transaction_id="c", period=CURRENT, account="Revenue", amount="150", customer="A"
+        ),
     ]
     return summaries, transactions
 
@@ -32,16 +36,18 @@ def test_investigation_records_tools_decisions_and_outcome():
     ).investigate(PRIOR, CURRENT, Decimal("1"), Decimal("1"))
     build_claim_lineage(result.accounts[0], transactions, observer)
     assert observer.final_status == "success"
-    assert {event.step_type for event in observer.events} >= {"tool_call", "reasoning", "final_answer"}
+    assert {event.step_type for event in observer.events} >= {
+        "tool_call",
+        "reasoning",
+        "final_answer",
+    }
     assert any(event.tool_name == "breakdown_by_dimension" for event in observer.events)
     assert any(event.tool_name == "build_claim_lineage" for event in observer.events)
 
 
 def test_failure_is_observed_and_reraised():
     summaries, transactions = fixture_data()
-    summaries[1] = AccountSummary(
-        period=CURRENT, account="Revenue", amount="150", currency="EUR"
-    )
+    summaries[1] = AccountSummary(period=CURRENT, account="Revenue", amount="150", currency="EUR")
     observer = InMemoryTraceObserver()
     with pytest.raises(ValueError, match="mixed currencies"):
         Investigator(FinancialTools(summaries, transactions), observer=observer).investigate(
@@ -64,9 +70,9 @@ def test_prism_adapter_submits_sdk_trajectory():
     client = FakePrismClient()
     observer = PrismTraceObserver(client)
     summaries, transactions = fixture_data()
-    Investigator(FinancialTools(summaries, transactions), dimensions=("customer",), observer=observer).investigate(
-        PRIOR, CURRENT, Decimal("1"), Decimal("1")
-    )
+    Investigator(
+        FinancialTools(summaries, transactions), dimensions=("customer",), observer=observer
+    ).investigate(PRIOR, CURRENT, Decimal("1"), Decimal("1"))
     assert client.payload["agent_id"] == "ledger-lens"
     assert client.payload["final_status"] == "success"
     assert client.payload["steps"]

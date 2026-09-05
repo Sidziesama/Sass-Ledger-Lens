@@ -18,6 +18,7 @@ def run_benchmark(*args, **kwargs):
 
     return implementation(*args, **kwargs)
 
+
 __all__ = [
     "BenchmarkCase",
     "BenchmarkScore",

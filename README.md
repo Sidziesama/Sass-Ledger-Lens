@@ -66,3 +66,17 @@ python -m src.evaluation.benchmark --output data/runs/benchmark-score.json
 ```
 
 The command exits nonzero if any benchmark case fails, making it suitable for CI and PRISM's “Prove” stage.
+
+## Development quality checks
+
+Install development dependencies and run the same checks enforced by GitHub Actions:
+
+```bash
+python -m pip install -r requirements-dev.txt
+ruff check .
+ruff format --check .
+pytest -q
+python -m src.evaluation.benchmark
+```
+
+CI runs these checks for every pull request and every push to `main`.

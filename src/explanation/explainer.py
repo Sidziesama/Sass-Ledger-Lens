@@ -6,8 +6,6 @@ from decimal import Decimal
 from time import perf_counter
 from uuid import uuid4
 
-from pydantic import ValidationError
-
 from src.agent import AccountInvestigation
 from src.evidence import ClaimLineage
 from src.observability import NullTraceObserver, TraceEvent, TraceObserver
@@ -34,9 +32,7 @@ def _number_tokens(text: str) -> set[str]:
     return normalized
 
 
-def build_evidence_packet(
-    investigation: AccountInvestigation, claims: list[ClaimLineage]
-) -> dict:
+def build_evidence_packet(investigation: AccountInvestigation, claims: list[ClaimLineage]) -> dict:
     variance = investigation.variance
     return {
         "account": variance.account,
@@ -51,10 +47,14 @@ def build_evidence_packet(
             "absolute_amount": str(abs(variance.variance)),
             "percentage": str(variance.variance_pct) if variance.variance_pct is not None else None,
             "absolute_percentage": (
-                str(abs(variance.variance_pct)) if variance.variance_pct is not None else "not-applicable"
+                str(abs(variance.variance_pct))
+                if variance.variance_pct is not None
+                else "not-applicable"
             ),
             "percentage_display": (
-                f"{abs(variance.variance_pct)}%" if variance.variance_pct is not None else "not-applicable"
+                f"{abs(variance.variance_pct)}%"
+                if variance.variance_pct is not None
+                else "not-applicable"
             ),
         },
         "coverage_percentage": str(investigation.stop_decision.coverage * Decimal("100")),
@@ -77,7 +77,9 @@ def build_evidence_packet(
             }
             for claim in claims
         ],
-        "business_context": [context.model_dump(mode="json") for context in investigation.business_context],
+        "business_context": [
+            context.model_dump(mode="json") for context in investigation.business_context
+        ],
     }
 
 

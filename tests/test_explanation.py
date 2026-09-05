@@ -25,12 +25,16 @@ def evidence():
         AccountSummary(period=CURRENT, account="Revenue", amount="150"),
     ]
     transactions = [
-        Transaction(transaction_id="p", period=PRIOR, account="Revenue", amount="100", customer="A"),
-        Transaction(transaction_id="c", period=CURRENT, account="Revenue", amount="150", customer="A"),
+        Transaction(
+            transaction_id="p", period=PRIOR, account="Revenue", amount="100", customer="A"
+        ),
+        Transaction(
+            transaction_id="c", period=CURRENT, account="Revenue", amount="150", customer="A"
+        ),
     ]
-    result = Investigator(FinancialTools(summaries, transactions), dimensions=("customer",)).investigate(
-        PRIOR, CURRENT, Decimal("1"), Decimal("1")
-    )
+    result = Investigator(
+        FinancialTools(summaries, transactions), dimensions=("customer",)
+    ).investigate(PRIOR, CURRENT, Decimal("1"), Decimal("1"))
     account = result.accounts[0]
     return account, build_claim_lineage(account, transactions)
 
@@ -38,7 +42,9 @@ def evidence():
 def test_template_explanation_is_grounded_and_traced():
     account, claims = evidence()
     observer = InMemoryTraceObserver()
-    result = EvidenceBoundExplainer(TemplateExplanationProvider(), observer).explain(account, claims)
+    result = EvidenceBoundExplainer(TemplateExplanationProvider(), observer).explain(
+        account, claims
+    )
     assert result.grounded is True
     assert result.claim_ids == [claims[0].claim_id]
     assert observer.final_status == "success"

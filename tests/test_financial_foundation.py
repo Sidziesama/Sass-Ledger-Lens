@@ -11,14 +11,18 @@ CURRENT = date(2026, 2, 1)
 
 
 def test_period_comparison_is_exact():
-    results = compare_periods(load_account_summaries(ROOT / "data/sample/monthly_summary.json"), PRIOR, CURRENT)
+    results = compare_periods(
+        load_account_summaries(ROOT / "data/sample/monthly_summary.json"), PRIOR, CURRENT
+    )
     revenue = next(row for row in results if row.account == "Revenue")
     assert revenue.variance == Decimal("180000")
     assert revenue.variance_pct == Decimal("18.00")
 
 
 def test_materiality_ranking():
-    results = compare_periods(load_account_summaries(ROOT / "data/sample/monthly_summary.json"), PRIOR, CURRENT)
+    results = compare_periods(
+        load_account_summaries(ROOT / "data/sample/monthly_summary.json"), PRIOR, CURRENT
+    )
     ranked = rank_material_variances(results, Decimal("50000"), Decimal("10"))
     assert ranked[0].result.account == "Revenue"
     assert ranked[0].is_material is True
@@ -26,7 +30,13 @@ def test_materiality_ranking():
 
 
 def test_customer_decomposition_reconciles_and_retains_lineage():
-    rows = breakdown_by_dimension(load_transactions(ROOT / "data/sample/transactions.json"), "Revenue", PRIOR, CURRENT, "customer")
+    rows = breakdown_by_dimension(
+        load_transactions(ROOT / "data/sample/transactions.json"),
+        "Revenue",
+        PRIOR,
+        CURRENT,
+        "customer",
+    )
     assert sum((row.variance for row in rows), Decimal("0")) == Decimal("180000")
     assert rows[0].driver == "Other"
     assert rows[0].variance == Decimal("65000")
@@ -36,6 +46,12 @@ def test_customer_decomposition_reconciles_and_retains_lineage():
 
 
 def test_segment_decomposition():
-    rows = breakdown_by_dimension(load_transactions(ROOT / "data/sample/transactions.json"), "Revenue", PRIOR, CURRENT, "segment")
+    rows = breakdown_by_dimension(
+        load_transactions(ROOT / "data/sample/transactions.json"),
+        "Revenue",
+        PRIOR,
+        CURRENT,
+        "segment",
+    )
     enterprise = next(row for row in rows if row.driver == "Enterprise")
     assert enterprise.variance == Decimal("93000")

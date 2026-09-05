@@ -66,7 +66,9 @@ class InMemoryTraceObserver:
 class PrismTraceObserver(InMemoryTraceObserver):
     """Submit an ordered Ledger Lens trajectory to PRISMtrace."""
 
-    def __init__(self, client: Any, *, agent_id: str = "ledger-lens", agent_name: str = "Ledger Lens"):
+    def __init__(
+        self, client: Any, *, agent_id: str = "ledger-lens", agent_name: str = "Ledger Lens"
+    ):
         super().__init__()
         self.client = client
         self.agent_id = agent_id

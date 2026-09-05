@@ -25,8 +25,12 @@ def parser() -> argparse.ArgumentParser:
     command = argparse.ArgumentParser(
         prog="ledger-lens", description="Investigate financial variances with transaction evidence."
     )
-    command.add_argument("--summaries", type=Path, default=ROOT / "data/sample/monthly_summary.json")
-    command.add_argument("--transactions", type=Path, default=ROOT / "data/sample/transactions.json")
+    command.add_argument(
+        "--summaries", type=Path, default=ROOT / "data/sample/monthly_summary.json"
+    )
+    command.add_argument(
+        "--transactions", type=Path, default=ROOT / "data/sample/transactions.json"
+    )
     command.add_argument("--memory", type=Path, default=ROOT / "data/memory")
     command.add_argument("--prior", type=date.fromisoformat, required=True, metavar="YYYY-MM-DD")
     command.add_argument("--current", type=date.fromisoformat, required=True, metavar="YYYY-MM-DD")
@@ -34,8 +38,12 @@ def parser() -> argparse.ArgumentParser:
     command.add_argument("--percentage-threshold", type=Decimal, default=Decimal("10"))
     command.add_argument("--coverage", type=Decimal, default=Decimal("0.80"))
     command.add_argument("--max-drivers", type=int, default=5)
-    command.add_argument("--output", type=Path, help="Write the complete investigation artifact as JSON.")
-    command.add_argument("--prism", action="store_true", help="Submit the trajectory using PRISMTRACE_* settings.")
+    command.add_argument(
+        "--output", type=Path, help="Write the complete investigation artifact as JSON."
+    )
+    command.add_argument(
+        "--prism", action="store_true", help="Submit the trajectory using PRISMTRACE_* settings."
+    )
     command.add_argument(
         "--llm",
         action="store_true",
@@ -99,9 +107,7 @@ def build_artifact(result, transactions, events, provider=None) -> dict[str, Any
 
 
 def print_report(artifact: dict[str, Any]) -> None:
-    print(
-        f"Ledger Lens investigation: {artifact['prior_period']} -> {artifact['current_period']}"
-    )
+    print(f"Ledger Lens investigation: {artifact['prior_period']} -> {artifact['current_period']}")
     if not artifact["accounts"]:
         print("No material variances found.")
         return

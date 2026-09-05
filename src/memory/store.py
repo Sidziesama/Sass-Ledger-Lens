@@ -49,7 +49,9 @@ class JsonMemoryStore:
         contexts = self._load_list(self.context_path, BusinessContext)
         by_id = {item.context_id: item for item in contexts}
         by_id[context.context_id] = context
-        self._write_models(self.context_path, sorted(by_id.values(), key=lambda item: item.context_id))
+        self._write_models(
+            self.context_path, sorted(by_id.values(), key=lambda item: item.context_id)
+        )
         return context
 
     def list_investigation_runs(self) -> list[InvestigationRun]:

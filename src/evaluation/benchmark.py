@@ -41,7 +41,9 @@ def evaluate_case(case: BenchmarkCase, tools: FinancialTools) -> CaseScore:
 
     for expected in case.expected_accounts:
         account = actual.get(expected.account)
-        variance_checks.append(account is not None and account.variance.variance == expected.variance)
+        variance_checks.append(
+            account is not None and account.variance.variance == expected.variance
+        )
         driver_checks.append(
             account is not None
             and account.dimension == expected.top_driver_dimension
@@ -103,10 +105,14 @@ def run_benchmark(
     scores = [evaluate_case(case, tools) for case in load_cases(cases_path)]
     result = BenchmarkScore(
         cases=scores,
-        variance_accuracy=sum((score.variance_accuracy for score in scores), Decimal("0")) / len(scores),
-        driver_accuracy=sum((score.driver_accuracy for score in scores), Decimal("0")) / len(scores),
-        reconciliation_rate=sum((score.reconciliation_rate for score in scores), Decimal("0")) / len(scores),
-        evidence_completeness=sum((score.evidence_completeness for score in scores), Decimal("0")) / len(scores),
+        variance_accuracy=sum((score.variance_accuracy for score in scores), Decimal("0"))
+        / len(scores),
+        driver_accuracy=sum((score.driver_accuracy for score in scores), Decimal("0"))
+        / len(scores),
+        reconciliation_rate=sum((score.reconciliation_rate for score in scores), Decimal("0"))
+        / len(scores),
+        evidence_completeness=sum((score.evidence_completeness for score in scores), Decimal("0"))
+        / len(scores),
         passed=all(score.passed for score in scores),
     )
     return result

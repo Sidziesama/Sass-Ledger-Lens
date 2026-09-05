@@ -30,7 +30,9 @@ def signed_money(value: Decimal) -> str:
 def evidence_summary(account) -> str:
     variance = account.variance
     direction = "increased" if variance.variance >= 0 else "decreased"
-    percent = "new from zero" if variance.variance_pct is None else f"{abs(variance.variance_pct):.1f}%"
+    percent = (
+        "new from zero" if variance.variance_pct is None else f"{abs(variance.variance_pct):.1f}%"
+    )
     if not account.drivers:
         return (
             f"{variance.account} {direction} by {money(abs(variance.variance))} ({percent}), "
@@ -101,8 +103,12 @@ with st.sidebar:
     st.header("Investigation controls")
     prior_period = st.selectbox("Prior period", periods, index=0)
     current_period = st.selectbox("Current period", periods, index=len(periods) - 1)
-    absolute_threshold = Decimal(str(st.number_input("Absolute materiality (USD)", min_value=0, value=50000, step=10000)))
-    percentage_threshold = Decimal(str(st.number_input("Percentage materiality", min_value=0.0, value=10.0, step=1.0)))
+    absolute_threshold = Decimal(
+        str(st.number_input("Absolute materiality (USD)", min_value=0, value=50000, step=10000))
+    )
+    percentage_threshold = Decimal(
+        str(st.number_input("Percentage materiality", min_value=0.0, value=10.0, step=1.0))
+    )
     investigate = st.button("Run investigation", type="primary", width="stretch")
 
 if investigate or "investigation" not in st.session_state:
@@ -141,7 +147,9 @@ with overview:
                 "Prior": float(item.variance.prior_amount),
                 "Current": float(item.variance.current_amount),
                 "Variance": float(item.variance.variance),
-                "Variance %": float(item.variance.variance_pct) if item.variance.variance_pct is not None else None,
+                "Variance %": float(item.variance.variance_pct)
+                if item.variance.variance_pct is not None
+                else None,
                 "Coverage %": float(item.stop_decision.coverage * 100),
                 "Evidence": "Sufficient" if item.stop_decision.should_stop else "Needs review",
             }
@@ -176,7 +184,9 @@ with drivers_tab:
             "Prior": float(row.prior_amount),
             "Current": float(row.current_amount),
             "Variance": float(row.variance),
-            "Contribution %": float(row.contribution_pct) if row.contribution_pct is not None else None,
+            "Contribution %": float(row.contribution_pct)
+            if row.contribution_pct is not None
+            else None,
         }
         for row in account.drivers
     ]
@@ -210,18 +220,24 @@ with trace_tab:
         width="stretch",
         hide_index=True,
     )
-    st.caption("This local trace uses the same trajectory shape submitted to PRISM when credentials are configured.")
+    st.caption(
+        "This local trace uses the same trajectory shape submitted to PRISM when credentials are configured."
+    )
 
 with memory_tab:
     st.subheader("Remembered business context")
     contexts = [context for account in result.accounts for context in account.business_context]
     if contexts:
         for context in contexts:
-            st.info(f"**{context.subject}** — {context.description}  \nSource: {context.source or 'unspecified'}")
+            st.info(
+                f"**{context.subject}** — {context.description}  \nSource: {context.source or 'unspecified'}"
+            )
     else:
         st.caption("No relevant context was retrieved for this investigation.")
 
-    all_claims = [claim for account in result.accounts for claim in claim_models(account, transactions)]
+    all_claims = [
+        claim for account in result.accounts for claim in claim_models(account, transactions)
+    ]
     existing_ids = {run.run_id for run in memory.list_investigation_runs()}
     if result.run_id not in existing_ids:
         if st.button("Save investigation run"):
