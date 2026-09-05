@@ -1,0 +1,32 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R07a000,2026-07-16,2026-07,Revenue,123530.14,Acme,subscription,Enterprise
+R07a001,2026-07-09,2026-07,Revenue,126013.22,Globex,subscription,Enterprise
+R07a002,2026-07-12,2026-07,Revenue,124046.35,Stark,subscription,Enterprise
+R07a003,2026-07-20,2026-07,Revenue,126185.99,Initech,subscription,Enterprise
+R07a004,2026-07-20,2026-07,Revenue,123648.18,Umbrella,subscription,SMB
+R07a005,2026-07-04,2026-07,Revenue,124424.45,Hooli,subscription,SMB
+R07a006,2026-07-11,2026-07,Revenue,122985.53,Vandelay,subscription,SMB
+R07a007,2026-07-17,2026-07,Revenue,125206.95,Wonka,subscription,SMB
+O07a000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,
+O07a001,2026-07-15,2026-07,Marketing,90000,Fieldmark,,
+O07a002,2026-07-15,2026-07,Cloud Expense,82000,AWS,,
+O07a003,2026-07-15,2026-07,Rent,40000,Granby Properties,,
+R08b000,2026-08-24,2026-08,Revenue,122743.66,Acme,subscription,Enterprise
+R08b001,2026-08-24,2026-08,Revenue,122937.75,Globex,subscription,Enterprise
+R08b002,2026-08-08,2026-08,Revenue,125578.88,Stark,subscription,Enterprise
+R08b003,2026-08-06,2026-08,Revenue,122683.73,Initech,subscription,Enterprise
+R08b004,2026-08-21,2026-08,Revenue,126629.18,Umbrella,subscription,SMB
+R08b005,2026-08-21,2026-08,Revenue,125146.31,Hooli,subscription,SMB
+R08b006,2026-08-14,2026-08,Revenue,125323.06,Vandelay,subscription,SMB
+R08b007,2026-08-13,2026-08,Revenue,123695.43,Wonka,subscription,SMB
+O08b000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,
+O08b001,2026-08-15,2026-08,Marketing,90000,Fieldmark,,
+O08b002,2026-08-15,2026-08,Cloud Expense,82000,AWS,,
+O08b003,2026-08-15,2026-08,Rent,40000,Granby Properties,,
+NEG0,2026-08-10,2026-08,Revenue,-15000,Credit 0,credit memo,SMB
+NEG1,2026-08-11,2026-08,Revenue,-15000,Credit 1,credit memo,SMB
+NEG2,2026-08-12,2026-08,Revenue,-15000,Credit 2,credit memo,SMB
+NEG3,2026-08-13,2026-08,Revenue,-15000,Credit 3,credit memo,SMB
+NEG4,2026-08-14,2026-08,Revenue,-15000,Credit 4,credit memo,SMB
+NEG5,2026-08-15,2026-08,Revenue,-15000,Credit 5,credit memo,SMB
+NEG6,2026-08-16,2026-08,Revenue,-15000,Credit 6,credit memo,SMB

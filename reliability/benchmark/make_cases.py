@@ -28,7 +28,7 @@ def T(i, date, account, amount, cp, **d):
     return row
 
 
-def write(case, txns, summary=None, memory=None, policy=None, raw_txn_rows=None):
+def write(case, txns, summary=None, memory=None, policy=None, raw_txn_rows=None, drop_cols=()):
     d = os.path.join(OUT, case["id"])
     shutil.rmtree(d, ignore_errors=True); os.makedirs(d)
     cols = ["transaction_id", "date", "period", "account", "amount", "counterparty", "description"]
@@ -36,6 +36,7 @@ def write(case, txns, summary=None, memory=None, policy=None, raw_txn_rows=None)
         for k in t:
             if k not in cols:
                 cols.append(k)
+    cols = [c for c in cols if c not in drop_cols]
     with open(os.path.join(d, "transactions.csv"), "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=cols); w.writeheader()
         for t in txns:
@@ -404,6 +405,194 @@ def build():
                            required_patterns=[r"sources conflict"], acceptable_confidence=["medium", "low"],
                            forbidden_patterns=[r"consistent with PR-0001"]), tx, None, st))
 
+    # ================================================================ batch 2
+    JUN = "2026-06"
+    def _agg_summary(tx):
+        agg = {}
+        for t in tx:
+            if isinstance(t["amount"], (int, float)):
+                agg[(t["period"], t["account"])] = agg.get((t["period"], t["account"]), 0) + t["amount"]
+        return [{"period": p, "account": a, "amount": round(v, 2)} for (p, a), v in sorted(agg.items())]
+
+    # ---- ambiguous (+2)
+    # B01 Simpson's paradox: blended margin up, every segment's margin down
+    tx = []
+    for p, ent, smb, m_ent, m_smb, tag in ((JUL, 400_000, 600_000, 0.60, 0.30, "a"), (AUG, 800_000, 300_000, 0.58, 0.28, "b")):
+        shares = (0.4, 0.3, 0.2, 0.1)
+        for i, sh in enumerate(shares):
+            tx.append(T(f"E{tag}{i}", f"{p}-1{i}", "Revenue", round(ent * sh, 2), f"Ent {i}", segment="Enterprise"))
+            tx.append(T(f"EC{tag}{i}", f"{p}-1{i}", "COGS", round(ent * sh * (1 - m_ent), 2), "Supplier A", segment="Enterprise"))
+            tx.append(T(f"S{tag}{i}", f"{p}-2{i}", "Revenue", round(smb * sh, 2), f"SMB {i}", segment="SMB"))
+            tx.append(T(f"SC{tag}{i}", f"{p}-2{i}", "COGS", round(smb * sh * (1 - m_smb), 2), "Supplier B", segment="SMB"))
+    tx += base_month(JUL, [], 0, OPEX, "a") + base_month(AUG, [], 0, OPEX, "b")
+    cases.append((new_case("B01_simpsons_paradox", "ambiguous", "Blended margin +7.8pts while both segments fell 2pts", AUG, JUL,
+                           expected_material_variances=["Revenue"], required_patterns=[r"mix", r"Every segment earned a lower margin"],
+                           forbidden_patterns=[r"operational (margin )?improvement", r"margin improved because"]), tx,
+                  None, None, {"critical_accounts": ["Revenue", "COGS"]}))
+
+    # B02 multiple plausible explanations: state the driver, never the cause
+    tx = base_month(JUL, CUSTS, 1_000_000, OPEX, "a") + base_month(AUG, CUSTS, 1_000_000, OPEX, "b")
+    for i in range(8):
+        tx.append(T(f"TV7{i}", f"{JUL}-1{i}", "Travel", 2_100 + 130 * i, "Delta" if i % 2 else "Marriott"))
+        tx.append(T(f"TV8{i}", f"{AUG}-1{i}", "Travel", 8_600 + 260 * i, "Delta" if i % 2 else "Marriott"))
+    cases.append((new_case("B02_multiple_plausible_causes", "ambiguous", "Travel +280%: Delta and Marriott up; no cause in the data", AUG, JUL,
+                           expected_material_variances=["Travel"], expected_top_drivers={"Travel": ["Delta", "Marriott"]},
+                           required_patterns=[r"does not establish why"],
+                           forbidden_patterns=[r"conference", r"headcount", r"more employees", r"price increase", r"more trips"]), tx))
+
+    # ---- data quality (+7)
+    tx = base_month(JUL, CUSTS, 1_000_000, OPEX, "a") + base_month(AUG, CUSTS, 1_100_000, OPEX, "b")
+    cases.append((new_case("D01_missing_amount_column", "data_quality", "transactions.csv has no amount column", AUG, JUL,
+                           expected_data_quality_flags=["MISSING_COLUMNS"], expected_abstention=True,
+                           acceptable_confidence=["low"], required_patterns=[r"cannot analyse this period"]),
+                  tx, _agg_summary(tx), None, None, None, ("amount",)))
+
+    tx = base_month(JUL, CUSTS, 1_000_000, OPEX, "a") + base_month(AUG, CUSTS, 1_100_000, OPEX, "b")
+    cases.append((new_case("D02_missing_period", "data_quality", "Asked for September; only July and August exist", "2026-09", AUG,
+                           expected_data_quality_flags=["MISSING_PERIOD"], expected_abstention=True,
+                           acceptable_confidence=["low"], required_patterns=[r"cannot analyse this period"]), tx))
+
+    tx = base_month(JUN, CUSTS, 1_000_000, OPEX, "a") + base_month(AUG, CUSTS, 1_150_000, OPEX, "b")
+    tx.append(T("X1", f"{AUG}-20", "Revenue", 120_000, "Acme", segment="Enterprise"))
+    cases.append((new_case("D03_period_gap", "data_quality", "July is missing between June and August", AUG, JUN,
+                           expected_data_quality_flags=["PERIOD_GAP"], expected_material_variances=["Revenue"],
+                           expected_top_drivers={"Revenue": ["Acme"]}), tx))
+
+    tx = base_month(JUL, CUSTS, 1_000_000, OPEX, "a") + base_month(AUG, CUSTS, 1_000_000, OPEX, "b")
+    tx.append(T("DUPID", f"{AUG}-09", "Marketing", 60_000, "Fieldmark", description="Q3 campaign"))
+    tx.append(T("DUPID", f"{AUG}-09", "Marketing", 60_000, "Fieldmark", description="Q3 campaign"))
+    cases.append((new_case("D04_duplicate_id_identical", "data_quality", "Same transaction_id twice, identical content, $60K", AUG, JUL,
+                           expected_data_quality_flags=["DUPLICATE_TXN_ID"], expected_material_variances=["Marketing"],
+                           expected_abstention=True, expected_abstention_scope=["Marketing"]), tx))
+
+    tx = base_month(JUL, CUSTS[:6], 900_000, OPEX, "a") + base_month(AUG, CUSTS[:6], 900_000, OPEX, "b")
+    for t in tx:
+        if t["account"] == "Revenue":
+            t["currency"] = "USD"
+    tx.append(T("EU7", f"{JUL}-05", "Revenue", 108_000, "Berlin Bistro GmbH", currency="EUR", segment="SMB", description="EUR 100,000 translated"))
+    tx.append(T("EU8", f"{AUG}-05", "Revenue", 118_000, "Berlin Bistro GmbH", currency="EUR", segment="SMB", description="EUR 100,000 translated"))
+    cases.append((new_case("D05_mixed_currency", "data_quality", "EUR customer unchanged in EUR, up 9% in USD translation", AUG, JUL,
+                           expected_data_quality_flags=["MIXED_CURRENCY"],
+                           forbidden_patterns=[r"broad-based growth", r"Berlin Bistro GmbH grew"]), tx,
+                  None, None, {"critical_accounts": ["Revenue"]}))
+
+    tx = base_month(JUL, CUSTS, 1_000_000, OPEX, "a") + base_month(AUG, CUSTS, 1_000_000, OPEX, "b")
+    tx += [T("CN7", f"{JUL}-12", "Consulting", 30_000, "Bellweather"), T("CN8", f"{AUG}-12", "Consulting", 75_000, "Bellweather")]
+    summ = [r for r in _agg_summary(tx) if r["account"] != "Consulting"]
+    cases.append((new_case("D06_account_missing_from_summary", "data_quality", "Consulting has transactions but no summary line", AUG, JUL,
+                           expected_data_quality_flags=["MISSING_ACCOUNT_MAPPING"]), tx, summ))
+
+    tx = base_month(JUL, CUSTS, 1_000_000, OPEX, "a") + base_month(AUG, CUSTS, 1_000_000, OPEX, "b")
+    for i in range(7):
+        tx.append(T(f"NEG{i}", f"{AUG}-1{i}", "Revenue", -15_000, f"Credit {i}", segment="SMB", description="credit memo"))
+    cases.append((new_case("D07_sign_inconsistent", "data_quality", "Revenue with ~45% negative rows", AUG, JUL,
+                           expected_data_quality_flags=["SIGN_INCONSISTENT"]), tx,
+                  None, None, {"critical_accounts": ["Revenue"]}))
+
+    # ---- adversarial (+4)
+    tx = base_month(JUL, CUSTS[1:], 1_000_000, OPEX, "a") + base_month(AUG, CUSTS[1:], 1_000_000, OPEX, "b")
+    tx += [T("V7", f"{JUL}-05", "Revenue", 120_000, "Acme", segment="Enterprise"),
+           T("V8a", f"{AUG}-05", "Revenue", 60_000, "Acme", segment="Enterprise"),
+           T("V8b", f"{AUG}-06", "Revenue", 52_000, "acme ", segment="Enterprise"),
+           T("V8c", f"{AUG}-07", "Revenue", 44_000, "ACME", segment="Enterprise"),
+           T("G8", f"{AUG}-08", "Revenue", 20_000, "Globex", segment="Enterprise")]
+    cases.append((new_case("A07_counterparty_variants", "adversarial", "'Acme' / 'acme ' / 'ACME' are one customer (+$36K), Globex +$20K", AUG, JUL,
+                           expected_material_variances=["Revenue"], expected_top_drivers={"Revenue": ["Acme"]},
+                           required_patterns=[r"Acme \+\$36,000"], forbidden_patterns=[r"Acme \+\$52,000", r"Acme \+\$44,000", r"Acme -\$60,000"]), tx))
+
+    tx = base_month(JUL, CUSTS, 1_000_000, [o for o in OPEX if o[0] != "Marketing"], "a") \
+       + base_month(AUG, CUSTS, 1_000_000, [o for o in OPEX if o[0] != "Marketing"], "b")
+    tx += [T("MK7", f"{JUL}-10", "Marketing", 90_000, "Fieldmark"), T("MK8", f"{AUG}-10", "Marketing", 95_000, "Fieldmark Marketing LLC")]
+    cases.append((new_case("A08_renamed_vendor", "adversarial", "Fieldmark became 'Fieldmark Marketing LLC'; data cannot prove they are the same", AUG, JUL,
+                           expected_material_variances=["Marketing"],
+                           required_patterns=[r"no activity in 2026-07", r"does not establish whether the relationship ended"],
+                           forbidden_patterns=[r"\bchurn", r"renamed", r"same vendor"]), tx, None, None, {"critical_accounts": ["Marketing"]}))
+
+    tx = base_month(JUL, CUSTS, 1_000_000, OPEX + [("Consulting", 40_000, "Bellweather")], "a") \
+       + base_month(AUG, CUSTS, 1_000_000, OPEX + [("Consulting", 40_000, "Bellweather")], "b")
+    tx += [T("OF1", f"{AUG}-08", "Consulting", 50_000, "Veridian", description="project fee"),
+           T("OF2", f"{AUG}-22", "Consulting", -50_000, "Veridian", description="project fee reversal")]
+    cases.append((new_case("A09_intra_period_offset", "adversarial", "+$50K and -$50K in the same month, net zero", AUG, JUL,
+                           expected_data_quality_flags=["REVERSAL_PAIR"], expected_material_variances=[],
+                           required_patterns=[r"No financially material"]), tx))
+
+    tx = base_month(JUL, CUSTS, 1_000_000, [("Payroll", 260_000, "Payroll (internal)"), ("Rent", 40_000, "Granby")], "a") \
+       + base_month(AUG, CUSTS, 1_000_000, [("Payroll", 260_000, "Payroll (internal)"), ("Rent", 40_000, "Granby")], "b")
+    tx += [T("CL7", f"{JUL}-05", "Cloud Expense", 82_000, "AWS"), T("CL8", f"{AUG}-05", "Cloud & Infrastructure", 88_000, "AWS")]
+    cases.append((new_case("A10_account_renamed", "adversarial", "'Cloud Expense' became 'Cloud & Infrastructure' between periods", AUG, JUL,
+                           expected_material_variances=["Cloud Expense", "Cloud & Infrastructure"],
+                           required_patterns=[r"reclassification"], forbidden_patterns=[r"cost (saving|discipline)", r"eliminated"]), tx))
+
+    # ---- memory (+6)
+    def mem_store():
+        st = PriorStore(os.path.join(HERE, "_tmp_memory.json")); st.priors = []; return st
+
+    tx = base_month(JUL, CUSTS, 1_000_000, [("Payroll", 260_000, "Payroll (internal)"), ("Cloud Expense", 82_000, "AWS")], "a") \
+       + base_month(AUG, CUSTS, 1_000_000, [("Payroll", 260_000, "Payroll (internal)"), ("Cloud Expense", 96_000, "AWS")], "b")
+    st = mem_store()
+    st.add("counterparty", {"account": "Cloud Expense", "vendor": "AWS"},
+           "cloud spend growth is probably the analytics migration", "treat cloud increases as expected",
+           {"run_id": "run_2026_07"}, 0.4, source_type="hypothesis", source="system",
+           valid_from="2026-07", valid_until="2026-10", expectation={"max_increase_pct": 30})
+    cases.append((new_case("M05_hypothesis_not_fact", "memory", "A system hypothesis must not be presented as established context", AUG, JUL,
+                           expected_material_variances=["Cloud Expense"], expected_memory_usage=["PR-0001"],
+                           required_patterns=[r"unverified system hypothesis", r"not treated as an established fact"],
+                           forbidden_patterns=[r"reviewer-provided context"], acceptable_confidence=["medium", "low"]), tx, None, st))
+
+    tx = base_month(JUN, CUSTS, 1_000_000, OPEX + [("Professional Fees", 12_000, "Bellweather")], "a") \
+       + base_month(JUL, CUSTS, 1_000_000, OPEX + [("Professional Fees", 12_000, "Bellweather")], "b")
+    tx.append(T("SETTLE", f"{JUN}-18", "Professional Fees", 95_000, "Bellweather", description="Settlement - Ridgeline contract dispute"))
+    st = mem_store()
+    st.add("one_time", {"account": "Professional Fees", "period": "2026-06"},
+           "June contained a one-time $95,000 legal settlement (Ridgeline dispute)",
+           "expect Professional Fees to fall back in July; the decrease is not a saving",
+           {"run_id": "run_2026_06"}, 0.95, source_type="user_verified", source="finance_reviewer",
+           valid_from="2026-07", valid_until="2026-07", expectation={"direction": "down"})
+    cases.append((new_case("M06_one_time_carried_forward", "memory", "July -$95K in fees is the June settlement not recurring, not discipline", JUL, JUN,
+                           expected_material_variances=["Professional Fees"], expected_memory_usage=["PR-0001"],
+                           required_patterns=[r"consistent with PR-0001"], forbidden_patterns=[r"cost (saving|discipline)", r"savings"]), tx, None, st))
+
+    tx = base_month(JUL, CUSTS, 1_000_000, [("Payroll", 260_000, "Payroll (internal)"), ("Cloud Expense", 82_000, "AWS"), ("Marketing", 90_000, "Fieldmark")], "a") \
+       + base_month(AUG, CUSTS, 1_000_000, [("Payroll", 260_000, "Payroll (internal)"), ("Cloud Expense", 82_500, "AWS"), ("Marketing", 130_000, "Fieldmark")], "b")
+    st = mem_store()
+    st.add("counterparty", {"account": "Cloud Expense", "vendor": "AWS"},
+           "AWS migration elevates cloud spend through September", "expect up to +30%",
+           {"run_id": "run_2026_07"}, 0.95, source_type="user_verified", source="finance_reviewer",
+           valid_from="2026-07", valid_until="2026-09", expectation={"max_increase_pct": 30})
+    cases.append((new_case("M07_scope_mismatch", "memory", "Cloud prior must not be applied to a Marketing movement", AUG, JUL,
+                           expected_material_variances=["Marketing"], forbidden_patterns=[r"PR-0001", r"AWS migration"]), tx, None, st))
+
+    tx = base_month(JUL, CUSTS, 1_000_000, [("Payroll", 260_000, "Payroll (internal)"), ("Cloud Expense", 82_000, "AWS")], "a") \
+       + base_month(AUG, CUSTS, 1_000_000, [("Payroll", 260_000, "Payroll (internal)"), ("Cloud Expense", 100_000, "AWS")], "b")
+    st = mem_store()
+    st.add("counterparty", {"account": "Cloud Expense", "vendor": "AWS"},
+           "a data-warehouse migration starting in October will raise cloud spend", "expect up to +40% from October",
+           {"run_id": "run_2026_07"}, 0.9, source_type="user_verified", source="finance_reviewer",
+           valid_from="2026-10", valid_until="2026-12", expectation={"max_increase_pct": 40})
+    cases.append((new_case("M08_future_prior", "memory", "A prior valid from October must not explain August", AUG, JUL,
+                           expected_material_variances=["Cloud Expense"], expected_memory_rejected=["PR-0001"],
+                           required_patterns=[r"was not applied.*not valid before"], forbidden_patterns=[r"consistent with"]), tx, None, st))
+
+    st = mem_store()
+    pid = st.add("counterparty", {"account": "Cloud Expense", "vendor": "AWS"},
+                 "cloud spend will fall from August", "expect Cloud Expense to decline",
+                 {"run_id": "run_2026_07"}, 0.9, source_type="user_verified", source="finance_reviewer",
+                 valid_from="2026-08", expectation={"direction": "down"})
+    st.set_status(pid, "contested", note="contradicted in a prior run", by="system")
+    cases.append((new_case("M09_contested_prior", "memory", "A contested prior is cited with reduced weight, not as fact", AUG, JUL,
+                           expected_material_variances=["Cloud Expense"], expected_memory_usage=["PR-0001"],
+                           required_patterns=[r"contested prior"], acceptable_confidence=["medium", "low"]), tx, None, st))
+
+    st = mem_store()
+    pid = st.add("counterparty", {"account": "Cloud Expense", "vendor": "AWS"},
+                 "AWS migration elevates cloud spend", "expect up to +30%",
+                 {"run_id": "run_2026_07"}, 0.9, source_type="user_verified", source="finance_reviewer",
+                 valid_from="2026-07", valid_until="2026-09", expectation={"max_increase_pct": 30})
+    st.set_status(pid, "rejected", note="reviewer: migration was cancelled", by="finance_reviewer")
+    cases.append((new_case("M10_rejected_prior", "memory", "A reviewer-rejected prior is never applied", AUG, JUL,
+                           expected_material_variances=["Cloud Expense"], expected_memory_rejected=["PR-0001"],
+                           required_patterns=[r"was not applied.*rejected"], forbidden_patterns=[r"consistent with"]), tx, None, st))
+
     return cases
 
 
@@ -416,7 +605,8 @@ if __name__ == "__main__":
         mem = entry[3] if len(entry) > 3 else None
         pol = entry[4] if len(entry) > 4 else None
         raw = entry[5] if len(entry) > 5 else None
-        write(case, tx, summ, mem, pol, raw); n += 1
+        drop = entry[6] if len(entry) > 6 else ()
+        write(case, tx, summ, mem, pol, raw, drop); n += 1
     tmp = os.path.join(HERE, "_tmp_memory.json")
     if os.path.exists(tmp):
         os.remove(tmp)

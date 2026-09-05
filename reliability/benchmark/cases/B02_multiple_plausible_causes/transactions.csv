@@ -1,0 +1,41 @@
+transaction_id,date,period,account,amount,counterparty,description,segment
+R07a000,2026-07-15,2026-07,Revenue,124217.99,Acme,subscription,Enterprise
+R07a001,2026-07-20,2026-07,Revenue,124557.9,Globex,subscription,Enterprise
+R07a002,2026-07-08,2026-07,Revenue,123979.49,Stark,subscription,Enterprise
+R07a003,2026-07-04,2026-07,Revenue,122514.59,Initech,subscription,Enterprise
+R07a004,2026-07-19,2026-07,Revenue,126621.19,Umbrella,subscription,SMB
+R07a005,2026-07-10,2026-07,Revenue,123159.29,Hooli,subscription,SMB
+R07a006,2026-07-20,2026-07,Revenue,124714.42,Vandelay,subscription,SMB
+R07a007,2026-07-24,2026-07,Revenue,126808.1,Wonka,subscription,SMB
+O07a000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,
+O07a001,2026-07-15,2026-07,Marketing,90000,Fieldmark,,
+O07a002,2026-07-15,2026-07,Cloud Expense,82000,AWS,,
+O07a003,2026-07-15,2026-07,Rent,40000,Granby Properties,,
+R08b000,2026-08-02,2026-08,Revenue,123372.49,Acme,subscription,Enterprise
+R08b001,2026-08-02,2026-08,Revenue,127422.51,Globex,subscription,Enterprise
+R08b002,2026-08-13,2026-08,Revenue,125494.54,Stark,subscription,Enterprise
+R08b003,2026-08-03,2026-08,Revenue,124099.92,Initech,subscription,Enterprise
+R08b004,2026-08-09,2026-08,Revenue,124657.49,Umbrella,subscription,SMB
+R08b005,2026-08-05,2026-08,Revenue,123708.25,Hooli,subscription,SMB
+R08b006,2026-08-08,2026-08,Revenue,127403.27,Vandelay,subscription,SMB
+R08b007,2026-08-22,2026-08,Revenue,127160.08,Wonka,subscription,SMB
+O08b000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,
+O08b001,2026-08-15,2026-08,Marketing,90000,Fieldmark,,
+O08b002,2026-08-15,2026-08,Cloud Expense,82000,AWS,,
+O08b003,2026-08-15,2026-08,Rent,40000,Granby Properties,,
+TV70,2026-07-10,2026-07,Travel,2100,Marriott,,
+TV80,2026-08-10,2026-08,Travel,8600,Marriott,,
+TV71,2026-07-11,2026-07,Travel,2230,Delta,,
+TV81,2026-08-11,2026-08,Travel,8860,Delta,,
+TV72,2026-07-12,2026-07,Travel,2360,Marriott,,
+TV82,2026-08-12,2026-08,Travel,9120,Marriott,,
+TV73,2026-07-13,2026-07,Travel,2490,Delta,,
+TV83,2026-08-13,2026-08,Travel,9380,Delta,,
+TV74,2026-07-14,2026-07,Travel,2620,Marriott,,
+TV84,2026-08-14,2026-08,Travel,9640,Marriott,,
+TV75,2026-07-15,2026-07,Travel,2750,Delta,,
+TV85,2026-08-15,2026-08,Travel,9900,Delta,,
+TV76,2026-07-16,2026-07,Travel,2880,Marriott,,
+TV86,2026-08-16,2026-08,Travel,10160,Marriott,,
+TV77,2026-07-17,2026-07,Travel,3010,Delta,,
+TV87,2026-08-17,2026-08,Travel,10420,Delta,,

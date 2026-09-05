@@ -2,27 +2,28 @@
   "priors": [
     {
       "id": "PR-0001",
-      "type": "counterparty",
+      "type": "one_time",
       "scope": {
-        "account": "Cloud Expense",
-        "vendor": "AWS"
+        "account": "Professional Fees",
+        "period": "2026-06"
       },
-      "statement": "cloud spend will fall from August because the migration completed and duplicate environments were shut down",
-      "implication": "expect Cloud Expense to decline",
+      "statement": "June contained a one-time $95,000 legal settlement (Ridgeline dispute)",
+      "implication": "expect Professional Fees to fall back in July; the decrease is not a saving",
       "basis": {
-        "run_id": "run_2026_07"
+        "run_id": "run_2026_06"
       },
       "observations": [
         {
-          "run_id": "run_2026_07"
+          "run_id": "run_2026_06"
         }
       ],
-      "confidence": 0.9,
+      "confidence": 0.95,
       "applies_to": {
-        "from_period": "2026-08"
+        "from_period": "2026-07",
+        "to_period": "2026-07"
       },
-      "valid_from": "2026-08",
-      "valid_until": null,
+      "valid_from": "2026-07",
+      "valid_until": "2026-07",
       "expectation": {
         "direction": "down"
       },

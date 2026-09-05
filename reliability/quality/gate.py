@@ -122,6 +122,14 @@ def run_gate(ds, period, prior_period):
         if len(rows) < 2 or len({r["txn_id"] for r in rows}) < 2:
             continue
         rows = sorted(rows, key=lambda r: r["date"])
+        if len(rows) >= 3:
+            # Three or more identical charges are a series (per-diems, instalments,
+            # daily fees), not a duplicated pair. Note it; do not block on it.
+            flags.append(_flag("RECURRING_SERIES", "info",
+                               f"{len(rows)} identical {rows[0]['gl_account']} charges of "
+                               f"{rows[0]['amount']:,.2f} from {rows[0]['counterparty_name']} in {rows[0]['period']}",
+                               {"transaction_ids": [r["txn_id"] for r in rows], "account": rows[0]["gl_account"]}))
+            continue
         for a, b in zip(rows, rows[1:]):
             da, db = _d(a), _d(b)
             if da and db and abs((db - da).days) <= 2 and a["txn_id"] != b["txn_id"]:

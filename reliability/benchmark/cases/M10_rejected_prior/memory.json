@@ -7,8 +7,8 @@
         "account": "Cloud Expense",
         "vendor": "AWS"
       },
-      "statement": "cloud spend will fall from August because the migration completed and duplicate environments were shut down",
-      "implication": "expect Cloud Expense to decline",
+      "statement": "AWS migration elevates cloud spend",
+      "implication": "expect up to +30%",
       "basis": {
         "run_id": "run_2026_07"
       },
@@ -17,27 +17,38 @@
           "run_id": "run_2026_07"
         }
       ],
-      "confidence": 0.9,
+      "confidence": 0.0,
       "applies_to": {
-        "from_period": "2026-08"
+        "from_period": "2026-07",
+        "to_period": "2026-09"
       },
-      "valid_from": "2026-08",
-      "valid_until": null,
+      "valid_from": "2026-07",
+      "valid_until": "2026-09",
       "expectation": {
-        "direction": "down"
+        "max_increase_pct": 30
       },
-      "status": "proposed",
+      "status": "rejected",
       "source_type": "user_verified",
       "source": "finance_reviewer",
       "verification_status": "verified",
-      "version": 1,
-      "history": [],
+      "version": 2,
+      "history": [
+        {
+          "version": 1,
+          "status": "proposed",
+          "confidence": 0.9,
+          "statement": "AWS migration elevates cloud spend",
+          "changed_at": "2026-09-05T16:44:25+00:00",
+          "by": "finance_reviewer",
+          "note": "reviewer: migration was cancelled"
+        }
+      ],
       "times_observed": 1,
       "times_applied": 0,
       "learned_at": "2026-09-05T16:44:25+00:00",
       "last_observed_at": "2026-09-05T16:44:25+00:00",
       "last_confirmed_at": null,
-      "user_note": null
+      "user_note": "reviewer: migration was cancelled"
     }
   ],
   "runs": [],

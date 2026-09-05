@@ -7,7 +7,7 @@
         "account": "Cloud Expense",
         "vendor": "AWS"
       },
-      "statement": "cloud spend will fall from August because the migration completed and duplicate environments were shut down",
+      "statement": "cloud spend will fall from August",
       "implication": "expect Cloud Expense to decline",
       "basis": {
         "run_id": "run_2026_07"
@@ -17,7 +17,7 @@
           "run_id": "run_2026_07"
         }
       ],
-      "confidence": 0.9,
+      "confidence": 0.45,
       "applies_to": {
         "from_period": "2026-08"
       },
@@ -26,18 +26,28 @@
       "expectation": {
         "direction": "down"
       },
-      "status": "proposed",
+      "status": "contested",
       "source_type": "user_verified",
       "source": "finance_reviewer",
-      "verification_status": "verified",
-      "version": 1,
-      "history": [],
+      "verification_status": "contested",
+      "version": 2,
+      "history": [
+        {
+          "version": 1,
+          "status": "proposed",
+          "confidence": 0.9,
+          "statement": "cloud spend will fall from August",
+          "changed_at": "2026-09-05T16:44:25+00:00",
+          "by": "system",
+          "note": "contradicted in a prior run"
+        }
+      ],
       "times_observed": 1,
       "times_applied": 0,
       "learned_at": "2026-09-05T16:44:25+00:00",
       "last_observed_at": "2026-09-05T16:44:25+00:00",
       "last_confirmed_at": null,
-      "user_note": null
+      "user_note": "contradicted in a prior run"
     }
   ],
   "runs": [],

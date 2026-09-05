@@ -52,7 +52,7 @@ def context_confidence(priors_used, detector_findings, contradictions=0, causal_
 
 
 def classify(data, attribution, context, evidence_coverage, has_blocker=False,
-             unexplained_share=None):
+             unexplained_share=None, weak_context=False):
     """Explicit, inspectable rules. Returns (verdict, reasons[])."""
     reasons = []
     if has_blocker:
@@ -66,6 +66,8 @@ def classify(data, attribution, context, evidence_coverage, has_blocker=False,
         reasons.append(f"only {attribution:.0%} of the movement is attributed")
     if unexplained_share is not None and unexplained_share > 0.3:
         reasons.append(f"{unexplained_share:.0%} of the movement remains unexplained")
+    if weak_context:
+        reasons.append("interpretation rests on a contested or unverified prior")
 
     if data >= 0.9 and attribution >= 0.8 and (evidence_coverage or 0) >= 100 and not reasons:
         return HIGH, ["data reconciled", f"{attribution:.0%} attributed", "all claims verified"]
@@ -75,13 +77,14 @@ def classify(data, attribution, context, evidence_coverage, has_blocker=False,
 
 
 def assemble(gate, variance, attributed, priors_used, detector_findings, claimset,
-             contradictions=0, causal_claims=0, causal_supported=0, blocked=False):
+             contradictions=0, causal_claims=0, causal_supported=0, blocked=False,
+             weak_context=False):
     attr, unexplained = attribution_confidence(variance, attributed, contradictions)
     ctx = context_confidence(priors_used, detector_findings, contradictions,
                              causal_claims, causal_supported)
     cov = claimset.evidence_coverage() if claimset else None
     share = (unexplained / abs(variance)) if variance else None
-    verdict, why = classify(gate["data_confidence"], attr, ctx, cov, blocked, share)
+    verdict, why = classify(gate["data_confidence"], attr, ctx, cov, blocked, share, weak_context)
     return {
         "data": gate["data_confidence"],
         "attribution": attr,

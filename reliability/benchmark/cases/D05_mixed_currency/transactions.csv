@@ -1,0 +1,23 @@
+transaction_id,date,period,account,amount,counterparty,description,segment,currency
+R07a000,2026-07-26,2026-07,Revenue,147108.2,Acme,subscription,Enterprise,USD
+R07a001,2026-07-16,2026-07,Revenue,152868.35,Globex,subscription,Enterprise,USD
+R07a002,2026-07-02,2026-07,Revenue,151888.47,Stark,subscription,Enterprise,USD
+R07a003,2026-07-05,2026-07,Revenue,150145.59,Initech,subscription,SMB,USD
+R07a004,2026-07-17,2026-07,Revenue,151734.0,Umbrella,subscription,SMB,USD
+R07a005,2026-07-27,2026-07,Revenue,151856.47,Hooli,subscription,SMB,USD
+O07a000,2026-07-15,2026-07,Payroll,260000,Payroll (internal),,,
+O07a001,2026-07-15,2026-07,Marketing,90000,Fieldmark,,,
+O07a002,2026-07-15,2026-07,Cloud Expense,82000,AWS,,,
+O07a003,2026-07-15,2026-07,Rent,40000,Granby Properties,,,
+R08b000,2026-08-05,2026-08,Revenue,147547.64,Acme,subscription,Enterprise,USD
+R08b001,2026-08-14,2026-08,Revenue,148613.31,Globex,subscription,Enterprise,USD
+R08b002,2026-08-19,2026-08,Revenue,147557.12,Stark,subscription,Enterprise,USD
+R08b003,2026-08-18,2026-08,Revenue,151975.26,Initech,subscription,SMB,USD
+R08b004,2026-08-14,2026-08,Revenue,152736.24,Umbrella,subscription,SMB,USD
+R08b005,2026-08-05,2026-08,Revenue,152141.79,Hooli,subscription,SMB,USD
+O08b000,2026-08-15,2026-08,Payroll,260000,Payroll (internal),,,
+O08b001,2026-08-15,2026-08,Marketing,90000,Fieldmark,,,
+O08b002,2026-08-15,2026-08,Cloud Expense,82000,AWS,,,
+O08b003,2026-08-15,2026-08,Rent,40000,Granby Properties,,,
+EU7,2026-07-05,2026-07,Revenue,108000,Berlin Bistro GmbH,"EUR 100,000 translated",SMB,EUR
+EU8,2026-08-05,2026-08,Revenue,118000,Berlin Bistro GmbH,"EUR 100,000 translated",SMB,EUR

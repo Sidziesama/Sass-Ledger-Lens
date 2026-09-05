@@ -1,0 +1,42 @@
+{
+  "id": "A07_counterparty_variants",
+  "category": "adversarial",
+  "title": "'Acme' / 'acme ' / 'ACME' are one customer (+$36K), Globex +$20K",
+  "period": "2026-08",
+  "prior_period": "2026-07",
+  "ground_truth": {
+    "expected_material_variances": [
+      "Revenue"
+    ],
+    "expected_immaterial": [],
+    "expected_top_drivers": {
+      "Revenue": [
+        "Acme"
+      ]
+    },
+    "expected_unexplained_amount": null,
+    "expected_unexplained_min_share": null,
+    "expected_data_quality_flags": [],
+    "expected_no_data_quality_flags": [],
+    "expected_memory_usage": [],
+    "expected_memory_rejected": [],
+    "forbidden_claims": [],
+    "forbidden_patterns": [
+      "Acme \\+\\$52,000",
+      "Acme \\+\\$44,000",
+      "Acme -\\$60,000"
+    ],
+    "required_patterns": [
+      "Acme \\+\\$36,000"
+    ],
+    "acceptable_confidence": [
+      "high",
+      "medium",
+      "low"
+    ],
+    "expected_abstention": false,
+    "expected_abstention_scope": [],
+    "max_tool_calls": 30,
+    "notes": ""
+  }
+}

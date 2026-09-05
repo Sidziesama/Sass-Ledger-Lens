@@ -1,0 +1,34 @@
+{
+  "id": "A09_intra_period_offset",
+  "category": "adversarial",
+  "title": "+$50K and -$50K in the same month, net zero",
+  "period": "2026-08",
+  "prior_period": "2026-07",
+  "ground_truth": {
+    "expected_material_variances": [],
+    "expected_immaterial": [],
+    "expected_top_drivers": {},
+    "expected_unexplained_amount": null,
+    "expected_unexplained_min_share": null,
+    "expected_data_quality_flags": [
+      "REVERSAL_PAIR"
+    ],
+    "expected_no_data_quality_flags": [],
+    "expected_memory_usage": [],
+    "expected_memory_rejected": [],
+    "forbidden_claims": [],
+    "forbidden_patterns": [],
+    "required_patterns": [
+      "No financially material"
+    ],
+    "acceptable_confidence": [
+      "high",
+      "medium",
+      "low"
+    ],
+    "expected_abstention": false,
+    "expected_abstention_scope": [],
+    "max_tool_calls": 30,
+    "notes": ""
+  }
+}

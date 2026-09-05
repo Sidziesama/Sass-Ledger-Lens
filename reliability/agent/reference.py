@@ -89,18 +89,29 @@ def _decompose(ds, p0, p1, account_key, dim, where=None):
     drill Revenue -> Enterprise -> Acme instead of stopping at the segment.
     """
     a, b, ids_b, ids_a, cnt = defaultdict(float), defaultdict(float), defaultdict(list), defaultdict(list), 0
+    names = {}
+
+    def keyof(t):
+        # "Acme", "acme " and "ACME" are one customer. Group on the normalized
+        # key, display the first spelling seen.
+        if dim == "counterparty":
+            k = t["counterparty_id"] or "(blank)"
+            names.setdefault(k, t["counterparty_name"] or "(blank)")
+            return k
+        return _dim_value(t, dim) or "(blank)"
+
     for t in ds.txns(p0):
         if t["account_key"] == account_key and (where is None or where(t)):
-            k = _dim_value(t, dim) or "(blank)"
+            k = keyof(t)
             a[k] += t["amount"]; ids_a[k].append(t["txn_id"])
     for t in ds.txns(p1):
         if t["account_key"] == account_key and (where is None or where(t)):
-            k = _dim_value(t, dim) or "(blank)"
+            k = keyof(t)
             b[k] += t["amount"]; ids_b[k].append(t["txn_id"]); cnt += 1
     rows = []
     for k in set(a) | set(b):
         pa, pb = a.get(k, 0.0), b.get(k, 0.0)
-        rows.append({"name": k, "prior": round(pa, 2), "current": round(pb, 2),
+        rows.append({"name": names.get(k, k), "prior": round(pa, 2), "current": round(pb, 2),
                      "change": round(pb - pa, 2),
                      "change_pct": round((pb - pa) / abs(pa) * 100, 1) if pa else None,
                      "status": "new" if not pa and pb else "inactive" if pa and not pb
@@ -117,6 +128,48 @@ def _decompose(ds, p0, p1, account_key, dim, where=None):
             "top3_share": round(top3, 4), "txn_count_current": cnt,
             "blank_share": round(sum(r["change"] for r in rows if r["name"] == "(blank)") / total, 3)
             if total else 0.0}
+
+
+def _margin_bridge(ds, p0, p1):
+    """Gross-margin % bridge by any dimension shared between Revenue and COGS rows.
+
+        mix  = sum(w1*m0) - sum(w0*m0)     what we sold changed
+        rate = sum(w1*m1) - sum(w1*m0)     each thing earned a different margin
+    """
+    out = []
+    for dim in ("segment", "category", "product"):
+        if dim not in ds.dimensions:
+            continue
+        rev, cogs = {p0: defaultdict(float), p1: defaultdict(float)}, {p0: defaultdict(float), p1: defaultdict(float)}
+        for p in (p0, p1):
+            for t in ds.txns(p):
+                k = t.get(dim) or ""
+                if not k:
+                    continue
+                if t["statement_section"] == "Revenue":
+                    rev[p][k] += t["amount"]
+                elif t["statement_section"] == "COGS":
+                    cogs[p][k] += t["amount"]
+        if not cogs[p0] or not cogs[p1] or not rev[p0] or not rev[p1]:
+            continue
+        keys = sorted(set(rev[p0]) | set(rev[p1]))
+        R0, R1 = sum(rev[p0].values()), sum(rev[p1].values())
+        if not R0 or not R1:
+            continue
+        m0 = {k: (rev[p0][k] - cogs[p0][k]) / rev[p0][k] if rev[p0].get(k) else 0.0 for k in keys}
+        m1 = {k: (rev[p1][k] - cogs[p1][k]) / rev[p1][k] if rev[p1].get(k) else 0.0 for k in keys}
+        w0 = {k: rev[p0].get(k, 0.0) / R0 for k in keys}
+        w1 = {k: rev[p1].get(k, 0.0) / R1 for k in keys}
+        b0, b1 = sum(w0[k] * m0[k] for k in keys), sum(w1[k] * m1[k] for k in keys)
+        mix = sum(w1[k] * m0[k] for k in keys) - b0
+        rate = b1 - sum(w1[k] * m0[k] for k in keys)
+        total = b1 - b0
+        present = [k for k in keys if rev[p0].get(k) and rev[p1].get(k)]
+        opposite = bool(present) and all((m1[k] - m0[k]) * total < 0 for k in present)
+        out.append({"dimension": dim, "m0": round(b0 * 100, 2), "m1": round(b1 * 100, 2),
+                    "total_bps": round(total * 1e4, 1), "mix_bps": round(mix * 1e4, 1),
+                    "rate_bps": round(rate * 1e4, 1), "all_rates_opposite": opposite})
+    return out
 
 
 def _rank(ds, p0, p1, gate, policy):
@@ -241,6 +294,7 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
 
     unexplained, abstained_scope = {}, []
     total_attr, total_var = 0.0, 0.0
+    weak_context = False
     detector_findings = []
     sentences = []
 
@@ -351,6 +405,14 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
                                      transaction_ids=(up["txn_ids"] + dn["txn_ids"])[:12]))
                 c.driver_amount = None
                 sentences.append(f"{txt} [{c.id}]"); tr.event("driver_found", account=acct, kind="offsetting")
+                for x in best["opposing"][:2]:
+                    if x["status"] == "inactive" and abs(x["change"]) >= 0.2 * max(gross_pos, gross_neg):
+                        txt = (f"{x['name']} had {_money(x['prior'])} in {prior_period} and no activity in {period}; "
+                               f"the data does not establish whether the relationship ended.")
+                        cx = claims.add(Claim(txt, account=acct, variance=V, driver_amount=x["change"], drivers=[x["name"]],
+                                              kind="attribution", detector="inactive", confidence=1.0,
+                                              numbers=[x["prior"]], transaction_ids=x["txn_ids"][:8]))
+                        sentences.append(f"{txt} [{cx.id}]")
 
             same = best["same"]
             if best["top3_share"] < DISTRIBUTED_TOP3 and best["members"] >= DISTRIBUTED_MIN_MEMBERS:
@@ -521,6 +583,17 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
                         store.set_status(p["id"], "contested", note=f"contradicted in {period}", by="system")
             else:
                 txt = f"Context from memory {p['id']} applies: {p['statement']}."
+            st, src = p.get("status"), p.get("source_type", "system_inferred")
+            if src != "user_verified":
+                txt = txt.replace("reviewer-provided context", "stored context")
+            if st == "contested":
+                txt = (f"A contested prior, {p['id']}, previously contradicted by evidence and carrying reduced "
+                       f"weight, would read: {txt}")
+                weak_context = True
+            elif src == "hypothesis":
+                txt = (f"An unverified system hypothesis, {p['id']}, not confirmed by a reviewer, would read: "
+                       f"{txt} It is not treated as an established fact.")
+                weak_context = True
             c = claims.add(Claim(txt, account=acct, kind="context", prior_ids=[p["id"]],
                                  confidence=p["confidence"],
                                  numbers=[r["variance_pct"], (p.get("expectation") or {}).get("max_increase_pct"), V]))
@@ -553,6 +626,27 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
         tr.event("investigation_stopped", account=acct,
                  reason=f"top3 {best['top3_share']:.0%}" if best else "no decomposition")
 
+    # -- margin composition: mix vs rate ----------------------------------------
+    # Blended margin can improve while every segment's margin falls, if sales
+    # shift toward higher-margin segments. That is a composition effect, not an
+    # operational improvement, and the memo must say which one it is.
+    for mb in _margin_bridge(ds, prior_period, period):
+        tr.event("tool_called", tool="margin_bridge", dimension=mb["dimension"],
+                 mix_bps=mb["mix_bps"], rate_bps=mb["rate_bps"])
+        if abs(mb["total_bps"]) < 50:
+            continue
+        txt = (f"Gross margin moved from {mb['m0']:.1f}% to {mb['m1']:.1f}% ({mb['total_bps']:+.0f} bps). "
+               f"By {mb['dimension']}, mix explains {mb['mix_bps']:+.0f} bps and margin rate {mb['rate_bps']:+.0f} bps.")
+        if mb["all_rates_opposite"]:
+            txt += (f" Every {mb['dimension']} earned a {'lower' if mb['total_bps'] > 0 else 'higher'} margin than before; "
+                    f"the blended {'improvement' if mb['total_bps'] > 0 else 'decline'} is entirely a shift in mix "
+                    f"toward {'higher' if mb['total_bps'] > 0 else 'lower'}-margin {mb['dimension']}s, "
+                    f"not an operational change.")
+        c = claims.add(Claim(txt, account="Gross Margin", kind="attribution", detector="margin_bridge",
+                             confidence=1.0, numbers=[mb["m0"], mb["m1"], mb["total_bps"], mb["mix_bps"], mb["rate_bps"]]))
+        c.transaction_ids = ["summary"]
+        sentences.append(f"{txt} [{c.id}]")
+
     if store:
         store.save()
 
@@ -570,7 +664,8 @@ def run(case_dir, period, prior_period=None, memory_path=None, tracer=None, poli
 
     blocked = bool(abstained_scope) or not gate["passed"]
     conf = assemble(gate, total_var, total_attr, priors, detector_findings, claims,
-                    contradictions=len(contradictions), blocked=blocked and bool(abstained_scope))
+                    contradictions=len(contradictions), blocked=blocked and bool(abstained_scope),
+                    weak_context=weak_context)
     tr.event("explanation_generated", claims=len(claims.claims), verified=len(claims.verified()),
              confidence=conf["overall"])
     tr.event("run_completed", abstained=bool(abstained_scope))

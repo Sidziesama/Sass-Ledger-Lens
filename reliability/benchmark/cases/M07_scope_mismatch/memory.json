@@ -7,8 +7,8 @@
         "account": "Cloud Expense",
         "vendor": "AWS"
       },
-      "statement": "cloud spend will fall from August because the migration completed and duplicate environments were shut down",
-      "implication": "expect Cloud Expense to decline",
+      "statement": "AWS migration elevates cloud spend through September",
+      "implication": "expect up to +30%",
       "basis": {
         "run_id": "run_2026_07"
       },
@@ -17,14 +17,15 @@
           "run_id": "run_2026_07"
         }
       ],
-      "confidence": 0.9,
+      "confidence": 0.95,
       "applies_to": {
-        "from_period": "2026-08"
+        "from_period": "2026-07",
+        "to_period": "2026-09"
       },
-      "valid_from": "2026-08",
-      "valid_until": null,
+      "valid_from": "2026-07",
+      "valid_until": "2026-09",
       "expectation": {
-        "direction": "down"
+        "max_increase_pct": 30
       },
       "status": "proposed",
       "source_type": "user_verified",

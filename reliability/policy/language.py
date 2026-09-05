@@ -103,7 +103,9 @@ def lint(narrative, claims, causal_claim_ids=()):
         violations.append({"type": "NONSENSE_FIGURE", "match": NONSENSE.search(narrative).group(0)})
 
     pool = _claim_numbers(claims)
-    for tok in NUMBER.findall(narrative):
+    # periods and dates are identifiers, not figures: 2026-10, 2026-08-05
+    scan = re.sub(r"\b\d{4}-\d{2}(?:-\d{2})?\b", " ", narrative)
+    for tok in NUMBER.findall(scan):
         raw = tok.strip()
         if re.fullmatch(r"\d{4}(-\d{2})?", raw) or raw in ("1", "2", "3", "one"):
             continue                                    # years, periods, ordinals
