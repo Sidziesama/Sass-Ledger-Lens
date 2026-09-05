@@ -12,9 +12,9 @@ git worktree add /tmp/court origin/main
 COURTROOM_ROOT=/tmp/court python -m reliability.benchmark.evaluate --runner reliability.benchmark.adapters.courtroom_v1:run_normalized
 ```
 
-| | `main` @ d180870 (JS courtroom) | `python-grounded-prism` @ 6319d12 | `reliability-hardening` @ 9b0eed8 | old `main` @ 3d74433 | reference |
+| | `main` @ d180870 (JS courtroom) | `python-grounded-prism` @ c22adba | `reliability-hardening` @ 9b0eed8 | old `main` @ 3d74433 | reference |
 |---|---|---|---|---|---|
-| **Overall** | **8 / 56** normalized · 0 / 56 raw | **5 / 56** live GIDE explainer · 0 / 56 template | 5 / 56 | 0 / 56 | **56 / 56** |
+| **Overall** | **8 / 56** normalized · 0 / 56 raw | **2 / 56** live GIDE explainer · 1 / 56 template | 5 / 56 | 0 / 56 | **56 / 56** |
 | normal | 4 / 11 | 0 / 11 | 3 / 11 | 0 / 11 | 11 / 11 |
 | ambiguous | 0 / 10 | 0 / 10 | 0 / 10 | 0 / 10 | 10 / 10 |
 | data quality | 2 / 11 | 0 / 11 | 0 / 11 | 0 / 11 | 11 / 11 |
@@ -22,23 +22,23 @@ COURTROOM_ROOT=/tmp/court python -m reliability.benchmark.evaluate --runner reli
 | memory (incl. 4 multi-run sequences) | 1 / 14 | 0 / 14 | 1 / 14 | 0 / 14 | 14 / 14 |
 
 `python-grounded-prism` continues the Python lineage with a GIDE-backed grounded explainer
-(claim-id and number-token checks) and PRISM tracing. Two measurements:
+and PRISM tracing. Commit 8603b97 added a data-quality gate, memory validity windows and
+reliability notes (zero base, concentration, inactivity, reversal, non-recurring, reclass,
+"does not establish why"); premature-stopping fell from 37 to 31 cases.
 
-- **Offline template provider: 0 / 56.** The template prints unrounded Decimals
-  ("40.90037309924180988050104740%"); every case fails `number_lint` first.
-- **Live path (`MAIN_V1_LLM=1`, its own provider on GIDE's 1.5B): 5 / 56.** The pipeline
-  works end-to-end (~5 s a case). Its grounding gate rejected the model's draft in **53 of 56**
-  cases and accepted 3. A rejected draft leaves the account with no explanation at all, so the
-  memo is the bare structured facts — which is why the profile is then identical to the old
-  Python `main`: 37 premature-stopping, 19 data-quality, 10 memory.
+Scored at c22adba (code unchanged from 8603b97):
 
-For contrast, the reference's memo gate on the same 1.5B accepts 50 / 56 drafts, because
-the prompt asks the model to choose and order verbatim claims rather than rewrite them, and a
-failing draft falls back to a template that still states every limitation. Both changes
-transfer directly to this branch's explainer — see `docs/HANDOFF_GROUNDED.md`.
+- **Live path (`MAIN_V1_LLM=1`, its provider on GIDE's 1.5B): 2 / 56.** Its gate now
+  rejects 31 of 56 drafts (was 53) — more memos ship. Of the 39 `number_lint` failures,
+  **all 39 are the unrounded Decimal `percentage_display`** ("66.66666666666666666666666667%")
+  reaching accepted memos; the model itself leaked **1** ungrounded number and **4** causal
+  phrasings ("This decrease is due to…") that the gate has no rule for. Numbers from the
+  product's own evidence packet (coverage, notes) are counted as grounded.
+- **Template path: 1 / 56** — same Decimal defect, first.
 
-Only asserted text is scanned for forbidden language — a candidate the courtroom
-*rejects* ("Proposed: growth was broad-based") is judgement, not assertion.
+Two one-line fixes (round the packet's percentages; add a causal-verb check) would remove
+43 of the failures; what remains is the shared worklist (38 limitation phrasings, 19
+data-quality flags, 10 memory).
 
 ## The JavaScript courtroom (`main` @ d180870)
 

@@ -41,3 +41,21 @@ reconciliation gap with amount, near-duplicates, naming variants, sign checks, p
 cutoff. Then memory (10): validity windows, source type, contested / rejected with reasons,
 and writing memory from each run. Reference for each: `reliability/docs/HANDOFF_COURTROOM.md`
 items 2–8 (the file names there point at the reference implementation).
+
+## Update — scored again at c22adba (after 8603b97's gate + reliability notes)
+
+Good: reliability notes landed (zero base, concentration, inactivity, reversal, non-recurring,
+reclass, "does not establish why"); premature-stopping 37 → 31. Live path still **2 / 56**,
+and the reason is now precise:
+
+| Failure | Cases | Fix |
+|---|---|---|
+| Unrounded Decimal in accepted memos (`percentage_display` = `str(Decimal)`, e.g. `66.66666666666666666666666667%`) | **39** | Round in `build_evidence_packet` (1 decimal for %, 0 for $) — the model quotes whatever the packet says |
+| Causal phrasing the gate does not check ("This decrease is **due to** …", "**suggesting that** the variance is …") | 4 | Add a causal-verb rule to the grounding gate: reject `caused / because of / due to / resulted from / led to / as a result of` unless a causal claim exists |
+| Genuinely ungrounded model number | 1 | Already caught by the number-token check on most cases; keep it |
+| Limitation phrasings still missing on the live path | 38 | The notes exist — make sure the explainer's summary carries them verbatim (or the fallback ships them when a draft is rejected) |
+| Data-quality flags never reach the memo | 19 | Reconciliation gap with amount, near-duplicates, naming variants, sign checks, period gaps, cutoff |
+| Memory language | 10 | "consistent with PR-…", "exceeds the learned range", "not applied: expired / rejected" |
+
+Gate now rejects 31 / 56 drafts (was 53). A rejected draft should still ship the deterministic
+sentences — see item 2 above.
