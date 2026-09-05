@@ -1,0 +1,10 @@
+[
+  {
+    "context_id": "revenue-enterprise-expansion-2026-02",
+    "subject": "Revenue",
+    "description": "Enterprise expansion renewals were expected to land in February 2026.",
+    "effective_period": "2026-02-01",
+    "source": "finance-team",
+    "tags": ["enterprise", "renewal", "expected-event"]
+  }
+]
