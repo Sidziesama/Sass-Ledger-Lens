@@ -20,7 +20,9 @@ their result actually contains and never invent behaviour on their behalf.
 """
 
 import csv
+import json
 import os
+import re
 from datetime import date
 from decimal import Decimal, InvalidOperation
 
@@ -47,6 +49,15 @@ except Exception:                      # noqa: BLE001
 REVENUE_HINTS = ("revenue", "sales", "income")
 ABS_THRESHOLD = Decimal("1000")
 PCT_THRESHOLD = Decimal("0")
+
+
+def _packet_text(ai, lineage):
+    """Their evidence packet as text (falls back to the claims if unavailable)."""
+    try:
+        from src.explanation.explainer import build_evidence_packet
+        return json.dumps(build_evidence_packet(ai, lineage), default=str)
+    except Exception:                                     # noqa: BLE001
+        return " ".join(f"{c.calculation.variance} {c.calculation.prior_amount} {c.calculation.current_amount}" for c in lineage)
 
 
 def _pdate(period):
@@ -187,13 +198,19 @@ def _run(case_dir, period, prior_period, memory_path=None, normalized=False):
                 n += 1
                 cid = f"claim_{n:03d}"
                 prose = f"{ex.headline} {ex.summary}".strip()
+                # Every figure in THEIR evidence packet (coverage %, reliability
+                # notes, per-claim amounts) is grounded by construction; register it
+                # so the linter flags only numbers with no deterministic origin.
+                packet_nums = [float(v.replace("$", "").replace(",", "")) for v in
+                               re.findall(r"[-+]?\$?\d[\d,]*(?:\.\d+)?", _packet_text(ai, lineage))
+                               if v.replace("$", "").replace(",", "").replace("+", "").replace("-", "").replace(".", "").isdigit()]
                 claims.append({"claim_id": cid, "claim": prose, "kind": "explanation", "account": v.account,
                                "variance": float(v.variance), "driver_amount": None, "contribution_pct": None,
                                "drivers": [cl.driver for cl in lineage], "transaction_ids": ["summary"],
                                "calculation": None, "detector": f"explainer:{ex.provider}", "confidence": 1.0,
                                "supporting_priors": [], "verified": bool(ex.grounded),
                                "verification_note": "product explainer (grounded=%s)" % ex.grounded,
-                               "numbers": []})
+                               "numbers": packet_nums + [float(ai.stop_decision.coverage) * 100]})
                 sentences.append(f"{prose} [{cid}]")
             except UngroundedExplanationError as e:
                 flags.append({"code": "EXPLAINER_REJECTED", "severity": "warning", "detail": str(e)[:200],
