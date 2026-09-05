@@ -38,3 +38,21 @@ The dashboard presents material period changes, evidence-backed summaries, ranke
 ```bash
 streamlit run app/app.py
 ```
+
+## Command-line investigations
+
+Run the same deterministic workflow without the UI and optionally save a portable JSON artifact containing variances, drivers, claims, transaction lineage, business context, and the investigation trace:
+
+```bash
+python -m src.cli \
+  --prior 2026-01-01 \
+  --current 2026-02-01 \
+  --output data/runs/demo-investigation.json
+```
+
+Add `--prism` to submit the trajectory when the `PRISMTRACE_*` environment variables are configured.
+Add `--llm` to use the configured OpenAI-compatible provider; otherwise the grounded offline template is used.
+
+## Evidence-constrained explanations
+
+`EvidenceBoundExplainer` sends a structured packet of deterministic results and verified claims to a pluggable provider. It rejects unknown claim citations and any numeric fact not present in the evidence packet. `TemplateExplanationProvider` works offline; `OpenAICompatibleProvider` can use a hosted provider or GIDE's local API through the `LEDGER_LENS_LLM_*` settings in `.env.example`.

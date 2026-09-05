@@ -8,6 +8,7 @@ import streamlit as st
 
 from src.agent import FinancialTools, Investigator
 from src.evidence import build_claim_lineage
+from src.explanation import EvidenceBoundExplainer, TemplateExplanationProvider
 from src.ingestion.loaders import load_account_summaries, load_transactions
 from src.ingestion.models import EvidenceClaim, InvestigationRun, ReviewerFeedback
 from src.memory import JsonMemoryStore
@@ -151,7 +152,17 @@ with overview:
     )
     for item in result.accounts:
         st.markdown(f"#### {item.variance.account}")
-        st.write(evidence_summary(item))
+        claims = build_claim_lineage(item, transactions)
+        if claims:
+            explanation = EvidenceBoundExplainer(TemplateExplanationProvider()).explain(
+                item, claims
+            )
+            st.write(explanation.summary)
+            st.caption(
+                f"Grounded · {len(explanation.claim_ids)} verified claims · {explanation.provider}"
+            )
+        else:
+            st.write(evidence_summary(item))
 
 with drivers_tab:
     selected_account = st.selectbox(
